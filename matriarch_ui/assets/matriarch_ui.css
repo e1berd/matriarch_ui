@@ -1,0 +1,117 @@
+/*
+  matriarchUI design tokens.
+  Import this once, after `@import "tailwindcss"`, in the consuming app's app.css:
+
+    @import "../../deps/matriarch_ui/assets/matriarch_ui.css";
+
+  Every color is a CSS custom property — override any `--color-mui-*` variable
+  on `:root` (or under `[data-theme="dark"]`) in your own app.css to re-theme,
+  no rebuild of this file required.
+*/
+
+@custom-variant mui-dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --font-mui-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Inter", sans-serif;
+
+  --color-mui-background: #f8f9fb;
+  --color-mui-surface: #ffffff;
+  --color-mui-surface-hover: #f3f4f6;
+  --color-mui-foreground: #0f172a;
+  --color-mui-muted-foreground: #4b5563;
+  --color-mui-subtle-foreground: #9ca3af;
+  --color-mui-border: #e4e7ec;
+  --color-mui-border-strong: #d1d5db;
+  --color-mui-overlay: rgb(15 23 42 / 55%);
+
+  --color-mui-primary: #1d4ed8;
+  --color-mui-primary-hover: #1e40af;
+  --color-mui-primary-foreground: #ffffff;
+  --color-mui-primary-subtle: #eff6ff;
+  --color-mui-primary-subtle-foreground: #1d4ed8;
+
+  --color-mui-accent: #d97706;
+  --color-mui-accent-hover: #b45309;
+  --color-mui-accent-foreground: #ffffff;
+  --color-mui-accent-subtle: #fef3c7;
+  --color-mui-accent-subtle-foreground: #92400e;
+
+  --color-mui-success: #16a34a;
+  --color-mui-success-subtle: #f0fdf4;
+  --color-mui-success-border: #bbf7d0;
+
+  --color-mui-warning: #d97706;
+  --color-mui-warning-subtle: #fffbeb;
+  --color-mui-warning-border: #fde68a;
+
+  --color-mui-danger: #dc2626;
+  --color-mui-danger-hover: #b91c1c;
+  --color-mui-danger-subtle: #fef2f2;
+  --color-mui-danger-border: #fecaca;
+
+  --color-mui-ring: var(--color-mui-primary);
+
+  --radius-mui-sm: 8px;
+  --radius-mui-md: 10px;
+  --radius-mui-lg: 14px;
+  --radius-mui-xl: 20px;
+  --radius-mui-full: 9999px;
+
+  --shadow-mui-sm: 0 1px 3px rgb(15 23 42 / 8%);
+  --shadow-mui-md: 0 4px 16px rgb(15 23 42 / 9%);
+  --shadow-mui-lg: 0 12px 32px rgb(15 23 42 / 14%);
+  --shadow-mui-xl: 0 24px 56px rgb(15 23 42 / 20%);
+}
+
+:root[data-theme="dark"] {
+  --color-mui-background: #0b1220;
+  --color-mui-surface: #111827;
+  --color-mui-surface-hover: #1f2937;
+  --color-mui-foreground: #f1f5f9;
+  --color-mui-muted-foreground: #94a3b8;
+  --color-mui-subtle-foreground: #64748b;
+  --color-mui-border: #1f2937;
+  --color-mui-border-strong: #334155;
+  --color-mui-overlay: rgb(0 0 0 / 65%);
+
+  --color-mui-primary: #3b82f6;
+  --color-mui-primary-hover: #60a5fa;
+  --color-mui-primary-foreground: #0b1220;
+  --color-mui-primary-subtle: #132447;
+  --color-mui-primary-subtle-foreground: #93c5fd;
+
+  --color-mui-accent: #f59e0b;
+  --color-mui-accent-hover: #fbbf24;
+  --color-mui-accent-foreground: #0b1220;
+  --color-mui-accent-subtle: #451a03;
+  --color-mui-accent-subtle-foreground: #fcd34d;
+
+  --color-mui-success: #4ade80;
+  --color-mui-success-subtle: #052e16;
+  --color-mui-success-border: #166534;
+
+  --color-mui-warning: #fbbf24;
+  --color-mui-warning-subtle: #451a03;
+  --color-mui-warning-border: #92400e;
+
+  --color-mui-danger: #f87171;
+  --color-mui-danger-hover: #fca5a5;
+  --color-mui-danger-subtle: #450a0a;
+  --color-mui-danger-border: #991b1b;
+
+  --shadow-mui-sm: 0 1px 3px rgb(0 0 0 / 30%);
+  --shadow-mui-md: 0 4px 16px rgb(0 0 0 / 35%);
+  --shadow-mui-lg: 0 12px 32px rgb(0 0 0 / 45%);
+  --shadow-mui-xl: 0 24px 56px rgb(0 0 0 / 55%);
+}
+
+@layer base {
+  [data-mui] {
+    font-family: var(--font-mui-sans);
+  }
+
+  [data-mui]:focus-visible {
+    outline: 2px solid var(--color-mui-ring);
+    outline-offset: 2px;
+  }
+}

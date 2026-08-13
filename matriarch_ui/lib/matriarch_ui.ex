@@ -1,0 +1,28 @@
+defmodule MatriarchUI do
+  @moduledoc """
+  `use MatriarchUI` inside your app's `html_helpers` block to import every
+  component (`<.button>`, `<.input>`, `<.select>`, ...) in one line.
+  """
+
+  defmacro __using__(_opts) do
+    quote do
+      import MatriarchUI.Alert
+      import MatriarchUI.Avatar
+      import MatriarchUI.Badge
+      import MatriarchUI.Button
+      import MatriarchUI.Card
+      import MatriarchUI.Checkbox
+      import MatriarchUI.DropdownMenu
+      import MatriarchUI.Input
+      import MatriarchUI.Modal
+      import MatriarchUI.Popover
+      import MatriarchUI.RadioGroup
+      import MatriarchUI.Select
+      import MatriarchUI.Separator
+      import MatriarchUI.Switch
+      import MatriarchUI.Tabs
+      import MatriarchUI.Textarea
+      import MatriarchUI.Tooltip
+    end
+  end
+end
