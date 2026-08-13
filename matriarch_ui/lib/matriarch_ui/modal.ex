@@ -30,7 +30,7 @@ defmodule MatriarchUI.Modal do
         ])
       }
     >
-      <div class="flex items-start justify-between gap-4 border-b border-mui-border px-5 py-4">
+      <div class="flex items-start justify-between gap-4 border-b border-mui-border px-4 py-3.5">
         <h2 :if={@title} class="text-base font-semibold text-mui-foreground">{@title}</h2>
         <button
           type="button"
@@ -48,8 +48,8 @@ defmodule MatriarchUI.Modal do
           </svg>
         </button>
       </div>
-      <div class="overflow-auto px-5 py-4 text-sm">{render_slot(@inner_block)}</div>
-      <div :if={@footer != []} class="flex justify-end gap-2 border-t border-mui-border px-5 py-4">
+      <div class="overflow-auto px-4 py-3.5 text-sm">{render_slot(@inner_block)}</div>
+      <div :if={@footer != []} class="flex justify-end gap-2 border-t border-mui-border px-4 py-3.5">
         {render_slot(@footer)}
       </div>
     </dialog>

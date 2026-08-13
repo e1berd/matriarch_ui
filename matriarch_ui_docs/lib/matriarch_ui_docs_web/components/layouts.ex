@@ -35,23 +35,26 @@ defmodule MatriarchUIDocsWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="sticky top-0 z-40 flex h-16 items-center gap-6 border-b border-mui-border bg-mui-surface/80 px-4 backdrop-blur sm:px-6 lg:px-8">
-      <a href="/" class="flex items-center gap-2 text-sm font-semibold text-mui-foreground">
-        <span class="flex size-7 items-center justify-center rounded-mui-sm bg-mui-primary text-white">
+    <header class="sticky top-0 z-40 flex h-13 items-center gap-5 border-b border-mui-border bg-mui-surface/80 px-4 backdrop-blur sm:px-6">
+      <a
+        href="/"
+        class="flex items-center gap-2 text-[13px] font-semibold tracking-tight text-mui-foreground"
+      >
+        <span class="flex size-6 items-center justify-center rounded-mui-sm bg-mui-primary text-xs text-white shadow-mui-button [background-image:var(--gloss-mui-sheen)]">
           M
         </span>
         matriarchUI
       </a>
-      <nav class="flex items-center gap-5 text-sm text-mui-muted-foreground">
+      <nav class="flex items-center gap-4 text-[13px] text-mui-muted-foreground">
         <.link navigate={~p"/docs"} class="hover:text-mui-foreground">Docs</.link>
         <.link navigate={~p"/docs/components/button"} class="hover:text-mui-foreground">
           Components
         </.link>
       </nav>
-      <div class="ml-auto flex items-center gap-3">
+      <div class="ml-auto flex items-center gap-2.5">
         <a
           href="https://github.com/e1berd/matriarch_ui"
-          class="text-sm text-mui-muted-foreground hover:text-mui-foreground"
+          class="text-[13px] text-mui-muted-foreground hover:text-mui-foreground"
         >
           GitHub
         </a>

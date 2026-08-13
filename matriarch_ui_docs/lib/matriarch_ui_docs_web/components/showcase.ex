@@ -16,12 +16,12 @@ defmodule MatriarchUIDocsWeb.Showcase do
         <p :if={@description} class="text-sm text-mui-muted-foreground">{@description}</p>
       </div>
       <div class={[
-        "flex flex-wrap items-center gap-4 rounded-mui-lg border border-mui-border bg-mui-surface p-6",
+        "flex flex-wrap items-center gap-3 rounded-mui-lg border border-mui-border bg-mui-surface p-5 shadow-mui-xs",
         @class
       ]}>
         {render_slot(@inner_block)}
       </div>
-      <pre class="overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface-hover p-4 text-xs text-mui-foreground"><code phx-no-curly-interpolation><%= String.trim(@code) %></code></pre>
+      <pre class="overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface-hover p-3.5 text-xs text-mui-foreground"><code phx-no-curly-interpolation><%= String.trim(@code) %></code></pre>
     </section>
     """
   end

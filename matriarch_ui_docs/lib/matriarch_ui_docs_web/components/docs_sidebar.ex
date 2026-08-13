@@ -14,14 +14,14 @@ defmodule MatriarchUIDocsWeb.DocsSidebar do
     assigns = assign(assigns, :components, Registry.components())
 
     ~H"""
-    <nav class="w-56 shrink-0 py-10 pr-6 text-sm">
-      <p class="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-mui-subtle-foreground">
+    <nav class="w-52 shrink-0 py-8 pr-5 text-[13px]">
+      <p class="mb-1.5 px-2 text-[11px] font-semibold uppercase tracking-wide text-mui-subtle-foreground">
         Getting started
       </p>
       <.link
         navigate={~p"/docs"}
         class={[
-          "block rounded-mui-sm px-2 py-1.5",
+          "block rounded-mui-sm px-2 py-1",
           is_nil(@active) && "bg-mui-primary-subtle text-mui-primary-subtle-foreground",
           !is_nil(@active) &&
             "text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground"
@@ -30,14 +30,14 @@ defmodule MatriarchUIDocsWeb.DocsSidebar do
         Installation
       </.link>
 
-      <p class="mb-2 mt-6 px-2 text-xs font-semibold uppercase tracking-wide text-mui-subtle-foreground">
+      <p class="mb-1.5 mt-5 px-2 text-[11px] font-semibold uppercase tracking-wide text-mui-subtle-foreground">
         Components
       </p>
       <.link
         :for={component <- @components}
         navigate={~p"/docs/components/#{component.slug}"}
         class={[
-          "block rounded-mui-sm px-2 py-1.5",
+          "block rounded-mui-sm px-2 py-1",
           @active == component.slug && "bg-mui-primary-subtle text-mui-primary-subtle-foreground",
           @active != component.slug &&
             "text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground"

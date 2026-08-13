@@ -21,11 +21,11 @@ defmodule MatriarchUI.Card do
       }
       {@rest}
     >
-      <div :if={@header != []} class="border-b border-mui-border px-5 py-4">
+      <div :if={@header != []} class="border-b border-mui-border px-4 py-3.5">
         {render_slot(@header)}
       </div>
-      <div class="px-5 py-4">{render_slot(@inner_block)}</div>
-      <div :if={@footer != []} class="border-t border-mui-border px-5 py-4">
+      <div class="px-4 py-3.5">{render_slot(@inner_block)}</div>
+      <div :if={@footer != []} class="border-t border-mui-border px-4 py-3.5">
         {render_slot(@footer)}
       </div>
     </div>

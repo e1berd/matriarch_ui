@@ -47,8 +47,8 @@ defmodule MatriarchUI.Select do
         data-mui-value-target={"#{@id}-value"}
         class={
           CN.cn([
-            "flex h-10 w-full items-center justify-between gap-2 rounded-mui-md border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground",
-            "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/30",
+            "flex h-9 w-full items-center justify-between gap-2 rounded-mui-md border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
+            "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
             @class
           ])
         }

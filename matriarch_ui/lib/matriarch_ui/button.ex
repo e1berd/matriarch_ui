@@ -6,19 +6,20 @@ defmodule MatriarchUI.Button do
   use Phoenix.Component
   alias MatriarchUI.CN
 
-  attr :type, :string, default: "button"
+  attr(:type, :string, default: "button")
 
-  attr :variant, :string,
+  attr(:variant, :string,
     default: "solid",
     values: ~w(solid outline ghost soft destructive link)
+  )
 
-  attr :size, :string, default: "md", values: ~w(sm md lg icon)
-  attr :loading, :boolean, default: false
-  attr :disabled, :boolean, default: false
-  attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(form name value navigate patch href method)
-  slot :inner_block, required: true
-  slot :icon
+  attr(:size, :string, default: "md", values: ~w(sm md lg icon))
+  attr(:loading, :boolean, default: false)
+  attr(:disabled, :boolean, default: false)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global, include: ~w(form name value navigate patch href method))
+  slot(:inner_block, required: true)
+  slot(:icon)
 
   def button(%{rest: rest} = assigns) do
     assigns =
@@ -71,17 +72,18 @@ defmodule MatriarchUI.Button do
     end
   end
 
-  defp size_classes("sm"), do: "h-8 px-3 text-sm"
-  defp size_classes("md"), do: "h-10 px-4 text-sm"
-  defp size_classes("lg"), do: "h-11 px-5 text-base"
-  defp size_classes("icon"), do: "size-10 p-0"
+  defp size_classes("sm"), do: "h-7 px-2.5 text-xs gap-1.5"
+  defp size_classes("md"), do: "h-9 px-3.5 text-sm"
+  defp size_classes("lg"), do: "h-10 px-4 text-sm"
+  defp size_classes("icon"), do: "size-9 p-0"
 
   defp variant_classes("solid") do
-    "bg-mui-primary text-mui-primary-foreground shadow-mui-sm hover:bg-mui-primary-hover"
+    "bg-mui-primary text-mui-primary-foreground shadow-mui-button [background-image:var(--gloss-mui-sheen)]" <>
+      " hover:bg-mui-primary-hover hover:[background-image:var(--gloss-mui-sheen-hover)] active:brightness-95"
   end
 
   defp variant_classes("outline") do
-    "border border-mui-border-strong bg-mui-surface text-mui-foreground hover:bg-mui-surface-hover"
+    "border border-mui-border-strong bg-mui-surface text-mui-foreground shadow-mui-xs hover:bg-mui-surface-hover"
   end
 
   defp variant_classes("ghost") do
@@ -93,7 +95,8 @@ defmodule MatriarchUI.Button do
   end
 
   defp variant_classes("destructive") do
-    "bg-mui-danger text-white shadow-mui-sm hover:bg-mui-danger-hover"
+    "bg-mui-danger text-white shadow-mui-button [background-image:var(--gloss-mui-sheen)]" <>
+      " hover:bg-mui-danger-hover hover:[background-image:var(--gloss-mui-sheen-hover)] active:brightness-95"
   end
 
   defp variant_classes("link") do

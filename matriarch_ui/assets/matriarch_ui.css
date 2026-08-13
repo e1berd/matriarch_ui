@@ -51,16 +51,22 @@
 
   --color-mui-ring: var(--color-mui-primary);
 
-  --radius-mui-sm: 8px;
-  --radius-mui-md: 10px;
-  --radius-mui-lg: 14px;
-  --radius-mui-xl: 20px;
+  --radius-mui-xs: 4px;
+  --radius-mui-sm: 6px;
+  --radius-mui-md: 8px;
+  --radius-mui-lg: 12px;
+  --radius-mui-xl: 16px;
   --radius-mui-full: 9999px;
 
-  --shadow-mui-sm: 0 1px 3px rgb(15 23 42 / 8%);
-  --shadow-mui-md: 0 4px 16px rgb(15 23 42 / 9%);
-  --shadow-mui-lg: 0 12px 32px rgb(15 23 42 / 14%);
-  --shadow-mui-xl: 0 24px 56px rgb(15 23 42 / 20%);
+  --shadow-mui-xs: 0 1px 1px rgb(15 23 42 / 5%);
+  --shadow-mui-sm: 0 1px 2px rgb(15 23 42 / 8%), 0 0 0 1px rgb(15 23 42 / 4%);
+  --shadow-mui-md: 0 2px 8px rgb(15 23 42 / 8%), 0 0 0 1px rgb(15 23 42 / 4%);
+  --shadow-mui-lg: 0 8px 24px rgb(15 23 42 / 12%), 0 0 0 1px rgb(15 23 42 / 4%);
+  --shadow-mui-xl: 0 16px 48px rgb(15 23 42 / 18%), 0 0 0 1px rgb(15 23 42 / 4%);
+  --shadow-mui-button: 0 1px 2px rgb(15 23 42 / 16%), inset 0 1px 0 rgb(255 255 255 / 16%);
+
+  --gloss-mui-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
+  --gloss-mui-sheen-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
 }
 
 :root[data-theme="dark"] {
@@ -99,10 +105,15 @@
   --color-mui-danger-subtle: #450a0a;
   --color-mui-danger-border: #991b1b;
 
-  --shadow-mui-sm: 0 1px 3px rgb(0 0 0 / 30%);
-  --shadow-mui-md: 0 4px 16px rgb(0 0 0 / 35%);
-  --shadow-mui-lg: 0 12px 32px rgb(0 0 0 / 45%);
-  --shadow-mui-xl: 0 24px 56px rgb(0 0 0 / 55%);
+  --shadow-mui-xs: 0 1px 1px rgb(0 0 0 / 20%);
+  --shadow-mui-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 0 0 1px rgb(255 255 255 / 6%);
+  --shadow-mui-md: 0 2px 8px rgb(0 0 0 / 35%), 0 0 0 1px rgb(255 255 255 / 6%);
+  --shadow-mui-lg: 0 8px 24px rgb(0 0 0 / 45%), 0 0 0 1px rgb(255 255 255 / 6%);
+  --shadow-mui-xl: 0 16px 48px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
+  --shadow-mui-button: 0 1px 2px rgb(0 0 0 / 35%), inset 0 1px 0 rgb(255 255 255 / 10%);
+
+  --gloss-mui-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+  --gloss-mui-sheen-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
 }
 
 @layer base {

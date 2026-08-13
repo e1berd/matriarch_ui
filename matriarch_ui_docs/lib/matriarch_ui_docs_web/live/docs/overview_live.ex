@@ -11,14 +11,14 @@ defmodule MatriarchUIDocsWeb.Docs.OverviewLive do
     <Layouts.app flash={@flash}>
       <div class="mx-auto flex max-w-6xl gap-2 px-6">
         <DocsSidebar.sidebar />
-        <div class="min-w-0 flex-1 border-l border-mui-border py-10 pl-8">
-          <h1 class="text-2xl font-semibold text-mui-foreground">Installation</h1>
+        <div class="min-w-0 flex-1 border-l border-mui-border py-8 pl-7">
+          <h1 class="text-2xl font-semibold tracking-tight text-mui-foreground">Installation</h1>
           <p class="mt-2 max-w-2xl text-mui-muted-foreground">
             matriarchUI is a plain Elixir package — <code class="text-mui-primary">Phoenix.Component</code>s,
             design tokens and a couple of colocated JS hooks. No JS build step, no npm packages to install.
           </p>
 
-          <ol class="mt-8 flex max-w-2xl flex-col gap-6">
+          <ol class="mt-6 flex max-w-2xl flex-col gap-5">
             <li>
               <p class="text-sm font-semibold text-mui-foreground">1. Add the dependency</p>
               <pre class="mt-2 overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface-hover p-4 text-xs"><code phx-no-curly-interpolation>{:matriarch_ui, github: "e1berd/matriarch_ui", sparse: "matriarch_ui"}</code></pre>

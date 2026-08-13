@@ -8,33 +8,33 @@ defmodule MatriarchUIDocsWeb.LandingLive do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <section class="relative overflow-hidden px-6 pb-24 pt-20 sm:pt-28">
-        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[480px] bg-gradient-to-b from-mui-primary-subtle to-transparent">
+      <section class="relative overflow-hidden px-6 pb-16 pt-16 sm:pt-20">
+        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-primary-subtle to-transparent">
         </div>
-        <div class="mx-auto max-w-3xl text-center">
-          <span class="inline-flex items-center rounded-mui-full border border-mui-border bg-mui-surface px-3 py-1 text-xs font-medium text-mui-muted-foreground shadow-mui-sm">
+        <div class="mx-auto max-w-2xl text-center">
+          <span class="inline-flex items-center rounded-mui-full border border-mui-border bg-mui-surface px-2.5 py-0.5 text-xs font-medium text-mui-muted-foreground shadow-mui-xs">
             Built for Phoenix LiveView
           </span>
-          <h1 class="mt-6 text-4xl font-bold tracking-tight text-mui-foreground sm:text-6xl">
+          <h1 class="mt-5 text-4xl font-bold tracking-tight text-mui-foreground sm:text-5xl">
             Interfaces that feel <span class="text-mui-primary">inevitable</span>.
           </h1>
-          <p class="mx-auto mt-6 max-w-xl text-lg text-mui-muted-foreground">
+          <p class="mx-auto mt-4 max-w-lg text-base text-mui-muted-foreground">
             A Clerk/Mosaic-inspired component kit for Phoenix LiveView. No daisyUI,
             no npm, no build step — just Elixir, Tailwind and a few colocated hooks.
           </p>
-          <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5">
             <.button size="lg" navigate={~p"/docs"}>Browse the docs</.button>
             <.button size="lg" variant="outline" href="https://github.com/e1berd/matriarch_ui">
               View on GitHub
             </.button>
           </div>
-          <pre class="mx-auto mt-8 max-w-md overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface p-4 text-left text-xs shadow-mui-sm"><code phx-no-curly-interpolation>{:matriarch_ui, github: "e1berd/matriarch_ui", sparse: "matriarch_ui"}</code></pre>
+          <pre class="mx-auto mt-6 max-w-md overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface p-3.5 text-left text-xs shadow-mui-xs"><code phx-no-curly-interpolation>{:matriarch_ui, github: "e1berd/matriarch_ui", sparse: "matriarch_ui"}</code></pre>
         </div>
       </section>
 
-      <section class="border-y border-mui-border bg-mui-surface px-6 py-16">
+      <section class="border-y border-mui-border bg-mui-surface px-6 py-10">
         <div class="mx-auto max-w-5xl">
-          <div class="flex flex-wrap items-center justify-center gap-4 rounded-mui-xl border border-mui-border bg-mui-background p-8 shadow-mui-md">
+          <div class="flex flex-wrap items-center justify-center gap-3 rounded-mui-lg border border-mui-border bg-mui-background p-5 shadow-mui-sm">
             <.button>Solid</.button>
             <.button variant="outline">Outline</.button>
             <.badge variant="primary">New</.badge>
@@ -47,19 +47,19 @@ defmodule MatriarchUIDocsWeb.LandingLive do
         </div>
       </section>
 
-      <section class="px-6 py-24">
-        <div class="mx-auto grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <section class="px-6 py-16">
+        <div class="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div
             :for={feature <- features()}
-            class="rounded-mui-lg border border-mui-border bg-mui-surface p-6"
+            class="rounded-mui-lg border border-mui-border bg-mui-surface p-5 shadow-mui-xs"
           >
-            <h3 class="text-sm font-semibold text-mui-foreground">{feature.title}</h3>
-            <p class="mt-2 text-sm text-mui-muted-foreground">{feature.description}</p>
+            <h3 class="text-sm font-semibold tracking-tight text-mui-foreground">{feature.title}</h3>
+            <p class="mt-1.5 text-sm text-mui-muted-foreground">{feature.description}</p>
           </div>
         </div>
       </section>
 
-      <footer class="border-t border-mui-border px-6 py-10 text-center text-sm text-mui-subtle-foreground">
+      <footer class="border-t border-mui-border px-6 py-8 text-center text-sm text-mui-subtle-foreground">
         matriarchUI is MIT licensed. Built with matriarchUI itself.
       </footer>
     </Layouts.app>
