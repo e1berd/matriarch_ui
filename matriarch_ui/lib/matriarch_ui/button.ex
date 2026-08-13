@@ -78,8 +78,9 @@ defmodule MatriarchUI.Button do
   defp size_classes("icon"), do: "size-9 p-0"
 
   defp variant_classes("solid") do
-    "bg-mui-primary text-mui-primary-foreground shadow-mui-button [background-image:var(--gloss-mui-sheen)]" <>
-      " hover:bg-mui-primary-hover hover:[background-image:var(--gloss-mui-sheen-hover)] active:brightness-95"
+    "bg-mui-primary text-mui-primary-foreground shadow-mui-button" <>
+      " [background-image:linear-gradient(180deg,var(--color-mui-primary),var(--color-mui-primary-hover))]" <>
+      " hover:brightness-105 active:translate-y-px"
   end
 
   defp variant_classes("outline") do
@@ -95,8 +96,9 @@ defmodule MatriarchUI.Button do
   end
 
   defp variant_classes("destructive") do
-    "bg-mui-danger text-white shadow-mui-button [background-image:var(--gloss-mui-sheen)]" <>
-      " hover:bg-mui-danger-hover hover:[background-image:var(--gloss-mui-sheen-hover)] active:brightness-95"
+    "bg-mui-danger text-white shadow-mui-button" <>
+      " [background-image:linear-gradient(180deg,var(--color-mui-danger),var(--color-mui-danger-hover))]" <>
+      " hover:brightness-105 active:translate-y-px"
   end
 
   defp variant_classes("link") do

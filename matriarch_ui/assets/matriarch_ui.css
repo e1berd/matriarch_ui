@@ -24,11 +24,11 @@
   --color-mui-border-strong: #d1d5db;
   --color-mui-overlay: rgb(15 23 42 / 55%);
 
-  --color-mui-primary: #1d4ed8;
-  --color-mui-primary-hover: #1e40af;
+  --color-mui-primary: #7c3aed;
+  --color-mui-primary-hover: #6d28d9;
   --color-mui-primary-foreground: #ffffff;
-  --color-mui-primary-subtle: #eff6ff;
-  --color-mui-primary-subtle-foreground: #1d4ed8;
+  --color-mui-primary-subtle: #f5f3ff;
+  --color-mui-primary-subtle-foreground: #6d28d9;
 
   --color-mui-accent: #d97706;
   --color-mui-accent-hover: #b45309;
@@ -64,9 +64,6 @@
   --shadow-mui-lg: 0 8px 24px rgb(15 23 42 / 12%), 0 0 0 1px rgb(15 23 42 / 4%);
   --shadow-mui-xl: 0 16px 48px rgb(15 23 42 / 18%), 0 0 0 1px rgb(15 23 42 / 4%);
   --shadow-mui-button: 0 1px 2px rgb(15 23 42 / 16%), inset 0 1px 0 rgb(255 255 255 / 16%);
-
-  --gloss-mui-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
-  --gloss-mui-sheen-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
 }
 
 :root[data-theme="dark"] {
@@ -80,11 +77,11 @@
   --color-mui-border-strong: #334155;
   --color-mui-overlay: rgb(0 0 0 / 65%);
 
-  --color-mui-primary: #3b82f6;
-  --color-mui-primary-hover: #60a5fa;
-  --color-mui-primary-foreground: #0b1220;
-  --color-mui-primary-subtle: #132447;
-  --color-mui-primary-subtle-foreground: #93c5fd;
+  --color-mui-primary: #a78bfa;
+  --color-mui-primary-hover: #c4b5fd;
+  --color-mui-primary-foreground: #1e1033;
+  --color-mui-primary-subtle: #241246;
+  --color-mui-primary-subtle-foreground: #c4b5fd;
 
   --color-mui-accent: #f59e0b;
   --color-mui-accent-hover: #fbbf24;
@@ -111,9 +108,6 @@
   --shadow-mui-lg: 0 8px 24px rgb(0 0 0 / 45%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-xl: 0 16px 48px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-button: 0 1px 2px rgb(0 0 0 / 35%), inset 0 1px 0 rgb(255 255 255 / 10%);
-
-  --gloss-mui-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-  --gloss-mui-sheen-hover: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0));
 }
 
 @layer base {

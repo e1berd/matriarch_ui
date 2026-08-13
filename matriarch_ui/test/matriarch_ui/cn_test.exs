@@ -21,4 +21,22 @@ defmodule MatriarchUI.CNTest do
   test "font size and text color both survive since they are different groups" do
     assert CN.cn(["text-sm text-red-500", "text-lg"]) == "text-red-500 text-lg"
   end
+
+  test "items-center and justify-center are different flex properties and both survive" do
+    assert CN.cn(["inline-flex items-center justify-center"]) ==
+             "inline-flex items-center justify-center"
+  end
+
+  test "text alignment and text color are different properties and both survive" do
+    assert CN.cn(["text-left", "text-mui-danger"]) == "text-left text-mui-danger"
+  end
+
+  test "background color and background-position/size utilities both survive" do
+    assert CN.cn(["bg-mui-primary bg-cover bg-center"]) == "bg-mui-primary bg-cover bg-center"
+  end
+
+  test "same-side rounded corners still conflict while different sides do not" do
+    assert CN.cn(["rounded-t-lg", "rounded-b-none"]) == "rounded-t-lg rounded-b-none"
+    assert CN.cn(["rounded-lg", "rounded-full"]) == "rounded-full"
+  end
 end
