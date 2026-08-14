@@ -10,14 +10,15 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
       description="Every button fires phx-click={event} phx-value-page={n} — handle it in your LiveView and re-render with the new page."
       code={
         ~S'''
-        <.pagination page={4} total_pages={12} event="paginate" />
+        <.pagination id="results-pagination" page={4} total_pages={12} event="paginate" />
         '''
       }
     >
-      <.pagination page={4} total_pages={12} event="paginate" />
+      <.pagination id="results-pagination" page={4} total_pages={12} event="paginate" />
     </.example>
 
     <.props_table rows={[
+      {"id", "string, required", "unique DOM id used by the navigation controls"},
       {"page", "integer, required", "current page, 1-indexed"},
       {"total_pages", "integer, required", "total number of pages"},
       {"siblings", "integer", "page numbers shown on each side of the current page, default 1"},

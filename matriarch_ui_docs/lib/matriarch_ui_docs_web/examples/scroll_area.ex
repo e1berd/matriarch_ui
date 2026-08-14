@@ -9,20 +9,31 @@ defmodule MatriarchUIDocsWeb.Examples.ScrollArea do
       title="Basic"
       code={
         ~S'''
-        <.scroll_area class="h-40 w-64 rounded-mui-lg border border-mui-border p-3">
+        <.scroll_area
+          id="activity-scroll-area"
+          class="h-40 w-64 rounded-mui-lg border border-mui-border"
+          content_class="space-y-1 p-3 pr-6"
+        >
           <p :for={i <- 1..20} class="text-sm text-mui-foreground">Row {i}</p>
         </.scroll_area>
         '''
       }
     >
-      <.scroll_area class="h-40 w-64 rounded-mui-lg border border-mui-border p-3">
+      <.scroll_area
+        id="activity-scroll-area"
+        class="h-40 w-64 rounded-mui-lg border border-mui-border"
+        content_class="space-y-1 p-3 pr-6"
+      >
         <p :for={i <- 1..20} class="text-sm text-mui-foreground">Row {i}</p>
       </.scroll_area>
     </.example>
 
     <.props_table rows={[
+      {"id", "string, required", "unique DOM id for the scroll behavior hook"},
       {"orientation", "vertical | horizontal | both", "which axis scrolls, defaults to vertical"},
-      {"class", "string", "merged with the default classes via CN.cn/1 — set height/width here"}
+      {"class", "string", "classes for the outer root — set height and width here"},
+      {"viewport_class", "string", "classes merged into the scrollable viewport"},
+      {"content_class", "string", "classes merged into the content container"}
     ]} />
     """
   end

@@ -9,7 +9,7 @@ defmodule MatriarchUIDocsWeb.LandingLive do
     ~H"""
     <Layouts.app flash={@flash}>
       <section class="relative overflow-hidden px-6 pb-16 pt-16 sm:pt-20">
-        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-accent-subtle to-transparent">
+        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-accent/10 via-mui-accent/5 to-transparent">
         </div>
         <div class="mx-auto max-w-2xl text-center">
           <span class="inline-flex items-center rounded-mui-full border border-mui-border bg-mui-surface px-2.5 py-0.5 text-xs font-medium text-mui-muted-foreground shadow-mui-xs">
@@ -23,7 +23,7 @@ defmodule MatriarchUIDocsWeb.LandingLive do
             no npm, no build step — just Elixir, Tailwind and a few colocated hooks.
           </p>
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5">
-            <.button navigate={~p"/docs"}>Browse the docs</.button>
+            <.button variant="brand" navigate={~p"/docs"}>Browse the docs</.button>
             <.button variant="outline" href="https://github.com/e1berd/matriarch_ui">
               View on GitHub
             </.button>
@@ -35,6 +35,7 @@ defmodule MatriarchUIDocsWeb.LandingLive do
       <section class="border-y border-mui-border bg-mui-surface px-6 py-10">
         <div class="mx-auto max-w-5xl">
           <div class="flex flex-wrap items-center justify-center gap-3 rounded-mui-lg border border-mui-border bg-mui-background p-5 shadow-mui-sm">
+            <.button variant="brand">Brand</.button>
             <.button>Solid</.button>
             <.button variant="outline">Outline</.button>
             <.badge variant="primary">New</.badge>

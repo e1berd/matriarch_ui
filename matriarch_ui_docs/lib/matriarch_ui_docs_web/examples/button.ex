@@ -15,6 +15,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
       code={
         ~S'''
         <.button variant="solid">Solid</.button>
+        <.button variant="brand">Brand</.button>
         <.button variant="outline">Outline</.button>
         <.button variant="ghost">Ghost</.button>
         <.button variant="soft">Soft</.button>
@@ -24,6 +25,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
       }
     >
       <.button variant="solid">Solid</.button>
+      <.button variant="brand">Brand</.button>
       <.button variant="outline">Outline</.button>
       <.button variant="ghost">Ghost</.button>
       <.button variant="soft">Soft</.button>
@@ -69,7 +71,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
     </.example>
 
     <.props_table rows={[
-      {"variant", "solid | outline | ghost | soft | destructive | link", "visual style"},
+      {"variant", "solid | brand | outline | ghost | soft | destructive | link", "visual style"},
       {"size", "sm | md | lg | icon", "height and padding"},
       {"loading", "boolean", "shows a spinner and disables the button"},
       {"disabled", "boolean", "disables the button"},

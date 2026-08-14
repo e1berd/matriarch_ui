@@ -7,7 +7,7 @@ defmodule MatriarchUIDocsWeb.Examples.Autocomplete do
     ~H"""
     <.example
       title="Basic"
-      description="Wire your own phx-change/phx-debounce to filter :option server-side as the user types."
+      description="The list opens on focus and filters locally as you type. Add phx-change/phx-debounce when suggestions come from the server."
       code={
         ~S'''
         <.field id="city" :let={id}>
@@ -39,7 +39,7 @@ defmodule MatriarchUIDocsWeb.Examples.Autocomplete do
       {"placeholder", "string", "shown when the input is empty"},
       {"invalid", "boolean", "shows the danger border and aria-invalid"},
       {"rest", "phx-change, phx-keyup, phx-debounce, phx-target, disabled",
-       "wire your own live filtering — the input's typed value is the form field, picking a suggestion fills it in"}
+       "optional server filtering — local filtering works without LiveView events"}
     ]} />
     """
   end

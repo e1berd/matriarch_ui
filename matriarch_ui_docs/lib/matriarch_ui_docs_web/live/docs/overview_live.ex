@@ -44,9 +44,31 @@ defmodule MatriarchUIDocsWeb.Docs.OverviewLive do
         hooks: {...colocatedHooks, ...matriarchUiHooks},
       })</code></pre>
               <p class="mt-2 text-sm text-mui-muted-foreground">
-                Only needed for Select, Tooltip, Popover and DropdownMenu — each app's
+                Needed for Select, Autocomplete, Scroll Area, Tooltip, Popover and DropdownMenu — each app's
                 colocated hooks live in their own manifest, so this merge step is required
                 once in your <code class="text-mui-primary">assets/js/app.js</code>.
+              </p>
+            </li>
+            <li>
+              <p class="text-sm font-semibold text-mui-foreground">5. Override the theme</p>
+              <pre class="mt-2 overflow-x-auto rounded-mui-lg border border-mui-border bg-mui-surface-hover p-4 text-xs"><code phx-no-curly-interpolation>:root {
+    --color-mui-brand: #2563eb;
+    --color-mui-brand-hover: #1d4ed8;
+    --color-mui-card: #ffffff;
+    --color-mui-card-muted: #f8fafc;
+    --color-mui-input-border: rgb(15 23 42 / 14%);
+    --gradient-mui-brand-button-highlight: linear-gradient(to bottom, rgb(255 255 255 / 28%), transparent);
+    --color-mui-slider-fill-start: #60a5fa;
+    --color-mui-slider-fill-end: var(--color-mui-brand);
+    --gradient-mui-slider-fill: linear-gradient(to right, #60a5fa, var(--color-mui-brand));
+    --color-mui-slider-thumb-border: var(--color-mui-brand);
+    --color-mui-scrollbar-track: rgb(37 99 235 / 12%);
+    --color-mui-scrollbar-thumb: rgb(37 99 235 / 45%);
+    --color-mui-scrollbar-thumb-hover: rgb(37 99 235 / 70%);
+    }</code></pre>
+              <p class="mt-2 text-sm text-mui-muted-foreground">
+                Override semantic tokens after importing matriarchUI. Components consume these
+                variables at runtime, so changing a theme does not require rebuilding the package.
               </p>
             </li>
           </ol>
