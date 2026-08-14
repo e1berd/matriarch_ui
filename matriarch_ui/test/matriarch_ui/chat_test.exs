@@ -64,6 +64,19 @@ defmodule MatriarchUI.ChatTest do
     assert document(bubble) |> LazyHTML.query("[data-mui-chat-bubble='assistant']") |> Enum.any?()
   end
 
+  test "message derives its bubble variant from side and author_kind via :content" do
+    html =
+      render_component(&chat_message/1, %{
+        id: "messages-7",
+        message_id: "7",
+        side: "outgoing",
+        content: [%{inner_block: fn _, _ -> "On my way" end}]
+      })
+
+    assert document(html) |> LazyHTML.query("[data-mui-chat-bubble='outgoing']") |> Enum.any?()
+    assert document(html) |> LazyHTML.query("[data-mui-chat-content]") |> Enum.any?()
+  end
+
   test "message viewport publishes a bounded virtual window" do
     html =
       render_component(&chat_messages/1, %{

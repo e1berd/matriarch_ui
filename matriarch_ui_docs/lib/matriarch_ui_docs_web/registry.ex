@@ -51,6 +51,7 @@ defmodule MatriarchUIDocsWeb.Registry do
     %{slug: "table", title: "Table", module: Examples.Table},
     %{slug: "tabs", title: "Tabs", module: Examples.Tabs},
     %{slug: "textarea", title: "Textarea", module: Examples.Textarea},
+    %{slug: "toast", title: "Toast", module: Examples.Toast},
     %{slug: "tooltip", title: "Tooltip", module: Examples.Tooltip}
   ]
 

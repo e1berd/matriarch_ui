@@ -444,6 +444,8 @@ defmodule MatriarchUI.RichEditor do
             this.editor.commands.updateUser(collaboration.user)
           }
 
+          this.handleClear = () => this.editor.commands.clearContent(true)
+
           if (this.userInput && collaboration.user) {
             this.userInput.value = collaboration.user.name
             this.userInput.addEventListener("input", this.handleUserInput)
@@ -451,6 +453,7 @@ defmodule MatriarchUI.RichEditor do
           root.addEventListener("mousedown", this.handleMouseDown)
           root.addEventListener("dragstart", this.handleDragStart)
           root.addEventListener("click", this.handleClick)
+          root.addEventListener("mui:rich-editor-clear", this.handleClear)
         },
 
         updated() {
@@ -474,6 +477,7 @@ defmodule MatriarchUI.RichEditor do
           this.el.removeEventListener("mousedown", this.handleMouseDown)
           this.el.removeEventListener("dragstart", this.handleDragStart)
           this.el.removeEventListener("click", this.handleClick)
+          this.el.removeEventListener("mui:rich-editor-clear", this.handleClear)
           this.userInput?.removeEventListener("input", this.handleUserInput)
           if (this.blockAnimationFrame) cancelAnimationFrame(this.blockAnimationFrame)
           this.editor?.destroy()

@@ -79,10 +79,12 @@ defmodule MatriarchUI.Chat do
   attr :time, :string, default: nil
   attr :focused, :boolean, default: false
   attr :class, :string, default: nil
+  attr :bubble_class, :string, default: nil
   attr :rest, :global
   slot :avatar
   slot :meta
-  slot :inner_block, required: true
+  slot :content, doc: "plain message body — the bubble variant is derived from side/author_kind"
+  slot :inner_block, doc: "full control over the bubble; an alternative to :content"
 
   def chat_message(assigns) do
     ~H"""
@@ -108,7 +110,7 @@ defmodule MatriarchUI.Chat do
         {render_slot(@avatar)}
       </div>
       <div class={[
-        "flex min-w-0 max-w-[min(78%,34rem)] flex-col gap-1",
+        "flex min-w-0 max-w-[min(72%,28rem)] flex-col gap-1",
         @side == "outgoing" && "items-end",
         @side == "system" && "max-w-full items-center"
       ]}>
@@ -123,11 +125,19 @@ defmodule MatriarchUI.Chat do
           <time :if={@time}>{@time}</time>
           {render_slot(@meta)}
         </div>
+        <.chat_bubble :if={@content != []} variant={default_bubble_variant(@side, @author_kind)} class={@bubble_class}>
+          <.chat_message_content>{render_slot(@content)}</.chat_message_content>
+        </.chat_bubble>
         {render_slot(@inner_block)}
       </div>
     </article>
     """
   end
+
+  defp default_bubble_variant("outgoing", _author_kind), do: "outgoing"
+  defp default_bubble_variant("system", _author_kind), do: "system"
+  defp default_bubble_variant(_side, "assistant"), do: "assistant"
+  defp default_bubble_variant(_side, _author_kind), do: "incoming"
 
   attr :variant, :string, default: "incoming", values: ~w(incoming outgoing assistant system)
   attr :class, :string, default: nil
@@ -225,6 +235,7 @@ defmodule MatriarchUI.Chat do
       export default {
         mounted() {
           this.submittedEditors = []
+          this.submittedRichEditors = []
 
           this.onKeydown = (event) => {
             const editor = event.target.closest("textarea, [contenteditable='true']")
@@ -247,19 +258,38 @@ defmodule MatriarchUI.Chat do
               value: editor.value
             }))
 
+            const richEditors = Array.from(this.el.querySelectorAll("[data-mui-rich-editor]"))
+            this.submittedRichEditors = richEditors.map((root) => ({
+              id: root.id,
+              value: document.getElementById(`${root.id}-input`)?.value
+            }))
+
             clearTimeout(this.clearTimer)
-            this.clearTimer = setTimeout(() => this.submittedEditors = [], 2_000)
+            this.clearTimer = setTimeout(() => {
+              this.submittedEditors = []
+              this.submittedRichEditors = []
+            }, 2_000)
             requestAnimationFrame(() => this.clearSubmittedValues())
           }
 
           this.onInput = (event) => {
-            if (!event.isTrusted || this.submittedEditors.length === 0) return
+            if (!event.isTrusted) return
 
-            const submitted = this.submittedEditors.find((editor) =>
-              editor.id ? editor.id === event.target.id : editor.name === event.target.name
-            )
+            if (this.submittedEditors.length > 0) {
+              const submitted = this.submittedEditors.find((editor) =>
+                editor.id ? editor.id === event.target.id : editor.name === event.target.name
+              )
+              if (submitted && event.target.value !== submitted.value) this.submittedEditors = []
+            }
 
-            if (submitted && event.target.value !== submitted.value) this.submittedEditors = []
+            if (this.submittedRichEditors.length > 0) {
+              const richRoot = event.target.closest("[data-mui-rich-editor]")
+              if (richRoot) {
+                this.submittedRichEditors = this.submittedRichEditors.filter(
+                  (editor) => editor.id !== richRoot.id
+                )
+              }
+            }
           }
 
           this.el.addEventListener("keydown", this.onKeydown)
@@ -276,19 +306,27 @@ defmodule MatriarchUI.Chat do
           this.el.removeEventListener("input", this.onInput)
         },
         clearSubmittedValues() {
-          if (this.submittedEditors.length === 0) return
+          if (this.submittedEditors.length > 0) {
+            const editors = Array.from(this.el.querySelectorAll("textarea, input[type='text']"))
 
-          const editors = Array.from(this.el.querySelectorAll("textarea, input[type='text']"))
+            this.submittedEditors.forEach((submitted) => {
+              const editor = editors.find((candidate) =>
+                submitted.id ? submitted.id === candidate.id : submitted.name === candidate.name
+              )
 
-          this.submittedEditors.forEach((submitted) => {
-            const editor = editors.find((candidate) =>
-              submitted.id ? submitted.id === candidate.id : submitted.name === candidate.name
-            )
+              if (!editor || editor.value !== submitted.value) return
+              editor.value = ""
+              editor.dispatchEvent(new Event("input", {bubbles: true}))
+            })
+          }
 
-            if (!editor || editor.value !== submitted.value) return
-            editor.value = ""
-            editor.dispatchEvent(new Event("input", {bubbles: true}))
-          })
+          if (this.submittedRichEditors.length > 0) {
+            this.submittedRichEditors.forEach((submitted) => {
+              const input = document.getElementById(`${submitted.id}-input`)
+              if (!input || input.value !== submitted.value) return
+              document.getElementById(submitted.id)?.dispatchEvent(new CustomEvent("mui:rich-editor-clear"))
+            })
+          }
         }
       }
     </script>
@@ -302,15 +340,14 @@ defmodule MatriarchUI.Chat do
 
   defp bubble_classes("incoming"),
     do:
-      "rounded-mui-lg rounded-bl-mui-xs border border-mui-border bg-mui-surface px-3 py-2 text-mui-foreground shadow-mui-xs"
+      "rounded-mui-xl rounded-bl-mui-sm border border-mui-border bg-mui-surface px-3.5 py-2 text-mui-foreground shadow-mui-xs"
 
   defp bubble_classes("outgoing"),
-    do:
-      "rounded-mui-lg rounded-br-mui-xs bg-mui-primary-subtle px-3 py-2 text-mui-primary-subtle-foreground"
+    do: "rounded-mui-xl rounded-br-mui-sm bg-mui-brand px-3.5 py-2 text-mui-brand-foreground"
 
   defp bubble_classes("assistant"),
     do:
-      "rounded-mui-lg rounded-bl-mui-xs border border-mui-border bg-mui-accent-subtle px-3 py-2 text-mui-accent-subtle-foreground"
+      "rounded-mui-xl rounded-bl-mui-sm border border-mui-border bg-mui-accent-subtle px-3.5 py-2 text-mui-accent-subtle-foreground"
 
   defp bubble_classes("system"),
     do:

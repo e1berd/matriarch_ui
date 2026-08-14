@@ -52,7 +52,7 @@ defmodule MatriarchUI.DropdownMenu do
         data-mui-close
         class={[
           "flex w-full items-center gap-1 rounded-mui-md px-2 py-1 text-left outline-none",
-          "hover:bg-mui-surface-hover focus:bg-mui-surface-hover",
+          "hover:bg-mui-surface-hover focus-visible:bg-mui-surface-hover",
           item[:variant] == "danger" && "text-mui-danger"
         ]}
         {item_rest(item)}

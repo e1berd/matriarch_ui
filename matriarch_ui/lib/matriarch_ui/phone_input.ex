@@ -52,9 +52,15 @@ defmodule MatriarchUI.PhoneInput do
     <div
       id={"#{@id}-phone-input"}
       data-mui
+      data-mui-orientation="horizontal"
       data-mui-phone-input
       data-mui-phone-codes={@dial_codes}
-      class={CN.cn(["mui-control-group inline-flex w-full items-stretch", @class])}
+      class={
+        CN.cn([
+          "mui-control-group isolate inline-flex w-full items-stretch [&>*:focus-within]:z-10",
+          @class
+        ])
+      }
     >
       <div data-mui-phone-region class="w-20 shrink-0">
         <.select
@@ -67,11 +73,7 @@ defmodule MatriarchUI.PhoneInput do
           panel_class="w-48"
           class="w-full"
         >
-          <:option
-            :for={code <- @regions}
-            value={code}
-            label={"#{flag(code)} #{Map.fetch!(@calling_codes, code)}"}
-          >
+          <:option :for={code <- @regions} value={code} label={flag(code)}>
             {flag(code)} {Map.fetch!(@calling_codes, code)}
           </:option>
         </.select>
@@ -174,16 +176,11 @@ defmodule MatriarchUI.PhoneInput do
             .map((letter) => String.fromCodePoint(letter.charCodeAt(0) + 127397))
             .join("")
 
-          const optionText = (code) => `${flag(code)} ${codes.get(code)}`
-
           const renderRegion = () => {
             prefix.textContent = codes.get(region) || ""
             regionLabel.textContent = flag(region)
             regionOptions.forEach((option) => {
-              const code = option.dataset.muiValue
-              option.dataset.muiLabel = optionText(code)
-              option.querySelector("span").textContent = optionText(code)
-              option.setAttribute("aria-selected", String(code === region))
+              option.setAttribute("aria-selected", String(option.dataset.muiValue === region))
             })
           }
 
@@ -230,6 +227,8 @@ defmodule MatriarchUI.PhoneInput do
             region = regionValue.value
             renderRegion()
             syncValue()
+            input.focus()
+            input.setSelectionRange(input.value.length, input.value.length)
           }, { signal })
 
           input.addEventListener("input", () => {
@@ -249,12 +248,6 @@ defmodule MatriarchUI.PhoneInput do
               syncValue()
             }
           }, { signal })
-
-          regionOptions.forEach((option) => {
-            const code = option.dataset.muiValue
-            option.dataset.muiLabel = optionText(code)
-            option.querySelector("span").textContent = optionText(code)
-          })
 
           if (value.value?.startsWith("+")) acceptInternational(value.value)
           else {

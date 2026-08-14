@@ -58,6 +58,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Tabs
       import MatriarchUI.Textarea
       import MatriarchUI.ThemeToggle
+      import MatriarchUI.Toast
       import MatriarchUI.Tooltip
     end
   end

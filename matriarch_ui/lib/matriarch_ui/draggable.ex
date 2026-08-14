@@ -238,12 +238,49 @@ defmodule MatriarchUI.Draggable do
             if (this.el.dataset.muiOrientation === "horizontal") placeholder.style.width = `${rect.width}px`
             return placeholder
           }
+          this.animatePlaceholder = (from) => {
+            if (!this.motionEnabled() || !this.placeholder || !from) return
+            const to = this.placeholder.getBoundingClientRect()
+            const x = from.left - to.left
+            const y = from.top - to.top
+            if (x === 0 && y === 0) return
+            this.placeholder.animate(
+              [{transform: `translate(${x}px, ${y}px)`}, {transform: "translate(0, 0)"}],
+              {duration: this.duration(), easing: this.easing},
+            )
+          }
           this.movePlaceholder = (target, before) => {
             const reference = before ? target : target.nextSibling
             if (reference === this.placeholder || this.placeholder.nextSibling === reference) return
+            const placeholderFrom = this.placeholder.getBoundingClientRect()
             const positions = this.positions()
             this.el.insertBefore(this.placeholder, reference)
             this.animateFrom(positions)
+            this.animatePlaceholder(placeholderFrom)
+          }
+          this.detachPlaceholder = () => {
+            const placeholder = this.placeholder
+            this.placeholder = null
+            if (!placeholder) return
+            if (!this.motionEnabled()) {
+              placeholder.remove()
+              return
+            }
+            const rect = placeholder.getBoundingClientRect()
+            Object.assign(placeholder.style, {
+              position: "fixed",
+              margin: "0",
+              left: `${rect.left}px`,
+              top: `${rect.top}px`,
+              width: `${rect.width}px`,
+              height: `${rect.height}px`,
+              pointerEvents: "none",
+            })
+            document.body.appendChild(placeholder)
+            placeholder
+              .animate([{opacity: 1}, {opacity: 0}], {duration: this.duration() * 0.6, easing: this.easing})
+              .finished.catch(() => {})
+              .finally(() => placeholder.remove())
           }
           this.completeDrag = (commit) => {
             const item = this.dragged
@@ -255,8 +292,7 @@ defmodule MatriarchUI.Draggable do
             item.style.display = this.originalDisplay
             delete item.dataset.muiDragging
             handle?.setAttribute("aria-grabbed", "false")
-            this.placeholder?.remove()
-            this.placeholder = null
+            this.detachPlaceholder()
             this.dragged = null
             this.animateFrom(positions)
             if (commit && this.motionEnabled()) {
@@ -285,6 +321,12 @@ defmodule MatriarchUI.Draggable do
             this.originalDisplay = item.style.display
             this.placeholder = this.createPlaceholder(item)
             this.el.insertBefore(this.placeholder, item.nextSibling)
+            if (this.motionEnabled()) {
+              this.placeholder.animate(
+                [{opacity: 0, transform: "scale(0.94)"}, {opacity: 1, transform: "scale(1)"}],
+                {duration: this.duration(), easing: this.easing},
+              )
+            }
             item.dataset.muiDragging = "true"
             handle.setAttribute("aria-grabbed", "true")
             event.dataTransfer.effectAllowed = "move"

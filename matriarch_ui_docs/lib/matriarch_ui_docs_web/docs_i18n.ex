@@ -51,6 +51,7 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "table" => "Таблица",
     "tabs" => "Вкладки",
     "textarea" => "Многострочное поле",
+    "toast" => "Тост-уведомление",
     "tooltip" => "Подсказка"
   }
 

@@ -8,7 +8,7 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
     router: MatriarchUIDocsWeb.Router
 
   def search_content(_locale) do
-    "LiveView stream PubSub Presence bounded message window infinite scroll deep links typing LLM assistant"
+    "LiveView stream PubSub Presence bounded message window infinite scroll deep links typing LLM assistant rich editor tiptap"
   end
 
   attr :streams, :map, required: true
@@ -31,7 +31,7 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
       <.example
         locale={@locale}
         title="LiveView stream + PubSub"
-        description="Open this page in another browser window: messages and typing state are shared in real time without Postgres."
+        description="Open this page in another browser window: messages and typing state are shared in real time without Postgres. The composer is a MatriarchUI.RichEditor, composed at the call site rather than baked into the chat primitives."
         class="block p-0"
         code={
           ~S'''
@@ -42,11 +42,6 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
                 <.chat_header_title>Phoenix commons</.chat_header_title>
                 <.chat_presence state="online" label={"#{@online_count} online"} />
               </div>
-              <:actions>
-                <.button variant="ghost" size="icon" aria-label="Conversation options">
-                  <.icon name="dots-three" />
-                </.button>
-              </:actions>
             </.chat_header>
 
             <.chat_messages
@@ -77,9 +72,7 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
                 <:avatar :if={message.author_id != @identity.id}>
                   <.avatar initials={initials(message.author_name)} size="sm" />
                 </:avatar>
-                <.chat_bubble variant={bubble_variant(message, @identity.id)}>
-                  <.chat_message_content>{message.body}</.chat_message_content>
-                </.chat_bubble>
+                <:content>{message.body}</:content>
               </.chat_message>
             </.chat_messages>
 
@@ -91,13 +84,22 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
               phx-change="chat:typing"
               phx-submit="chat:send"
             >
-              <.textarea
+              <.rich_editor
                 id="phoenix-chat-input"
-                name="chat[message]"
-                value={@message_value}
-                rows="1"
+                editable
                 placeholder="Write a message…"
-                class="min-h-8 resize-none border-0 bg-transparent px-2 py-1.5 shadow-none focus-visible:border-transparent focus-visible:ring-0"
+                class="min-h-8 flex-1 border-0 bg-transparent shadow-none"
+              >
+                <:toolbar class="hidden"></:toolbar>
+                <:content class="min-h-0 flex-1 [&_.mui-rich-editor-content]:min-h-0 [&_.mui-rich-editor-content]:px-2 [&_.mui-rich-editor-content]:py-1.5" />
+              </.rich_editor>
+              <input
+                type="text"
+                class="hidden"
+                name="chat[message]"
+                id="phoenix-chat-input-plain"
+                phx-hook=".ChatRichBridge"
+                data-mui-chat-bridge-for="phoenix-chat-input"
               />
               <.button type="submit" variant="brand" size="icon" aria-label="Send message">
                 <.icon name="paper-plane-tilt" />
@@ -114,11 +116,6 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
               <.chat_header_title>Phoenix commons</.chat_header_title>
               <.chat_presence state="online" label={"#{@online_count} online"} />
             </div>
-            <:actions>
-              <.button variant="ghost" size="icon" aria-label="Conversation options">
-                <.icon name="dots-three" />
-              </.button>
-            </:actions>
           </.chat_header>
 
           <.chat_messages
@@ -149,9 +146,7 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
               <:avatar :if={message.author_id != @identity.id}>
                 <.avatar initials={initials(message.author_name)} size="sm" />
               </:avatar>
-              <.chat_bubble variant={bubble_variant(message, @identity.id)}>
-                <.chat_message_content>{message.body}</.chat_message_content>
-              </.chat_bubble>
+              <:content>{message.body}</:content>
             </.chat_message>
           </.chat_messages>
 
@@ -163,13 +158,22 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
             phx-change="chat:typing"
             phx-submit="chat:send"
           >
-            <.textarea
+            <.rich_editor
               id="phoenix-chat-input"
-              name="chat[message]"
-              value={@message_value}
-              rows="1"
+              editable
               placeholder="Write a message…"
-              class="min-h-8 resize-none border-0 bg-transparent px-2 py-1.5 shadow-none focus-visible:border-transparent focus-visible:ring-0"
+              class="min-h-8 flex-1 border-0 bg-transparent shadow-none"
+            >
+              <:toolbar class="hidden"></:toolbar>
+              <:content class="min-h-0 flex-1 [&_.mui-rich-editor-content]:min-h-0 [&_.mui-rich-editor-content]:px-2 [&_.mui-rich-editor-content]:py-1.5" />
+            </.rich_editor>
+            <input
+              type="text"
+              class="hidden"
+              name="chat[message]"
+              id="phoenix-chat-input-plain"
+              phx-hook=".ChatRichBridge"
+              data-mui-chat-bridge-for="phoenix-chat-input"
             />
             <.button type="submit" variant="brand" size="icon" aria-label="Send message">
               <.icon name="paper-plane-tilt" />
@@ -186,7 +190,8 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
           The LiveView owns chat_limit and chat_offset. The hook emits load events and preserves a shared message as the visual anchor.
         </.architecture_card>
         <.architecture_card title="Transport agnostic">
-          The content primitive accepts plain text or rendered rich-text DOM. PubSub, database queries, Tiptap, and LLM pipelines stay in the host application.
+          A message's <code>:content</code>
+          slot accepts plain text or rendered rich DOM. This demo bridges the rich editor's Tiptap document to a plain-text field — PubSub, database queries, and any richer storage stay in the host application.
         </.architecture_card>
       </section>
 
@@ -206,17 +211,60 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
            "stable application id used for anchors and links"},
           {"chat_message.author_kind", "person | assistant | system",
            "identifies human, LLM, and system authors without prescribing a schema"},
-          {"chat_message_content", "slot",
-           "plain text or rich DOM rendered from a future editor document"},
+          {"chat_message.:content", "slot",
+           "plain text or rich DOM; the bubble variant is derived from side/author_kind"},
+          {"chat_message.:inner_block", "slot",
+           "drop down to a manual <.chat_bubble> for full control instead of :content"},
           {"chat_composer.submit_on_enter", "boolean",
-           "Enter submits; Shift+Enter inserts a line break"},
+           "Enter submits; Shift+Enter inserts a line break — also works inside a nested .rich_editor"},
           {"chat_composer.clear_on_submit", "boolean",
-           "clears native text fields after a successful form submit event"}
+           "clears text fields and any nested .rich_editor after a successful submit"}
         ]}
       />
 
       <MatriarchUIDocsWeb.Examples.ChatPresenceGuide.guide />
     </div>
+
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".ChatRichBridge">
+      function plainText(doc) {
+        const lines = []
+
+        const walk = (node, into) => {
+          if (node.type === "text") {
+            into.push(node.text || "")
+            return
+          }
+
+          const blockTypes = ["paragraph", "heading", "listItem", "taskItem", "blockquote", "codeBlock"]
+          const isBlock = blockTypes.includes(node.type)
+          const parts = isBlock ? [] : into
+          ;(node.content || []).forEach((child) => walk(child, parts))
+          if (isBlock) lines.push(parts.join(""))
+        }
+
+        ;(doc.content || []).forEach((node) => walk(node, []))
+        return lines.join("\n").trim()
+      }
+
+      export default {
+        mounted() {
+          const richEditor = document.getElementById(this.el.dataset.muiChatBridgeFor)
+          if (!richEditor) return
+
+          this.onChange = (event) => {
+            this.el.value = plainText(event.detail.json)
+            this.el.dispatchEvent(new Event("input", { bubbles: true }))
+          }
+
+          richEditor.addEventListener("mui:rich-editor-change", this.onChange)
+        },
+        destroyed() {
+          document
+            .getElementById(this.el.dataset.muiChatBridgeFor)
+            ?.removeEventListener("mui:rich-editor-change", this.onChange)
+        },
+      }
+    </script>
     """
   end
 
@@ -230,14 +278,6 @@ defmodule MatriarchUIDocsWeb.Examples.Chat do
       <p class="mt-1 text-sm leading-6 text-mui-muted-foreground">{render_slot(@inner_block)}</p>
     </div>
     """
-  end
-
-  defp bubble_variant(message, own_id) do
-    cond do
-      message.author_id == own_id -> "outgoing"
-      message.author_kind == "assistant" -> "assistant"
-      true -> "incoming"
-    end
   end
 
   defp initials(name) do

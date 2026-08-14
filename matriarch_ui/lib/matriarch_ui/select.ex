@@ -82,7 +82,7 @@ defmodule MatriarchUI.Select do
       >
         <span :if={@selected != []} data-mui-select-label class="truncate">
           <%= for {option, index} <- Enum.with_index(@selected) do %>
-            <span :if={index > 0}>, </span>{render_slot(option)}
+            <span :if={index > 0}>, </span><%= if option[:label], do: option.label, else: render_slot(option) %>
           <% end %>
         </span>
         <span :if={@selected == []} data-mui-select-label class="truncate">{@placeholder}</span>
