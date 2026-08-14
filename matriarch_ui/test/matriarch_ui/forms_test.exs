@@ -32,6 +32,13 @@ defmodule MatriarchUI.FormsTest do
     assert count(html, ~s(input[type="checkbox"]#tos[checked])) == 1
   end
 
+  test "checkbox exposes the indeterminate state with a Phosphor indicator" do
+    html = render_component(&checkbox/1, %{name: "all", id: "all", indeterminate: true})
+
+    assert count(html, ~s(input[type="checkbox"]#all[aria-checked="mixed"])) == 1
+    assert count(html, ~s([data-mui-icon="minus"])) == 1
+  end
+
   test "switch renders a checkbox input styled as a track/thumb" do
     html = render_component(&switch/1, %{name: "notify", id: "notify", checked: false})
     assert count(html, ~s(input[type="checkbox"]#notify)) == 1
@@ -65,6 +72,7 @@ defmodule MatriarchUI.FormsTest do
     assert count(html, ~s(input[type="hidden"][name="role"][value="admin"])) == 1
     assert count(html, ~s([role="option"])) == 2
     assert count(html, ~s([role="option"][data-mui-value="admin"][aria-selected="true"])) == 1
+    assert count(html, ~s([role="option"][data-mui-label])) == 0
     assert html =~ "Admin"
   end
 
@@ -89,6 +97,28 @@ defmodule MatriarchUI.FormsTest do
 
     assert count(html, ~s([role="option"])) == 2
     assert html =~ "Berlin"
+  end
+
+  test "multiple select renders a native multiple value target and selected checkmarks" do
+    html =
+      render_component(&select/1, %{
+        id: "roles",
+        name: "roles",
+        value: ["admin", "editor"],
+        multiple: true,
+        option: [
+          %{value: "admin", inner_block: fn _, _ -> "Admin" end},
+          %{value: "editor", inner_block: fn _, _ -> "Editor" end},
+          %{value: "viewer", inner_block: fn _, _ -> "Viewer" end}
+        ]
+      })
+
+    assert count(html, ~s(select#roles-value[name="roles[]"][multiple])) == 1
+    assert count(html, ~s(select#roles-value option[selected])) == 2
+    assert count(html, ~s(button[data-mui-multiple="true"])) == 1
+    assert count(html, ~s([role="listbox"][aria-multiselectable="true"])) == 1
+    assert count(html, ~s([role="option"][aria-selected="true"])) == 2
+    assert count(html, ~s([role="option"] [data-mui-icon="check"])) == 3
   end
 
   test "select panel matches the trigger width" do

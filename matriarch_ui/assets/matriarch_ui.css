@@ -30,6 +30,10 @@
   --color-mui-card-border: var(--color-mui-border);
   --color-mui-input-background: var(--color-mui-surface);
   --color-mui-input-border: var(--color-mui-border-strong);
+  --color-mui-checkbox-background: transparent;
+  --color-mui-checkbox-border: var(--color-mui-input-border);
+  --color-mui-checkbox-checked: var(--color-mui-primary);
+  --color-mui-checkbox-checked-foreground: var(--color-mui-primary-foreground);
 
   --color-mui-primary: oklch(0.205 0 0);
   --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
@@ -133,6 +137,10 @@
   --color-mui-card-border: rgb(255 255 255 / 7%);
   --color-mui-input-background: transparent;
   --color-mui-input-border: rgb(255 255 255 / 11%);
+  --color-mui-checkbox-background: rgb(255 255 255 / 4%);
+  --color-mui-checkbox-border: rgb(255 255 255 / 18%);
+  --color-mui-checkbox-checked: var(--color-mui-primary);
+  --color-mui-checkbox-checked-foreground: var(--color-mui-primary-foreground);
 
   --color-mui-primary: oklch(0.922 0 0);
   --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
@@ -381,5 +389,50 @@
 
   .mui-button-spinner {
     animation-duration: var(--duration-mui-spinner);
+  }
+
+  .mui-control-group > * {
+    position: relative;
+  }
+
+  .mui-control-group > div[data-mui] {
+    flex: 1 1 auto;
+  }
+
+  .mui-control-group > * + * {
+    margin-inline-start: -1px;
+  }
+
+  .mui-control-group :where([data-mui-control]) {
+    border-radius: 0 !important;
+  }
+
+  .mui-control-group[data-mui-orientation="horizontal"] > :first-child:is([data-mui-control]),
+  .mui-control-group[data-mui-orientation="horizontal"] > :first-child :where([data-mui-control]) {
+    border-start-start-radius: var(--radius-mui-md) !important;
+    border-end-start-radius: var(--radius-mui-md) !important;
+  }
+
+  .mui-control-group[data-mui-orientation="horizontal"] > :last-child:is([data-mui-control]),
+  .mui-control-group[data-mui-orientation="horizontal"] > :last-child :where([data-mui-control]) {
+    border-start-end-radius: var(--radius-mui-md) !important;
+    border-end-end-radius: var(--radius-mui-md) !important;
+  }
+
+  .mui-control-group[data-mui-orientation="vertical"] > * + * {
+    margin-block-start: -1px;
+    margin-inline-start: 0;
+  }
+
+  .mui-control-group[data-mui-orientation="vertical"] > :first-child:is([data-mui-control]),
+  .mui-control-group[data-mui-orientation="vertical"] > :first-child :where([data-mui-control]) {
+    border-start-start-radius: var(--radius-mui-md) !important;
+    border-start-end-radius: var(--radius-mui-md) !important;
+  }
+
+  .mui-control-group[data-mui-orientation="vertical"] > :last-child:is([data-mui-control]),
+  .mui-control-group[data-mui-orientation="vertical"] > :last-child :where([data-mui-control]) {
+    border-end-start-radius: var(--radius-mui-md) !important;
+    border-end-end-radius: var(--radius-mui-md) !important;
   }
 }

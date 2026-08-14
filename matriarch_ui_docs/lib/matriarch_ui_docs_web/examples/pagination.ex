@@ -4,17 +4,19 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
   import MatriarchUIDocsWeb.Showcase
 
   def examples(assigns) do
+    assigns = Map.put_new(assigns, :page, 4)
+
     ~H"""
     <.example
       title="Basic"
-      description="Every button fires phx-click={event} phx-value-page={n} — handle it in your LiveView and re-render with the new page."
+      description="Every button emits the requested page. The LiveView stores it in ?page=N with push_patch and restores it in handle_params/3."
       code={
         ~S'''
-        <.pagination id="results-pagination" page={4} total_pages={12} event="paginate" />
+        <.pagination id="results-pagination" page={@page} total_pages={12} event="paginate" />
         '''
       }
     >
-      <.pagination id="results-pagination" page={4} total_pages={12} event="paginate" />
+      <.pagination id="results-pagination" page={@page} total_pages={12} event="paginate" />
     </.example>
 
     <.props_table rows={[

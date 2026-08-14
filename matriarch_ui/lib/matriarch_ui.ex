@@ -19,6 +19,7 @@ defmodule MatriarchUI do
       import MatriarchUI.DropdownMenu
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
+      import MatriarchUI.Group
       import MatriarchUI.Input
       import MatriarchUI.Icon
       import MatriarchUI.Listbox
@@ -33,6 +34,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Slider
       import MatriarchUI.Splitter
       import MatriarchUI.Switch
+      import MatriarchUI.Table
       import MatriarchUI.Tabs
       import MatriarchUI.Textarea
       import MatriarchUI.Tooltip

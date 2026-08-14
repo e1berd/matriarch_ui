@@ -192,6 +192,7 @@ defmodule MatriarchUI.Floating do
 
       function selectOption(trigger, panel, option) {
         const label = option.dataset.muiLabel || option.textContent.trim()
+        const multiple = trigger.dataset.muiMultiple === "true"
 
         if (trigger.tagName === "INPUT") {
           trigger.value = label
@@ -200,13 +201,34 @@ defmodule MatriarchUI.Floating do
         }
 
         const target = document.getElementById(trigger.dataset.muiValueTarget)
+        const labelEl = trigger.querySelector("[data-mui-select-label]")
+
+        if (multiple) {
+          const selected = option.getAttribute("aria-selected") !== "true"
+          option.setAttribute("aria-selected", selected ? "true" : "false")
+
+          if (target?.tagName === "SELECT") {
+            const targetOption = Array.from(target.options).find(
+              (item) => item.value === option.dataset.muiValue
+            )
+            if (targetOption) targetOption.selected = selected
+            target.dispatchEvent(new Event("input", { bubbles: true }))
+            target.dispatchEvent(new Event("change", { bubbles: true }))
+          }
+
+          const labels = Array.from(panel.querySelectorAll('[role="option"][aria-selected="true"]')).map(
+            (item) => item.dataset.muiLabel || item.textContent.trim()
+          )
+          if (labelEl) labelEl.textContent = labels.join(", ") || trigger.dataset.muiPlaceholder || ""
+          return
+        }
+
         if (target) {
           target.value = option.dataset.muiValue
           target.dispatchEvent(new Event("input", { bubbles: true }))
           target.dispatchEvent(new Event("change", { bubbles: true }))
         }
 
-        const labelEl = trigger.querySelector("[data-mui-select-label]")
         if (labelEl) labelEl.textContent = label
 
         panel.querySelectorAll('[role="option"]').forEach((el) => {
@@ -265,7 +287,7 @@ defmodule MatriarchUI.Floating do
               if (option && panel.contains(option)) {
                 event.preventDefault()
                 selectOption(trigger, panel, option)
-                hide()
+                if (trigger.dataset.muiMultiple !== "true") hide()
               }
             }
           }
@@ -324,7 +346,7 @@ defmodule MatriarchUI.Floating do
             const option = event.target.closest("[data-mui-value]")
             if (option && role === "listbox") {
               selectOption(trigger, panel, option)
-              hide()
+              if (trigger.dataset.muiMultiple !== "true") hide()
             }
             if (event.target.closest("[data-mui-close]")) hide()
           })

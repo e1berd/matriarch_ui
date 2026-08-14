@@ -35,6 +35,7 @@ defmodule MatriarchUI.Autocomplete do
     ~H"""
     <div data-mui>
       <input
+        data-mui-control
         type="text"
         id={@id}
         name={@name}

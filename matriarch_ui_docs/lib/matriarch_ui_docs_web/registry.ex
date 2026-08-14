@@ -16,6 +16,7 @@ defmodule MatriarchUIDocsWeb.Registry do
     %{slug: "dropdown-menu", title: "Dropdown Menu", module: Examples.DropdownMenu},
     %{slug: "field", title: "Field", module: Examples.Field},
     %{slug: "fieldset", title: "Fieldset", module: Examples.Field},
+    %{slug: "group", title: "Group", module: Examples.Group},
     %{slug: "input", title: "Input", module: Examples.Input},
     %{slug: "listbox", title: "Listbox", module: Examples.Listbox},
     %{slug: "modal", title: "Modal", module: Examples.Modal},
@@ -29,6 +30,7 @@ defmodule MatriarchUIDocsWeb.Registry do
     %{slug: "slider", title: "Slider", module: Examples.Slider},
     %{slug: "splitter", title: "Splitter", module: Examples.Splitter},
     %{slug: "switch", title: "Switch", module: Examples.Switch},
+    %{slug: "table", title: "Table", module: Examples.Table},
     %{slug: "tabs", title: "Tabs", module: Examples.Tabs},
     %{slug: "textarea", title: "Textarea", module: Examples.Textarea},
     %{slug: "tooltip", title: "Tooltip", module: Examples.Tooltip}

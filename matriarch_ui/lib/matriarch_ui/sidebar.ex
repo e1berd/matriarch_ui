@@ -135,7 +135,7 @@ defmodule MatriarchUI.Sidebar do
       href={@href}
       class={
         CN.cn([
-          "flex min-h-7 items-center gap-2 rounded-mui-md px-2 py-1 text-[13px] font-normal text-mui-muted-foreground transition-[color,background-color] duration-150 ease-mui-out",
+          "flex min-h-7 items-center gap-2 rounded-mui-md px-2 py-1 text-[13px] font-normal text-mui-muted-foreground",
           "group-data-[mui-state=closed]/sidebar:md:justify-center group-data-[mui-state=closed]/sidebar:md:gap-0 group-data-[mui-state=closed]/sidebar:md:px-0",
           "hover:bg-mui-surface-hover hover:text-mui-foreground",
           @active && "bg-mui-primary-subtle text-mui-primary-subtle-foreground hover:bg-mui-primary-subtle",

@@ -38,13 +38,13 @@ defmodule MatriarchUI.Button do
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
       ~H"""
-      <.link data-mui class={@class} {@rest}>
+      <.link data-mui data-mui-control class={@class} {@rest}>
         {render_slot(@inner_block)}
       </.link>
       """
     else
       ~H"""
-      <button type={@type} disabled={@disabled || @loading} data-mui class={@class} {@rest}>
+      <button type={@type} disabled={@disabled || @loading} data-mui data-mui-control class={@class} {@rest}>
         <.icon :if={@loading} name="spinner-gap" class="mui-button-spinner animate-spin" />
         <span :if={!@loading && @icon != []} class="-ml-0.5 size-4">{render_slot(@icon)}</span>
         {render_slot(@inner_block)}

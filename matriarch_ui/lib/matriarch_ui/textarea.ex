@@ -24,6 +24,7 @@ defmodule MatriarchUI.Textarea do
     ~H"""
     <textarea
       data-mui
+      data-mui-control
       name={@name}
       id={@id}
       aria-invalid={to_string(@invalid)}

@@ -18,10 +18,13 @@ defmodule MatriarchUI.Input do
 
   def input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
-    |> assign(field: nil, invalid: used_input?(field) && field.errors != [])
-    |> assign_new(:name, fn -> field.name end)
-    |> assign_new(:id, fn -> field.id end)
-    |> assign_new(:value, fn -> field.value end)
+    |> assign(
+      field: nil,
+      invalid: used_input?(field) && field.errors != [],
+      name: assigns.name || field.name,
+      id: assigns.id || field.id,
+      value: if(is_nil(assigns.value), do: field.value, else: assigns.value)
+    )
     |> input()
   end
 
@@ -35,6 +38,7 @@ defmodule MatriarchUI.Input do
         {render_slot(@leading)}
       </span>
       <input
+        data-mui-control
         type={@type}
         name={@name}
         id={@id}

@@ -25,7 +25,7 @@ defmodule MatriarchUI.Pagination do
       id={@id}
       data-mui
       aria-label="Pagination"
-      class={CN.cn(["flex items-center gap-2", @class])}
+      class={CN.cn(["flex items-center gap-1", @class])}
     >
       <button
         id={"#{@id}-previous"}
@@ -35,15 +35,15 @@ defmodule MatriarchUI.Pagination do
         phx-target={@target}
         disabled={@page <= 1}
         aria-label="Previous page"
-        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
+        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <.icon name="caret-left" />
       </button>
 
-      <span :for={item <- @items}>
+      <%= for item <- @items do %>
         <span
           :if={item == :ellipsis}
-          class="flex h-8 min-w-9 items-center justify-center text-sm text-mui-subtle-foreground select-none"
+          class="flex h-9 min-w-9 items-center justify-center text-sm text-mui-subtle-foreground select-none"
         >
           …
         </span>
@@ -55,11 +55,11 @@ defmodule MatriarchUI.Pagination do
           phx-value-page={item}
           phx-target={@target}
           aria-current={item == @page && "page"}
-          class="flex h-8 min-w-9 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface px-2 text-sm font-medium text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 aria-[current=page]:border-mui-brand aria-[current=page]:bg-mui-brand aria-[current=page]:text-mui-brand-foreground aria-[current=page]:hover:bg-mui-brand-hover"
+          class="flex h-8 min-w-9 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface px-2 text-sm font-medium text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 aria-[current=page]:border-mui-brand aria-[current=page]:bg-mui-brand aria-[current=page]:text-mui-brand-foreground aria-[current=page]:hover:bg-mui-brand-hover"
         >
           {item}
         </button>
-      </span>
+      <% end %>
 
       <button
         id={"#{@id}-next"}
@@ -69,7 +69,7 @@ defmodule MatriarchUI.Pagination do
         phx-target={@target}
         disabled={@page >= @total_pages}
         aria-label="Next page"
-        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
+        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <.icon name="caret-right" />
       </button>
