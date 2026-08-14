@@ -18,6 +18,7 @@ defmodule MatriarchUI.Floating do
       restricts fallback to top/bottom only, never left/right
     * `data-mui-role` — `"menu"` or `"listbox"` enables arrow-key roving focus
     * `data-mui-match-width` — `"true"` keeps the panel as wide as its trigger
+    * `data-mui-persistent` — `"true"` keeps an open panel open when its trigger is clicked again
     * `data-mui-value-target` — id of the hidden input a `"listbox"` writes its
       selected value into (Select only)
 
@@ -247,6 +248,7 @@ defmodule MatriarchUI.Floating do
           const axis = trigger.dataset.muiAxis || "both"
           const triggerMode = trigger.dataset.muiTrigger || "click"
           const role = trigger.dataset.muiRole
+          const persistent = trigger.dataset.muiPersistent === "true"
           let open = false
           let stopAutoUpdate = null
 
@@ -318,7 +320,7 @@ defmodule MatriarchUI.Floating do
           }
 
           if (triggerMode === "click") {
-            trigger.addEventListener("click", () => (open ? hide() : show()))
+            trigger.addEventListener("click", () => (open ? (persistent ? show() : hide()) : show()))
           } else if (triggerMode === "focus") {
             trigger.addEventListener("focus", show)
             trigger.addEventListener("click", show)

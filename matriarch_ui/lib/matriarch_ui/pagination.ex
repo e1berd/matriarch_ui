@@ -6,6 +6,7 @@ defmodule MatriarchUI.Pagination do
   """
   use Phoenix.Component
   alias MatriarchUI.CN
+  alias MatriarchUI.I18n
   import MatriarchUI.Icon
 
   attr :id, :string, required: true
@@ -14,19 +15,28 @@ defmodule MatriarchUI.Pagination do
   attr :siblings, :integer, default: 1
   attr :event, :string, default: "paginate"
   attr :target, :any, default: nil
+  attr :locale, :string, default: "en"
   attr :class, :string, default: nil
+  slot :page_size
 
   def pagination(assigns) do
     assigns =
       assign(assigns, :items, page_items(assigns.page, assigns.total_pages, assigns.siblings))
 
     ~H"""
-    <nav
+    <div
       id={@id}
       data-mui
-      aria-label="Pagination"
-      class={CN.cn(["flex items-center gap-1", @class])}
+      class={CN.cn(["flex w-full items-center justify-between gap-4", @class])}
     >
+      <div
+        :if={@page_size != []}
+        class="flex items-center gap-2 text-sm text-mui-muted-foreground"
+      >
+        <span>{I18n.t(@locale, "pagination.results_per_page")}</span>
+        {render_slot(@page_size)}
+      </div>
+      <nav aria-label={I18n.t(@locale, "pagination.aria_label")} class="flex items-center gap-1">
       <button
         id={"#{@id}-previous"}
         type="button"
@@ -34,7 +44,7 @@ defmodule MatriarchUI.Pagination do
         phx-value-page={@page - 1}
         phx-target={@target}
         disabled={@page <= 1}
-        aria-label="Previous page"
+        aria-label={I18n.t(@locale, "pagination.previous_page")}
         class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <.icon name="caret-left" />
@@ -68,12 +78,13 @@ defmodule MatriarchUI.Pagination do
         phx-value-page={@page + 1}
         phx-target={@target}
         disabled={@page >= @total_pages}
-        aria-label="Next page"
+        aria-label={I18n.t(@locale, "pagination.next_page")}
         class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <.icon name="caret-right" />
       </button>
-    </nav>
+      </nav>
+    </div>
     """
   end
 

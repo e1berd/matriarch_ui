@@ -26,6 +26,8 @@ defmodule MatriarchUIDocsWeb.Layouts do
 
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
+  attr :locale, :string, default: "en"
+  attr :language_paths, :map, default: %{"en" => "/", "ru" => "/?locale=ru"}
 
   attr :current_scope, :map,
     default: nil,
@@ -35,7 +37,12 @@ defmodule MatriarchUIDocsWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <header class="sticky top-0 z-40 flex h-13 items-center gap-5 border-b border-mui-border bg-mui-surface/80 px-4 backdrop-blur sm:px-6">
+    <header
+      id="docs-header"
+      phx-hook=".MUILocale"
+      data-docs-locale={@locale}
+      class="sticky top-0 z-40 flex h-13 items-center gap-5 border-b border-mui-border bg-mui-surface/80 px-4 backdrop-blur sm:px-6"
+    >
       <a
         href="/"
         class="flex items-center gap-2 text-[13px] font-semibold tracking-tight text-mui-foreground"
@@ -46,12 +53,34 @@ defmodule MatriarchUIDocsWeb.Layouts do
         matriarchUI
       </a>
       <nav class="flex items-center gap-4 text-[13px] text-mui-muted-foreground">
-        <.link navigate={~p"/docs"} class="hover:text-mui-foreground">Docs</.link>
-        <.link navigate={~p"/docs/components/button"} class="hover:text-mui-foreground">
-          Components
+        <.link navigate={~p"/docs?#{locale_params(@locale)}"} class="hover:text-mui-foreground">
+          {MatriarchUI.I18n.t(@locale, "docs.docs")}
+        </.link>
+        <.link
+          navigate={~p"/docs/components/button?#{locale_params(@locale)}"}
+          class="hover:text-mui-foreground"
+        >
+          {MatriarchUI.I18n.t(@locale, "docs.components")}
         </.link>
       </nav>
       <div class="ml-auto flex items-center gap-2.5">
+        <.dropdown_menu id="docs-language" placement="bottom-end" class="min-w-32">
+          <:trigger>
+            <.button
+              variant="ghost"
+              size="sm"
+              aria-label={MatriarchUI.I18n.t(@locale, "docs.language")}
+            >
+              {MatriarchUI.I18n.t(
+                @locale,
+                if(@locale == "ru", do: "docs.russian", else: "docs.english")
+              )}
+              <.icon name="caret-down" class="size-3" />
+            </.button>
+          </:trigger>
+          <:item patch={@language_paths["en"]}>{MatriarchUI.I18n.t(@locale, "docs.english")}</:item>
+          <:item patch={@language_paths["ru"]}>{MatriarchUI.I18n.t(@locale, "docs.russian")}</:item>
+        </.dropdown_menu>
         <a
           href="https://github.com/e1berd/matriarch_ui"
           class="text-[13px] text-mui-muted-foreground hover:text-mui-foreground"
@@ -152,6 +181,26 @@ defmodule MatriarchUIDocsWeb.Layouts do
         <.icon name="moon" class="size-4 text-mui-muted-foreground" />
       </button>
     </div>
+    """
+  end
+
+  defp locale_params("ru"), do: [locale: "ru"]
+  defp locale_params(_locale), do: []
+
+  attr :rest, :global
+
+  def locale_hook(assigns) do
+    ~H"""
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".MUILocale">
+      export default {
+        mounted() {
+          document.documentElement.lang = this.el.dataset.docsLocale
+        },
+        updated() {
+          document.documentElement.lang = this.el.dataset.docsLocale
+        }
+      }
+    </script>
     """
   end
 end

@@ -29,4 +29,19 @@ defmodule MatriarchUI.PaginationTest do
     assert query(html, ~s(button[aria-label="Previous page"][disabled])) == 1
     assert query(html, ~s(button[aria-label="Next page"][disabled])) == 0
   end
+
+  test "renders the translated table-style page-size area" do
+    html =
+      render_component(&pagination/1, %{
+        id: "pages",
+        page: 1,
+        total_pages: 5,
+        locale: "ru",
+        page_size: [%{inner_block: fn _, _ -> "25" end}]
+      })
+
+    assert html =~ "Результатов на странице"
+    assert query(html, ~s(nav[aria-label="Пагинация"])) == 1
+    assert query(html, ~s(button[aria-label="Следующая страница"])) == 1
+  end
 end

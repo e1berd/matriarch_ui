@@ -57,6 +57,7 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
   def examples(assigns) do
     filters = Map.get(assigns, :filters, %{"query" => "", "status" => ""})
     page = Map.get(assigns, :table_page, 1)
+    locale = Map.get(assigns, :locale, "en")
     users = filtered_users(filters)
     total_pages = max(ceil(length(users) / 3), 1)
     page = min(page, total_pages)
@@ -66,7 +67,8 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
         filter_form: to_form(filters, as: :filters),
         users: Enum.slice(users, (page - 1) * 3, 3),
         table_page: page,
-        total_pages: total_pages
+        total_pages: total_pages,
+        locale: locale
       })
 
     ~H"""
@@ -153,23 +155,22 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
           </.table_body>
         </.table>
 
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2 text-sm text-mui-muted-foreground">
-            Results per page
+        <.pagination
+          id="users-pagination"
+          page={@table_page}
+          total_pages={@total_pages}
+          event="paginate-table"
+          locale={@locale}
+        >
+          <:page_size>
             <div class="w-20">
               <.select id="page-size" name="page_size" value="3">
                 <:option value="3">3</:option>
                 <:option value="6">6</:option>
               </.select>
             </div>
-          </div>
-          <.pagination
-            id="users-pagination"
-            page={@table_page}
-            total_pages={@total_pages}
-            event="paginate-table"
-          />
-        </div>
+          </:page_size>
+        </.pagination>
       </div>
     </.example>
 
@@ -276,23 +277,22 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
         </.table_body>
       </.table>
 
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2 text-sm text-mui-muted-foreground">
-          Results per page
+      <.pagination
+        id="users-pagination"
+        page={@table_page}
+        total_pages={@total_pages}
+        event="paginate-table"
+        locale={@locale}
+      >
+        <:page_size>
           <div class="w-20">
             <.select id="page-size" name="page_size" value="3">
               <:option value="3">3</:option>
               <:option value="6">6</:option>
             </.select>
           </div>
-        </div>
-        <.pagination
-          id="users-pagination"
-          page={@table_page}
-          total_pages={@total_pages}
-          event="paginate-table"
-        />
-      </div>
+        </:page_size>
+      </.pagination>
     </div>
     '''
   end

@@ -1,16 +1,17 @@
 defmodule MatriarchUIDocsWeb.Docs.OverviewLive do
   use MatriarchUIDocsWeb, :live_view
+  alias MatriarchUI.I18n
   alias MatriarchUIDocsWeb.DocsSidebar
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "Installation")}
+  def mount(params, _session, socket) do
+    {:ok, assign_locale(socket, params)}
   end
 
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} locale={@locale} language_paths={@language_paths}>
       <div class="mx-auto flex max-w-6xl gap-2 px-6">
-        <DocsSidebar.sidebar />
+        <DocsSidebar.sidebar locale={@locale} />
         <div class="min-w-0 flex-1 border-l border-mui-border py-8 pl-7">
           <h1 class="text-2xl font-semibold tracking-tight text-mui-foreground">Installation</h1>
           <p class="mt-2 max-w-2xl text-mui-muted-foreground">
@@ -76,5 +77,17 @@ defmodule MatriarchUIDocsWeb.Docs.OverviewLive do
       </div>
     </Layouts.app>
     """
+  end
+
+  def handle_params(params, _uri, socket), do: {:noreply, assign_locale(socket, params)}
+
+  defp assign_locale(socket, params) do
+    locale = I18n.normalize_locale(params["locale"])
+
+    assign(socket,
+      page_title: I18n.t(locale, "docs.installation"),
+      locale: locale,
+      language_paths: %{"en" => ~p"/docs", "ru" => ~p"/docs?locale=ru"}
+    )
   end
 end

@@ -4,10 +4,10 @@ defmodule MatriarchUI.Icon do
   alias MatriarchUI.CN
 
   @names ~w(
-    arrow-right arrows-clockwise bell caret-down caret-left caret-right check check-circle
-    clock desktop dots-six-vertical dots-three folders gear git-branch github-logo google-logo
-    house info magnifying-glass minus moon plus sidebar-simple sign-out spinner-gap sun timer warning
-    warning-circle x x-circle
+    arrow-right arrows-clockwise bell calendar-blank caret-down caret-left caret-right check check-circle
+    clock desktop dots-six-vertical dots-three eye eye-slash file folders gear git-branch github-logo
+    google-logo house image info magnifying-glass minus moon plus sidebar-simple sign-out spinner-gap
+    sun timer trash upload-simple warning warning-circle x x-circle
   )
   @icon_directory Path.join([Mix.Project.deps_path(), "phosphor_icons", "core", "raw", "regular"])
   @icon_paths Map.new(@names, &{&1, Path.join(@icon_directory, "#{&1}.svg")})

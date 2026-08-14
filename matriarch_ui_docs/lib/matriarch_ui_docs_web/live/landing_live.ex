@@ -1,13 +1,14 @@
 defmodule MatriarchUIDocsWeb.LandingLive do
   use MatriarchUIDocsWeb, :live_view
+  alias MatriarchUI.I18n
 
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, page_title: "matriarchUI")}
+  def mount(params, _session, socket) do
+    {:ok, assign_locale(socket, params)}
   end
 
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} locale={@locale} language_paths={@language_paths}>
       <section class="relative overflow-hidden px-6 pb-16 pt-16 sm:pt-20">
         <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-accent/10 via-mui-accent/5 to-transparent">
         </div>
@@ -23,7 +24,7 @@ defmodule MatriarchUIDocsWeb.LandingLive do
             no npm, no build step — just Elixir, Tailwind and a few colocated hooks.
           </p>
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5">
-            <.button variant="brand" navigate={~p"/docs"}>Browse the docs</.button>
+            <.button variant="brand" navigate={@docs_path}>Browse the docs</.button>
             <.button variant="outline" href="https://github.com/e1berd/matriarch_ui">
               View on GitHub
             </.button>
@@ -65,6 +66,19 @@ defmodule MatriarchUIDocsWeb.LandingLive do
       </footer>
     </Layouts.app>
     """
+  end
+
+  def handle_params(params, _uri, socket), do: {:noreply, assign_locale(socket, params)}
+
+  defp assign_locale(socket, params) do
+    locale = I18n.normalize_locale(params["locale"])
+
+    assign(socket,
+      page_title: "matriarchUI",
+      locale: locale,
+      docs_path: if(locale == "ru", do: ~p"/docs?locale=ru", else: ~p"/docs"),
+      language_paths: %{"en" => ~p"/", "ru" => ~p"/?locale=ru"}
+    )
   end
 
   defp features do

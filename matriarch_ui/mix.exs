@@ -37,7 +37,7 @@ defmodule MatriarchUI.MixProject do
     [
       licenses: ["MIT"],
       links: %{"GitHub" => @source_url},
-      files: ~w(lib assets .formatter.exs mix.exs README.md LICENSE)
+      files: ~w(lib assets priv .formatter.exs mix.exs README.md LICENSE)
     ]
   end
 

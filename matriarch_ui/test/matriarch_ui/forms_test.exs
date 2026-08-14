@@ -1,7 +1,7 @@
 defmodule MatriarchUI.FormsTest do
   use ExUnit.Case, async: true
   import Phoenix.LiveViewTest
-  import MatriarchUI.{Input, Textarea, Checkbox, Switch, RadioGroup, Select, Autocomplete}
+  import MatriarchUI.{Autocomplete, Checkbox, Input, Radio, RadioGroup, Select, Switch, Textarea}
 
   defp count(html, selector),
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
@@ -55,6 +55,14 @@ defmodule MatriarchUI.FormsTest do
 
     assert count(html, ~s(input[type="radio"])) == 2
     assert count(html, ~s(input[type="radio"][value="pro"][checked])) == 1
+  end
+
+  test "radio composes with an external field label" do
+    html =
+      render_component(&radio/1, %{id: "updates", name: "updates", value: "yes", checked: true})
+
+    assert count(html, ~s(input#updates[type="radio"][name="updates"][value="yes"][checked])) == 1
+    assert count(html, ~s(input#updates + span)) == 1
   end
 
   test "select renders the trigger, hidden value input and one option per slot entry" do

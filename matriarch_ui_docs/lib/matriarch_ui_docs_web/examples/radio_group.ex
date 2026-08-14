@@ -6,7 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.RadioGroup do
   def examples(assigns) do
     ~H"""
     <.example
-      title="Basic"
+      title="Radio group"
       code={
         ~S'''
         <.radio_group

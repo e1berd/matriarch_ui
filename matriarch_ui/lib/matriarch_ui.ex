@@ -16,16 +16,26 @@ defmodule MatriarchUI do
       import MatriarchUI.Card
       import MatriarchUI.Carousel
       import MatriarchUI.Checkbox
+      import MatriarchUI.ColorInput
+      import MatriarchUI.DateInput
+      import MatriarchUI.DatePicker
       import MatriarchUI.DropdownMenu
+      import MatriarchUI.EmailInput
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
+      import MatriarchUI.FileUpload
       import MatriarchUI.Group
       import MatriarchUI.Input
       import MatriarchUI.Icon
+      import MatriarchUI.List
       import MatriarchUI.Listbox
       import MatriarchUI.Modal
       import MatriarchUI.Pagination
+      import MatriarchUI.PasswordInput
+      import MatriarchUI.PhoneInput
       import MatriarchUI.Popover
+      import MatriarchUI.Progress
+      import MatriarchUI.Radio
       import MatriarchUI.RadioGroup
       import MatriarchUI.ScrollArea
       import MatriarchUI.Select
@@ -33,6 +43,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Sidebar
       import MatriarchUI.Slider
       import MatriarchUI.Splitter
+      import MatriarchUI.Spinner
       import MatriarchUI.Switch
       import MatriarchUI.Table
       import MatriarchUI.Tabs

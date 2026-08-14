@@ -9,6 +9,7 @@ defmodule MatriarchUI.Select do
   attr :name, :any, default: nil
   attr :value, :any, default: nil
   attr :multiple, :boolean, default: false
+  attr :disabled, :boolean, default: false
   attr :placeholder, :string, default: "Select…"
   attr :invalid, :boolean, default: false
   attr :class, :string, default: nil
@@ -40,8 +41,8 @@ defmodule MatriarchUI.Select do
 
     ~H"""
     <div data-mui>
-      <input :if={!@multiple} type="hidden" id={"#{@id}-value"} name={@name} value={@value} />
-      <select :if={@multiple} id={"#{@id}-value"} name={@multiple_name} multiple hidden>
+      <input :if={!@multiple} type="hidden" id={"#{@id}-value"} name={@name} value={@value} disabled={@disabled} />
+      <select :if={@multiple} id={"#{@id}-value"} name={@multiple_name} multiple hidden disabled={@disabled}>
         <option
           :for={option <- @option}
           value={option.value}
@@ -53,6 +54,7 @@ defmodule MatriarchUI.Select do
       <button
         data-mui-control
         type="button"
+        disabled={@disabled}
         id={@id}
         phx-hook="MatriarchUI.Floating.MUIFloating"
         aria-controls={"#{@id}-panel"}
@@ -70,7 +72,7 @@ defmodule MatriarchUI.Select do
         class={
           CN.cn([
             "flex h-8 w-full items-center justify-between gap-2 rounded-mui-md border border-mui-border bg-mui-surface px-3 text-sm text-mui-foreground",
-            "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
+            "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20 disabled:cursor-not-allowed disabled:opacity-50",
             @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
             @class
           ])

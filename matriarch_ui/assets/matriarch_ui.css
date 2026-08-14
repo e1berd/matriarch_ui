@@ -234,6 +234,14 @@
     --mui-slider-fill: 0%;
   }
 
+  input.mui-date-input {
+    appearance: textfield;
+  }
+
+  input.mui-date-input::-webkit-calendar-picker-indicator {
+    display: none;
+  }
+
   input.mui-slider::-webkit-slider-runnable-track {
     height: var(--size-mui-slider-track);
     border-radius: var(--radius-mui-full);
@@ -318,6 +326,20 @@
 }
 
 @layer components {
+  @keyframes mui-progress-slide {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: translateX(300%);
+    }
+  }
+
+  .mui-progress-indeterminate {
+    animation: mui-progress-slide 1.2s ease-in-out infinite;
+  }
+
   .mui-card {
     box-shadow: var(--shadow-mui-sm);
   }
