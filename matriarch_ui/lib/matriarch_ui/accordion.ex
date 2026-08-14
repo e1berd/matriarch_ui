@@ -2,6 +2,7 @@ defmodule MatriarchUI.Accordion do
   @moduledoc "Expand/collapse list of items — `type=\"single\"` closes siblings, `type=\"multiple\"` doesn't."
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :type, :string, default: "single", values: ~w(single multiple)
@@ -34,21 +35,10 @@ defmodule MatriarchUI.Accordion do
             class="group flex w-full items-center justify-between gap-2 py-3.5 text-left text-sm font-medium text-mui-foreground transition-colors hover:text-mui-primary"
           >
             {item.title}
-            <svg
-              class="size-4 shrink-0 text-mui-subtle-foreground transition-transform duration-150 ease-mui-out group-data-[mui-state=open]:rotate-180"
-              viewBox="0 0 20 20"
-              fill="none"
-              aria-hidden="true"
-            >
-              <path
-                d="M5.5 7.5L10 12l4.5-4.5"
-                stroke="currentColor"
-                stroke-width="1.5"
-                fill="none"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <.icon
+              name="caret-down"
+              class="text-mui-subtle-foreground transition-transform duration-150 ease-mui-out group-data-[mui-state=open]:rotate-180"
+            />
           </button>
         </h3>
         <div

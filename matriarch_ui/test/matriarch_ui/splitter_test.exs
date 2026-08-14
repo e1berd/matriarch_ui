@@ -19,6 +19,7 @@ defmodule MatriarchUI.SplitterTest do
 
     assert query(html, "[data-mui-panel]") == 3
     assert query(html, "[data-mui-handle]") == 2
+    assert query(html, ~s([data-mui-handle] [data-mui-icon="dots-six-vertical"])) == 2
     assert html =~ "Left"
     assert html =~ "Right"
   end

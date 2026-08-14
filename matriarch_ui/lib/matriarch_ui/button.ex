@@ -5,6 +5,7 @@ defmodule MatriarchUI.Button do
   """
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr(:type, :string, default: "button")
 
@@ -44,27 +45,7 @@ defmodule MatriarchUI.Button do
     else
       ~H"""
       <button type={@type} disabled={@disabled || @loading} data-mui class={@class} {@rest}>
-        <svg
-          :if={@loading}
-          class="mui-button-spinner size-4 animate-spin"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <circle
-            class="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            stroke-width="4"
-          />
-          <path
-            class="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          />
-        </svg>
+        <.icon :if={@loading} name="spinner-gap" class="mui-button-spinner animate-spin" />
         <span :if={!@loading && @icon != []} class="-ml-0.5 size-4">{render_slot(@icon)}</span>
         {render_slot(@inner_block)}
       </button>

@@ -6,6 +6,7 @@ defmodule MatriarchUI.Alert do
   """
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :variant, :string, default: "default", values: ~w(default info success warning danger)
   attr :class, :string, default: nil
@@ -75,45 +76,11 @@ defmodule MatriarchUI.Alert do
     assigns = %{variant: variant}
 
     ~H"""
-    <svg :if={@variant == "default"} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path
-        d="M10 2.5c-2 0-3.5 1.6-3.5 4v2.3L5 11.7v1h10v-1l-1.5-2.9V6.5c0-2.4-1.5-4-3.5-4z"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linejoin="round"
-      />
-      <path d="M8.3 14.8a1.8 1.8 0 003.4 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-    </svg>
-    <svg :if={@variant == "info"} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5" />
-      <path d="M10 9v4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      <circle cx="10" cy="6.5" r="0.9" fill="currentColor" />
-    </svg>
-    <svg :if={@variant == "success"} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5" />
-      <path
-        d="M7 10.2l2 2 4-4.4"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-    <svg :if={@variant == "warning"} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <path
-        d="M10 3.2l7.3 12.6a1 1 0 01-.87 1.5H3.57a1 1 0 01-.87-1.5L10 3.2z"
-        stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linejoin="round"
-      />
-      <path d="M10 8.3v3.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      <circle cx="10" cy="14.2" r="0.9" fill="currentColor" />
-    </svg>
-    <svg :if={@variant == "danger"} viewBox="0 0 20 20" fill="none" aria-hidden="true">
-      <circle cx="10" cy="10" r="7.25" stroke="currentColor" stroke-width="1.5" />
-      <path d="M10 6.5v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-      <circle cx="10" cy="13.5" r="0.9" fill="currentColor" />
-    </svg>
+    <.icon :if={@variant == "default"} name="bell" />
+    <.icon :if={@variant == "info"} name="info" />
+    <.icon :if={@variant == "success"} name="check-circle" />
+    <.icon :if={@variant == "warning"} name="warning" />
+    <.icon :if={@variant == "danger"} name="warning-circle" />
     """
   end
 end

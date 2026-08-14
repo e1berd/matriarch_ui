@@ -1,6 +1,6 @@
 # matriarchUI
 
-Phoenix LiveView component primitives — Clerk/Mosaic-inspired, no daisyUI.
+Phoenix LiveView component primitives — polished and Mosaic-inspired, no daisyUI.
 
 ```elixir
 def deps do

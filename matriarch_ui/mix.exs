@@ -12,7 +12,7 @@ defmodule MatriarchUI.MixProject do
       start_permanent: Mix.env() == :prod,
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       deps: deps(),
-      description: "A Phoenix LiveView component kit — Clerk/Mosaic-inspired primitives.",
+      description: "A Phoenix LiveView component kit with polished Mosaic-inspired primitives.",
       package: package(),
       docs: docs()
     ]
@@ -26,6 +26,7 @@ defmodule MatriarchUI.MixProject do
     [
       {:phoenix_live_view, "~> 1.2"},
       {:phoenix_html, "~> 4.3"},
+      {:phosphor_icons, "~> 2.1", compile: false, app: false},
       {:ex_doc, "~> 0.40", only: :dev, runtime: false},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:jason, "~> 1.4", only: :test}

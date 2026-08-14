@@ -12,6 +12,7 @@ defmodule MatriarchUI.Sidebar do
   use Phoenix.Component
   alias MatriarchUI.CN
   alias Phoenix.LiveView.JS
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :class, :string, default: nil
@@ -27,9 +28,9 @@ defmodule MatriarchUI.Sidebar do
       class={
         CN.cn([
           "group/sidebar fixed inset-y-0 left-0 z-50 flex w-64 -translate-x-full flex-col overflow-hidden",
-          "border-r border-mui-border bg-mui-surface transition-[width,transform] duration-150 ease-mui-out",
+          "border-r border-mui-border bg-mui-surface transition-[width,transform] duration-200 ease-mui-out",
           "data-[mui-state=open]:translate-x-0",
-          "md:relative md:inset-auto md:z-auto md:translate-x-0 md:data-[mui-state=closed]:w-16",
+          "md:relative md:inset-auto md:z-auto md:translate-x-0 md:data-[mui-state=closed]:w-14",
           @class
         ])
       }
@@ -65,9 +66,7 @@ defmodule MatriarchUI.Sidebar do
       <%= if @inner_block != [] do %>
         {render_slot(@inner_block)}
       <% else %>
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
-        </svg>
+        <.icon name="sidebar-simple" />
       <% end %>
     </button>
     """
@@ -78,7 +77,7 @@ defmodule MatriarchUI.Sidebar do
 
   def sidebar_header(assigns) do
     ~H"""
-    <div class={CN.cn(["flex items-center gap-2 border-b border-mui-border px-3 py-3", @class])}>
+    <div class={CN.cn(["flex items-center gap-2 border-b border-mui-border px-2.5 py-3", @class])}>
       {render_slot(@inner_block)}
     </div>
     """
@@ -89,7 +88,7 @@ defmodule MatriarchUI.Sidebar do
 
   def sidebar_content(assigns) do
     ~H"""
-    <div class={CN.cn(["flex-1 overflow-y-auto p-2", @class])}>{render_slot(@inner_block)}</div>
+    <div class={CN.cn(["flex-1 overflow-y-auto px-2 py-3", @class])}>{render_slot(@inner_block)}</div>
     """
   end
 
@@ -108,10 +107,10 @@ defmodule MatriarchUI.Sidebar do
 
   def sidebar_group(assigns) do
     ~H"""
-    <div class={CN.cn(["flex flex-col gap-0.5 py-2", @class])}>
+    <div class={CN.cn(["flex flex-col py-2", @class])}>
       <p
         :if={@label}
-        class="px-2.5 pb-1 text-xs font-medium uppercase text-mui-subtle-foreground group-data-[mui-state=closed]/sidebar:md:hidden"
+        class="max-h-6 overflow-hidden px-2 pb-1.5 text-[11px] font-semibold uppercase tracking-wide text-mui-subtle-foreground opacity-100 transition-[max-height,opacity,padding] duration-150 ease-mui-out group-data-[mui-state=closed]/sidebar:md:max-h-0 group-data-[mui-state=closed]/sidebar:md:pb-0 group-data-[mui-state=closed]/sidebar:md:opacity-0"
       >
         {@label}
       </p>
@@ -136,15 +135,18 @@ defmodule MatriarchUI.Sidebar do
       href={@href}
       class={
         CN.cn([
-          "flex items-center gap-2.5 rounded-mui-md px-2.5 py-2 text-sm font-medium text-mui-muted-foreground transition-colors",
+          "flex min-h-7 items-center gap-2 rounded-mui-md px-2 py-1 text-[13px] font-normal text-mui-muted-foreground transition-[color,background-color] duration-150 ease-mui-out",
+          "group-data-[mui-state=closed]/sidebar:md:justify-center group-data-[mui-state=closed]/sidebar:md:gap-0 group-data-[mui-state=closed]/sidebar:md:px-0",
           "hover:bg-mui-surface-hover hover:text-mui-foreground",
           @active && "bg-mui-primary-subtle text-mui-primary-subtle-foreground hover:bg-mui-primary-subtle",
           @class
         ])
       }
     >
-      <span :if={@icon != []} class="size-4 shrink-0">{render_slot(@icon)}</span>
-      <span class="truncate group-data-[mui-state=closed]/sidebar:md:hidden">{render_slot(@inner_block)}</span>
+      <span :if={@icon != []} class="flex size-4 shrink-0 items-center justify-center">{render_slot(@icon)}</span>
+      <span class="max-w-48 truncate opacity-100 transition-[max-width,opacity] duration-150 ease-mui-out group-data-[mui-state=closed]/sidebar:md:max-w-0 group-data-[mui-state=closed]/sidebar:md:opacity-0">
+        {render_slot(@inner_block)}
+      </span>
     </.link>
     """
   end

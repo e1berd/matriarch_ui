@@ -1,12 +1,12 @@
 defmodule MatriarchUIDocsWeb.CoreComponents do
   @moduledoc """
-  Site-level primitives not already covered by `matriarch_ui` itself:
-  flash rendering and the heroicons wrapper.
+  Site-level flash rendering primitives.
   """
   use Phoenix.Component
   use Gettext, backend: MatriarchUIDocsWeb.Gettext
 
   alias Phoenix.LiveView.JS
+  import MatriarchUI.Icon
 
   attr :id, :string, doc: "the optional id of flash container"
   attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
@@ -34,8 +34,8 @@ defmodule MatriarchUIDocsWeb.CoreComponents do
           "border-mui-primary-subtle bg-mui-primary-subtle text-mui-primary-subtle-foreground",
         @kind == :error && "border-mui-danger-border bg-mui-danger-subtle text-mui-danger"
       ]}>
-        <.icon :if={@kind == :info} name="hero-information-circle" class="size-5 shrink-0" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle" class="size-5 shrink-0" />
+        <.icon :if={@kind == :info} name="info" class="size-5 shrink-0" />
+        <.icon :if={@kind == :error} name="warning-circle" class="size-5 shrink-0" />
         <div class="flex-1">
           <p :if={@title} class="font-semibold">{@title}</p>
           <p>{msg}</p>
@@ -45,19 +45,10 @@ defmodule MatriarchUIDocsWeb.CoreComponents do
           class="shrink-0 cursor-pointer opacity-60 hover:opacity-100"
           aria-label={gettext("close")}
         >
-          <.icon name="hero-x-mark" class="size-4" />
+          <.icon name="x" class="size-4" />
         </button>
       </div>
     </div>
-    """
-  end
-
-  attr :name, :string, required: true
-  attr :class, :any, default: "size-4"
-
-  def icon(%{name: "hero-" <> _} = assigns) do
-    ~H"""
-    <span class={[@name, @class]} />
     """
   end
 

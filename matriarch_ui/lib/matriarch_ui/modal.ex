@@ -14,6 +14,7 @@ defmodule MatriarchUI.Modal do
   """
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
   alias Phoenix.LiveView.JS
 
   attr :id, :string, required: true
@@ -49,14 +50,7 @@ defmodule MatriarchUI.Modal do
           class="text-mui-subtle-foreground hover:text-mui-foreground"
           aria-label="Close"
         >
-          <svg class="size-5" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path
-              d="M5 5l10 10M15 5L5 15"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
+          <.icon name="x" class="size-5" />
         </button>
       </div>
       <div class="overflow-auto px-4 py-3.5 text-sm">{render_slot(@inner_block)}</div>

@@ -1,6 +1,6 @@
 # matriarchUI
 
-A Phoenix LiveView component kit — Clerk/Mosaic-inspired primitives, no daisyUI,
+A Phoenix LiveView component kit — polished Mosaic-inspired primitives, no daisyUI,
 no CSS framework lock-in. Colors and radii are CSS variables so any consumer can
 re-theme without touching the build.
 

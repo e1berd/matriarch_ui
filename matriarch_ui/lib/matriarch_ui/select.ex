@@ -2,6 +2,7 @@ defmodule MatriarchUI.Select do
   @moduledoc "Bare listbox-style select — pair with `MatriarchUI.Field` for a label and validation errors."
   use Phoenix.Component
   alias MatriarchUI.{CN, Floating}
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :field, Phoenix.HTML.FormField
@@ -60,9 +61,7 @@ defmodule MatriarchUI.Select do
       >
         <span :if={@selected} data-mui-select-label>{render_slot(@selected)}</span>
         <span :if={!@selected} data-mui-select-label>{@placeholder}</span>
-        <svg class="size-4 text-mui-subtle-foreground" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-          <path d="M5.5 7.5L10 12l4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <.icon name="caret-down" class="text-mui-subtle-foreground" />
       </button>
       <div
         id={"#{@id}-panel"}
@@ -71,7 +70,7 @@ defmodule MatriarchUI.Select do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg"
+            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-[13px] shadow-mui-lg"
           ])
         }
       >
@@ -82,7 +81,7 @@ defmodule MatriarchUI.Select do
           data-mui-value={option.value}
           data-mui-label={option[:label] || option.value}
           aria-selected={to_string(to_string(@value) == to_string(option.value))}
-          class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2 py-2 hover:bg-mui-surface-hover focus:bg-mui-surface-hover focus:outline-none aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
+          class="flex min-h-7 cursor-pointer items-center justify-between rounded-mui-sm px-2 py-1 hover:bg-mui-surface-hover focus:bg-mui-surface-hover focus:outline-none aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
         >
           {render_slot(option)}
         </div>

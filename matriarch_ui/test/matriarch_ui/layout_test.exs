@@ -1,7 +1,7 @@
 defmodule MatriarchUI.LayoutTest do
   use ExUnit.Case, async: true
   import Phoenix.LiveViewTest
-  import MatriarchUI.{Card, Avatar, Alert, Separator, Tabs, Modal, Breadcrumb}
+  import MatriarchUI.{Card, Avatar, Alert, Separator, Tabs, Modal, Breadcrumb, Icon}
 
   defp query(html, selector),
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
@@ -77,15 +77,17 @@ defmodule MatriarchUI.LayoutTest do
   end
 
   test "a custom :icon slot overrides the variant default" do
+    custom_icon = render_component(&icon/1, %{name: "x"})
+
     html =
       render_component(&alert/1, %{
         icon: [
-          %{inner_block: fn _, _ -> Phoenix.HTML.raw(~s(<svg class="custom-icon"></svg>)) end}
+          %{inner_block: fn _, _ -> Phoenix.HTML.raw(custom_icon) end}
         ],
         inner_block: [%{inner_block: fn _, _ -> "Body" end}]
       })
 
-    assert query(html, "svg.custom-icon") == 1
+    assert query(html, ~s([data-mui-icon="x"])) == 1
   end
 
   test "separator exposes aria-orientation" do

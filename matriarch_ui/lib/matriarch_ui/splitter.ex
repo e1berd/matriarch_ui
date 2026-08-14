@@ -2,6 +2,7 @@ defmodule MatriarchUI.Splitter do
   @moduledoc "Resizable panes — drag (or arrow keys on) the handle between two `:panel` slots to resize them."
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :orientation, :string, default: "horizontal", values: ~w(horizontal vertical)
@@ -49,11 +50,23 @@ defmodule MatriarchUI.Splitter do
           aria-orientation={@orientation}
           tabindex="0"
           class={[
-            "shrink-0 touch-none bg-mui-border transition-colors hover:bg-mui-primary focus-visible:bg-mui-primary",
-            @orientation == "horizontal" && "w-px cursor-col-resize",
-            @orientation == "vertical" && "h-px cursor-row-resize"
+            "group/handle relative z-10 flex shrink-0 touch-none items-center justify-center bg-mui-border outline-none transition-colors hover:bg-mui-primary focus-visible:bg-mui-primary before:absolute before:content-['']",
+            @orientation == "horizontal" &&
+              "w-px cursor-col-resize before:inset-y-0 before:left-1/2 before:w-6 before:-translate-x-1/2",
+            @orientation == "vertical" &&
+              "h-px cursor-row-resize before:inset-x-0 before:top-1/2 before:h-6 before:-translate-y-1/2"
           ]}
         >
+          <.icon
+            name="dots-six-vertical"
+            class={
+              CN.cn([
+                "absolute z-10 h-8 w-5 rounded-mui-sm border border-mui-border bg-mui-surface p-1 text-mui-foreground shadow-mui-xs transition-[color,border-color,background-color]",
+                "group-hover/handle:border-mui-primary group-hover/handle:text-mui-primary group-focus-visible/handle:border-mui-primary group-focus-visible/handle:text-mui-primary",
+                @orientation == "vertical" && "rotate-90"
+              ])
+            }
+          />
         </div>
       <% end %>
     </div>

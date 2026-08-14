@@ -2,6 +2,7 @@ defmodule MatriarchUI.Carousel do
   @moduledoc "Scroll-snap slideshow — prev/next buttons and dots, no JS layout math."
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :label, :string, default: "Carousel"
@@ -39,15 +40,7 @@ defmodule MatriarchUI.Carousel do
         aria-label="Previous slide"
         class="absolute left-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-mui-full border border-mui-border bg-mui-surface/90 text-mui-foreground shadow-mui-sm hover:bg-mui-surface-hover disabled:pointer-events-none disabled:opacity-40"
       >
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path
-            d="M12.5 5L7.5 10l5 5"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <.icon name="caret-left" />
       </button>
       <button
         type="button"
@@ -55,15 +48,7 @@ defmodule MatriarchUI.Carousel do
         aria-label="Next slide"
         class="absolute right-2 top-1/2 flex size-8 -translate-y-1/2 items-center justify-center rounded-mui-full border border-mui-border bg-mui-surface/90 text-mui-foreground shadow-mui-sm hover:bg-mui-surface-hover disabled:pointer-events-none disabled:opacity-40"
       >
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path
-            d="M7.5 5l5 5-5 5"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
-        </svg>
+        <.icon name="caret-right" />
       </button>
 
       <div class="mt-3 flex items-center justify-center gap-1.5">

@@ -21,13 +21,25 @@ defmodule MatriarchUIDocsWeb.Examples.Sidebar do
             </.sidebar_header>
             <.sidebar_content>
               <.sidebar_group label="Workspace">
-                <.sidebar_menu_item navigate="#" active>Dashboard</.sidebar_menu_item>
-                <.sidebar_menu_item navigate="#">Projects</.sidebar_menu_item>
-                <.sidebar_menu_item navigate="#">Settings</.sidebar_menu_item>
+                <.sidebar_menu_item navigate="#" active>
+                  <:icon><.icon name="house" /></:icon>
+                  Dashboard
+                </.sidebar_menu_item>
+                <.sidebar_menu_item navigate="#">
+                  <:icon><.icon name="folders" /></:icon>
+                  Projects
+                </.sidebar_menu_item>
+                <.sidebar_menu_item navigate="#">
+                  <:icon><.icon name="gear" /></:icon>
+                  Settings
+                </.sidebar_menu_item>
               </.sidebar_group>
             </.sidebar_content>
             <.sidebar_footer>
-              <.sidebar_menu_item navigate="#">Log out</.sidebar_menu_item>
+              <.sidebar_menu_item navigate="#">
+                <:icon><.icon name="sign-out" /></:icon>
+                Log out
+              </.sidebar_menu_item>
             </.sidebar_footer>
           </.sidebar>
           <div class="flex-1 p-4 text-sm text-mui-muted-foreground">Page content</div>
@@ -45,13 +57,25 @@ defmodule MatriarchUIDocsWeb.Examples.Sidebar do
           </.sidebar_header>
           <.sidebar_content>
             <.sidebar_group label="Workspace">
-              <.sidebar_menu_item navigate="#" active>Dashboard</.sidebar_menu_item>
-              <.sidebar_menu_item navigate="#">Projects</.sidebar_menu_item>
-              <.sidebar_menu_item navigate="#">Settings</.sidebar_menu_item>
+              <.sidebar_menu_item navigate="#" active>
+                <:icon><.icon name="house" /></:icon>
+                Dashboard
+              </.sidebar_menu_item>
+              <.sidebar_menu_item navigate="#">
+                <:icon><.icon name="folders" /></:icon>
+                Projects
+              </.sidebar_menu_item>
+              <.sidebar_menu_item navigate="#">
+                <:icon><.icon name="gear" /></:icon>
+                Settings
+              </.sidebar_menu_item>
             </.sidebar_group>
           </.sidebar_content>
           <.sidebar_footer>
-            <.sidebar_menu_item navigate="#">Log out</.sidebar_menu_item>
+            <.sidebar_menu_item navigate="#">
+              <:icon><.icon name="sign-out" /></:icon>
+              Log out
+            </.sidebar_menu_item>
           </.sidebar_footer>
         </.sidebar>
         <div class="flex-1 p-4 text-sm text-mui-muted-foreground">Page content</div>

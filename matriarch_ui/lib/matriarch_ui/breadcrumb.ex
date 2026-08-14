@@ -2,6 +2,7 @@ defmodule MatriarchUI.Breadcrumb do
   @moduledoc "Static page-hierarchy trail — no JS, the last item slot is the current page."
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :class, :string, default: nil
 
@@ -31,21 +32,11 @@ defmodule MatriarchUI.Breadcrumb do
           <span :if={index == @last_index} aria-current="page" class="font-medium text-mui-foreground">
             {render_slot(item)}
           </span>
-          <svg
+          <.icon
             :if={index != @last_index}
+            name="caret-right"
             class="size-3.5 text-mui-subtle-foreground"
-            viewBox="0 0 20 20"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M7.5 5l5 5-5 5"
-              stroke="currentColor"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+          />
         </li>
       </ol>
     </nav>

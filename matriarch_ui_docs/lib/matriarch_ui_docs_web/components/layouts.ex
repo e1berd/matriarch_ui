@@ -96,7 +96,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         hidden
       >
         {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        <.icon name="arrows-clockwise" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
 
       <.flash
@@ -111,7 +111,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         hidden
       >
         {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        <.icon name="arrows-clockwise" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
     </div>
     """
@@ -133,7 +133,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
       >
-        <.icon name="hero-computer-desktop-micro" class="size-4 text-mui-muted-foreground" />
+        <.icon name="desktop" class="size-4 text-mui-muted-foreground" />
       </button>
 
       <button
@@ -141,7 +141,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="light"
       >
-        <.icon name="hero-sun-micro" class="size-4 text-mui-muted-foreground" />
+        <.icon name="sun" class="size-4 text-mui-muted-foreground" />
       </button>
 
       <button
@@ -149,7 +149,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="dark"
       >
-        <.icon name="hero-moon-micro" class="size-4 text-mui-muted-foreground" />
+        <.icon name="moon" class="size-4 text-mui-muted-foreground" />
       </button>
     </div>
     """

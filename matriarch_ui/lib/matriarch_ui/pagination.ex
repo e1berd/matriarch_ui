@@ -6,6 +6,7 @@ defmodule MatriarchUI.Pagination do
   """
   use Phoenix.Component
   alias MatriarchUI.CN
+  import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :page, :integer, required: true
@@ -36,9 +37,7 @@ defmodule MatriarchUI.Pagination do
         aria-label="Previous page"
         class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M12.5 5L7.5 10l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <.icon name="caret-left" />
       </button>
 
       <span :for={item <- @items}>
@@ -72,9 +71,7 @@ defmodule MatriarchUI.Pagination do
         aria-label="Next page"
         class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
-        <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M7.5 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+        <.icon name="caret-right" />
       </button>
     </nav>
     """

@@ -20,6 +20,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
       import MatriarchUI.Input
+      import MatriarchUI.Icon
       import MatriarchUI.Listbox
       import MatriarchUI.Modal
       import MatriarchUI.Pagination

@@ -19,7 +19,7 @@ defmodule MatriarchUIDocsWeb.LandingLive do
             Interfaces that feel <span class="text-mui-accent">inevitable</span>.
           </h1>
           <p class="mx-auto mt-4 max-w-lg text-base text-mui-muted-foreground">
-            A Clerk/Mosaic-inspired component kit for Phoenix LiveView. No daisyUI,
+            A polished Mosaic-inspired component kit for Phoenix LiveView. No daisyUI,
             no npm, no build step — just Elixir, Tailwind and a few colocated hooks.
           </p>
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5">
