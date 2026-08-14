@@ -42,8 +42,8 @@ defmodule MatriarchUI.Input do
         aria-invalid={to_string(@invalid)}
         class={
           CN.cn([
-            "h-8 w-full rounded-mui-md border border-mui-border bg-mui-surface px-3 text-sm text-mui-foreground",
-            "placeholder:text-mui-input-placeholder focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
+            "mui-input h-8 w-full rounded-mui-md border border-transparent bg-mui-input-background px-3 text-sm text-mui-foreground",
+            "placeholder:text-mui-input-placeholder focus-visible:border-mui-brand focus-visible:ring-2 focus-visible:ring-mui-slider-ring",
             "disabled:cursor-not-allowed disabled:opacity-50",
             @leading != [] && "pl-9",
             @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",

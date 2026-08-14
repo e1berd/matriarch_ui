@@ -7,6 +7,7 @@ defmodule MatriarchUI.Pagination do
   use Phoenix.Component
   alias MatriarchUI.CN
 
+  attr :id, :string, required: true
   attr :page, :integer, required: true
   attr :total_pages, :integer, required: true
   attr :siblings, :integer, default: 1
@@ -19,15 +20,21 @@ defmodule MatriarchUI.Pagination do
       assign(assigns, :items, page_items(assigns.page, assigns.total_pages, assigns.siblings))
 
     ~H"""
-    <nav data-mui aria-label="Pagination" class={CN.cn(["flex items-center gap-1", @class])}>
+    <nav
+      id={@id}
+      data-mui
+      aria-label="Pagination"
+      class={CN.cn(["flex items-center gap-2", @class])}
+    >
       <button
+        id={"#{@id}-previous"}
         type="button"
         phx-click={@event}
         phx-value-page={@page - 1}
         phx-target={@target}
         disabled={@page <= 1}
         aria-label="Previous page"
-        class="flex size-8 items-center justify-center rounded-mui-md text-mui-foreground hover:bg-mui-surface-hover disabled:pointer-events-none disabled:opacity-40"
+        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M12.5 5L7.5 10l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -35,30 +42,35 @@ defmodule MatriarchUI.Pagination do
       </button>
 
       <span :for={item <- @items}>
-        <span :if={item == :ellipsis} class="flex size-8 items-center justify-center text-sm text-mui-subtle-foreground">
+        <span
+          :if={item == :ellipsis}
+          class="flex h-8 min-w-9 items-center justify-center text-sm text-mui-subtle-foreground select-none"
+        >
           …
         </span>
         <button
           :if={item != :ellipsis}
+          id={"#{@id}-page-#{item}"}
           type="button"
           phx-click={@event}
           phx-value-page={item}
           phx-target={@target}
           aria-current={item == @page && "page"}
-          class="flex size-8 items-center justify-center rounded-mui-md text-sm font-medium text-mui-foreground hover:bg-mui-surface-hover aria-[current=page]:bg-mui-primary aria-[current=page]:text-mui-primary-foreground aria-[current=page]:hover:bg-mui-primary"
+          class="flex h-8 min-w-9 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface px-2 text-sm font-medium text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 aria-[current=page]:border-mui-brand aria-[current=page]:bg-mui-brand aria-[current=page]:text-mui-brand-foreground aria-[current=page]:hover:bg-mui-brand-hover"
         >
           {item}
         </button>
       </span>
 
       <button
+        id={"#{@id}-next"}
         type="button"
         phx-click={@event}
         phx-value-page={@page + 1}
         phx-target={@target}
         disabled={@page >= @total_pages}
         aria-label="Next page"
-        class="flex size-8 items-center justify-center rounded-mui-md text-mui-foreground hover:bg-mui-surface-hover disabled:pointer-events-none disabled:opacity-40"
+        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-xs transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
       >
         <svg class="size-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <path d="M7.5 5l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

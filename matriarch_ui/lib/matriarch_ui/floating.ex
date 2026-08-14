@@ -17,6 +17,7 @@ defmodule MatriarchUI.Floating do
       the 4 sides when the requested one has no room; `"vertical"` (Select)
       restricts fallback to top/bottom only, never left/right
     * `data-mui-role` — `"menu"` or `"listbox"` enables arrow-key roving focus
+    * `data-mui-match-width` — `"true"` keeps the panel as wide as its trigger
     * `data-mui-value-target` — id of the hidden input a `"listbox"` writes its
       selected value into (Select only)
 
@@ -153,6 +154,7 @@ defmodule MatriarchUI.Floating do
       function computeAndApply(trigger, panel, placement, offset, axis) {
         const viewport = { width: window.innerWidth, height: window.innerHeight }
         const triggerRect = trigger.getBoundingClientRect()
+        if (trigger.dataset.muiMatchWidth === "true") panel.style.width = `${triggerRect.width}px`
         const panelRect = panel.getBoundingClientRect()
         const resolved = resolvePlacement(placement, triggerRect, panelRect, offset, viewport, axis)
         const coords = shift(coordsFor(resolved, triggerRect, panelRect, offset), panelRect, viewport)
@@ -179,7 +181,9 @@ defmodule MatriarchUI.Floating do
       }
 
       function focusItem(panel, delta) {
-        const items = Array.from(panel.querySelectorAll('[role="option"], [role="menuitem"]'))
+        const items = Array.from(panel.querySelectorAll('[role="option"], [role="menuitem"]')).filter(
+          (item) => !item.hidden && item.getAttribute("aria-disabled") !== "true"
+        )
         if (items.length === 0) return
         const current = items.indexOf(document.activeElement)
         const next = current === -1 ? 0 : (current + delta + items.length) % items.length
@@ -225,6 +229,21 @@ defmodule MatriarchUI.Floating do
           let stopAutoUpdate = null
 
           const position = () => computeAndApply(trigger, panel, placement, offset, axis)
+          const filterOptions = () => {
+            if (role !== "listbox" || trigger.tagName !== "INPUT" || trigger.dataset.muiFilter !== "true") return
+            const query = trigger.value.trim().toLocaleLowerCase()
+            const options = Array.from(panel.querySelectorAll('[role="option"]'))
+            let visibleCount = 0
+
+            options.forEach((option) => {
+              const label = (option.dataset.muiLabel || option.textContent).trim().toLocaleLowerCase()
+              option.hidden = query !== "" && !label.includes(query)
+              if (!option.hidden) visibleCount += 1
+            })
+
+            const empty = panel.querySelector("[data-mui-empty]")
+            if (empty) empty.hidden = visibleCount !== 0
+          }
 
           const onPointerDown = (event) => {
             if (panel.contains(event.target) || trigger.contains(event.target)) return
@@ -241,12 +260,20 @@ defmodule MatriarchUI.Floating do
             } else if ((role === "menu" || role === "listbox") && event.key === "ArrowUp") {
               event.preventDefault()
               focusItem(panel, -1)
+            } else if (role === "listbox" && event.key === "Enter") {
+              const option = document.activeElement.closest?.('[role="option"]')
+              if (option && panel.contains(option)) {
+                event.preventDefault()
+                selectOption(trigger, panel, option)
+                hide()
+              }
             }
           }
 
           const show = () => {
             if (open) return
             open = true
+            filterOptions()
             panel.dataset.muiState = "open"
             trigger.setAttribute("aria-expanded", "true")
             position()
@@ -270,6 +297,18 @@ defmodule MatriarchUI.Floating do
 
           if (triggerMode === "click") {
             trigger.addEventListener("click", () => (open ? hide() : show()))
+          } else if (triggerMode === "focus") {
+            trigger.addEventListener("focus", show)
+            trigger.addEventListener("click", show)
+            trigger.addEventListener("input", () => {
+              filterOptions()
+              show()
+            })
+            trigger.addEventListener("blur", () => {
+              requestAnimationFrame(() => {
+                if (!panel.contains(document.activeElement)) hide()
+              })
+            })
           } else {
             const onEnter = () => show()
             const onLeave = () => hide()
@@ -293,6 +332,7 @@ defmodule MatriarchUI.Floating do
           const panelObserver = new MutationObserver(() => {
             if (!open) return
             if (panel.dataset.muiState !== "open") panel.dataset.muiState = "open"
+            filterOptions()
             position()
           })
           panelObserver.observe(panel, {

@@ -81,9 +81,24 @@ defmodule MatriarchUI.FormsTest do
       })
 
     assert count(html, ~s(input[type="text"][name="city"][value="Ber"])) == 1
-    assert count(html, ~s(input[data-mui-trigger="focus"][data-mui-axis="vertical"])) == 1
+
+    assert count(
+             html,
+             ~s(input[data-mui-trigger="focus"][data-mui-axis="vertical"][data-mui-filter="true"][data-mui-match-width="true"])
+           ) == 1
+
     assert count(html, ~s([role="option"])) == 2
     assert html =~ "Berlin"
+  end
+
+  test "select panel matches the trigger width" do
+    html =
+      render_component(&select/1, %{
+        id: "role",
+        option: [%{value: "admin", inner_block: fn _, _ -> "Admin" end}]
+      })
+
+    assert count(html, ~s(button[data-mui-match-width="true"])) == 1
   end
 
   test "autocomplete shows a no-results message when :option is empty" do

@@ -47,6 +47,7 @@ defmodule MatriarchUI.Select do
         data-mui-placement="bottom-start"
         data-mui-axis="vertical"
         data-mui-role="listbox"
+        data-mui-match-width="true"
         data-mui-value-target={"#{@id}-value"}
         class={
           CN.cn([
@@ -70,7 +71,7 @@ defmodule MatriarchUI.Select do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 min-w-48 overflow-auto rounded-mui-lg bg-mui-surface p-0.5 text-sm shadow-mui-lg"
+            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg"
           ])
         }
       >
@@ -81,7 +82,7 @@ defmodule MatriarchUI.Select do
           data-mui-value={option.value}
           data-mui-label={option[:label] || option.value}
           aria-selected={to_string(to_string(@value) == to_string(option.value))}
-          class="flex cursor-pointer items-center justify-between rounded-mui-md px-2 py-1 hover:bg-mui-surface-hover aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
+          class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2 py-2 hover:bg-mui-surface-hover focus:bg-mui-surface-hover focus:outline-none aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
         >
           {render_slot(option)}
         </div>

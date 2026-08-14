@@ -16,7 +16,7 @@ defmodule MatriarchUI.Card do
       data-mui
       class={
         CN.cn([
-          "rounded-mui-xl bg-mui-surface text-mui-foreground shadow-mui-lg",
+          "mui-card rounded-mui-xl border border-mui-card-border bg-mui-card-muted/30 p-1 text-mui-foreground mui-dark:bg-mui-card",
           @class
         ])
       }
@@ -32,7 +32,7 @@ defmodule MatriarchUI.Card do
 
   def card_header(assigns) do
     ~H"""
-    <div class={CN.cn(["flex flex-col gap-1.5 px-4 py-3.5", @class])}>
+    <div class={CN.cn(["flex flex-col gap-1 p-3", @class])}>
       {render_slot(@inner_block)}
     </div>
     """
@@ -43,7 +43,7 @@ defmodule MatriarchUI.Card do
 
   def card_title(assigns) do
     ~H"""
-    <h3 class={CN.cn(["text-sm font-semibold leading-none text-mui-foreground", @class])}>
+    <h3 class={CN.cn(["text-xl font-semibold leading-none tracking-tight text-mui-foreground", @class])}>
       {render_slot(@inner_block)}
     </h3>
     """
@@ -63,7 +63,16 @@ defmodule MatriarchUI.Card do
 
   def card_content(assigns) do
     ~H"""
-    <div class={CN.cn(["px-4 pb-3.5", @class])}>{render_slot(@inner_block)}</div>
+    <div
+      class={
+        CN.cn([
+          "rounded-mui-lg border border-mui-card-border bg-mui-card p-3 mui-dark:bg-mui-card-muted",
+          @class
+        ])
+      }
+    >
+      {render_slot(@inner_block)}
+    </div>
     """
   end
 
@@ -72,7 +81,7 @@ defmodule MatriarchUI.Card do
 
   def card_footer(assigns) do
     ~H"""
-    <div class={CN.cn(["flex items-center gap-2 px-4 pb-3.5", @class])}>
+    <div class={CN.cn(["flex items-center px-3 pt-1.5 pb-0.5", @class])}>
       {render_slot(@inner_block)}
     </div>
     """

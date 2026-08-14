@@ -25,6 +25,12 @@
   --color-mui-border-strong: oklch(0.9219 0 0);
   --color-mui-overlay: rgb(47 48 55 / 45%);
 
+  --color-mui-card: var(--color-mui-surface);
+  --color-mui-card-muted: var(--color-mui-surface-hover);
+  --color-mui-card-border: var(--color-mui-border);
+  --color-mui-input-background: var(--color-mui-surface);
+  --color-mui-input-border: var(--color-mui-border-strong);
+
   --color-mui-primary: oklch(0.205 0 0);
   --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
   --color-mui-primary-foreground: oklch(0.985 0 0);
@@ -37,6 +43,21 @@
   --color-mui-accent-subtle: oklch(0.9583 0.0214 291.74);
   --color-mui-accent-subtle-foreground: #5f3ee8;
 
+  --color-mui-brand: #6c47ff;
+  --color-mui-brand-hover: #7656ff;
+  --color-mui-brand-foreground: #ffffff;
+
+  --color-mui-slider-track: oklch(0.9219 0 0);
+  --color-mui-slider-fill-start: #8b6cff;
+  --color-mui-slider-fill-end: var(--color-mui-brand);
+  --color-mui-slider-thumb: #ffffff;
+  --color-mui-slider-thumb-border: var(--color-mui-brand);
+  --color-mui-slider-ring: color-mix(in oklab, var(--color-mui-brand), transparent 72%);
+
+  --color-mui-scrollbar-track: color-mix(in oklab, var(--color-mui-border), transparent 25%);
+  --color-mui-scrollbar-thumb: color-mix(in oklab, var(--color-mui-muted-foreground), transparent 45%);
+  --color-mui-scrollbar-thumb-hover: color-mix(in oklab, var(--color-mui-muted-foreground), transparent 20%);
+
   --color-mui-success: oklch(0.548 0.153 152.535);
   --color-mui-success-subtle: oklch(0.9859 0.0164 156.92);
   --color-mui-success-border: color-mix(in oklab, var(--color-mui-success), transparent 82%);
@@ -47,6 +68,7 @@
 
   --color-mui-danger: oklch(0.577 0.245 27.325);
   --color-mui-danger-hover: color-mix(in oklab, var(--color-mui-danger), var(--color-mui-danger-foreground) 12%);
+  --color-mui-danger-button-hover: color-mix(in oklab, var(--color-mui-danger) 90%, transparent);
   --color-mui-danger-foreground: oklch(0.985 0 0);
   --color-mui-danger-subtle: oklch(0.9757 0.0118 17.36);
   --color-mui-danger-border: color-mix(in oklab, var(--color-mui-danger), transparent 82%);
@@ -66,8 +88,32 @@
   --shadow-mui-lg: 0 12px 12px -7px oklch(0.2046 0 0 / 12%), 0 24px 24px -10px oklch(0.2046 0 0 / 4%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
   --shadow-mui-xl: 0 16px 48px oklch(0.2046 0 0 / 18%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
   --shadow-mui-button: none;
+  --shadow-mui-brand-button: inset 0 1px 0 rgb(255 255 255 / 7%), 0 1px 3px rgb(47 48 55 / 20%);
+  --shadow-mui-card-elevated: 0 5px 15px rgb(47 48 55 / 8%), 0 15px 35px -5px rgb(47 48 55 / 12%), 0 0 0 1px rgb(47 48 55 / 7%);
+  --shadow-mui-input: 0 0 0 1px var(--color-mui-input-border), 0 1px 2px rgb(47 48 55 / 5%);
+  --shadow-mui-social-button: 0 0 0 1px var(--color-mui-input-border), 0 2px 3px -1px rgb(47 48 55 / 8%), 0 1px 0 rgb(47 48 55 / 2%);
+  --shadow-mui-danger-button: inset 0 -1px 0 0 color-mix(in oklab, var(--color-mui-background) 20%, transparent);
+  --shadow-mui-slider-thumb: 0 1px 2px rgb(47 48 55 / 18%), 0 0 0 1px rgb(47 48 55 / 6%);
 
   --ease-mui-out: cubic-bezier(0.4, 0.36, 0, 1);
+}
+
+:root {
+  --gradient-mui-brand-button-highlight: linear-gradient(to bottom, rgb(255 255 255 / 20%), transparent);
+  --gradient-mui-brand-button-sheen: linear-gradient(to bottom, rgb(255 255 255 / 10%) 0 46%, transparent 54%);
+  --gradient-mui-danger-button: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-mui-background) 30%, transparent),
+    transparent
+  );
+  --gradient-mui-slider-fill: linear-gradient(
+    to right,
+    var(--color-mui-slider-fill-start),
+    var(--color-mui-slider-fill-end)
+  );
+  --size-mui-slider-track: 4px;
+  --size-mui-slider-thumb: 16px;
+  --duration-mui-spinner: 650ms;
 }
 
 :root[data-theme="dark"] {
@@ -82,6 +128,12 @@
   --color-mui-border-strong: oklch(0.3715 0 0);
   --color-mui-overlay: rgb(0 0 0 / 65%);
 
+  --color-mui-card: rgb(27 27 31);
+  --color-mui-card-muted: rgb(32 32 36);
+  --color-mui-card-border: rgb(255 255 255 / 7%);
+  --color-mui-input-background: transparent;
+  --color-mui-input-border: rgb(255 255 255 / 11%);
+
   --color-mui-primary: oklch(0.922 0 0);
   --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
   --color-mui-primary-foreground: oklch(0.205 0 0);
@@ -94,6 +146,21 @@
   --color-mui-accent-subtle: oklch(0.3097 0.1008 285.05);
   --color-mui-accent-subtle-foreground: #c4b5fd;
 
+  --color-mui-brand: #846bff;
+  --color-mui-brand-hover: #927cff;
+  --color-mui-brand-foreground: #000000;
+
+  --color-mui-slider-track: oklch(0.3715 0 0);
+  --color-mui-slider-fill-start: #a58cff;
+  --color-mui-slider-fill-end: var(--color-mui-brand);
+  --color-mui-slider-thumb: #ffffff;
+  --color-mui-slider-thumb-border: var(--color-mui-brand);
+  --color-mui-slider-ring: color-mix(in oklab, var(--color-mui-brand), transparent 68%);
+
+  --color-mui-scrollbar-track: color-mix(in oklab, var(--color-mui-border), transparent 25%);
+  --color-mui-scrollbar-thumb: color-mix(in oklab, var(--color-mui-muted-foreground), transparent 40%);
+  --color-mui-scrollbar-thumb-hover: color-mix(in oklab, var(--color-mui-muted-foreground), transparent 15%);
+
   --color-mui-success: oklch(0.696 0.17 162.48);
   --color-mui-success-subtle: oklch(0.3297 0.052 152.31);
   --color-mui-success-border: color-mix(in oklab, var(--color-mui-success), transparent 72%);
@@ -104,6 +171,7 @@
 
   --color-mui-danger: oklch(0.637 0.237 25.331);
   --color-mui-danger-hover: color-mix(in oklab, var(--color-mui-danger), var(--color-mui-danger-foreground) 12%);
+  --color-mui-danger-button-hover: color-mix(in oklab, var(--color-mui-danger) 90%, transparent);
   --color-mui-danger-foreground: oklch(0.985 0 0);
   --color-mui-danger-subtle: oklch(0.255 0.0604 22.31);
   --color-mui-danger-border: color-mix(in oklab, var(--color-mui-danger), transparent 72%);
@@ -114,6 +182,20 @@
   --shadow-mui-lg: 0 8px 24px rgb(0 0 0 / 45%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-xl: 0 16px 48px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-button: inset 0 1px 0 rgb(255 255 255 / 10%), 0 1px 3px rgb(0 0 0 / 35%);
+  --shadow-mui-brand-button: 0 0 0 1px var(--color-mui-brand), inset 0 1px 1px rgb(255 255 255 / 7%), 0 2px 3px rgb(34 42 53 / 20%), 0 1px 1px rgb(0 0 0 / 24%);
+  --shadow-mui-card-elevated: 0 5px 15px rgb(0 0 0 / 8%), 0 15px 35px -5px rgb(0 0 0 / 20%), 0 0 0 1px var(--color-mui-card-border);
+  --shadow-mui-input: 0 0 0 1px var(--color-mui-input-border), 0 0 1px rgb(255 255 255 / 7%);
+  --shadow-mui-social-button: 0 0 0 1px rgb(255 255 255 / 7%), 0 2px 3px -1px rgb(0 0 0 / 8%), 0 1px 0 rgb(0 0 0 / 2%);
+  --shadow-mui-danger-button: inset 0 -1px 0 0 color-mix(in oklab, var(--color-mui-background) 20%, transparent);
+  --shadow-mui-slider-thumb: 0 1px 2px rgb(0 0 0 / 35%), 0 0 0 1px rgb(255 255 255 / 12%);
+
+  --gradient-mui-danger-button: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--color-mui-foreground) 20%, transparent),
+    transparent
+  );
+  --gradient-mui-brand-button-highlight: none;
+  --gradient-mui-brand-button-sheen: none;
 }
 
 @layer base {
@@ -126,62 +208,178 @@
     outline-offset: 2px;
   }
 
+  .mui-scroll-area-viewport {
+    scrollbar-width: none;
+  }
+
+  .mui-scroll-area-viewport::-webkit-scrollbar {
+    display: none;
+  }
+
   /* ::-webkit-slider-thumb/::-moz-range-* aren't reachable via Tailwind utilities; used by MatriarchUI.Slider. */
   input.mui-slider {
     appearance: none;
     width: 100%;
     height: 1.25rem;
     background: transparent;
+    cursor: pointer;
     --mui-slider-fill: 0%;
   }
 
   input.mui-slider::-webkit-slider-runnable-track {
-    height: 6px;
+    height: var(--size-mui-slider-track);
     border-radius: var(--radius-mui-full);
-    background: linear-gradient(
-      to right,
-      var(--color-mui-primary) var(--mui-slider-fill),
-      var(--color-mui-border-strong) var(--mui-slider-fill)
-    );
+    background-color: var(--color-mui-slider-track);
+    background-image: var(--gradient-mui-slider-fill);
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: var(--mui-slider-fill) 100%;
   }
 
   input.mui-slider::-moz-range-track {
-    height: 6px;
+    height: var(--size-mui-slider-track);
     border-radius: var(--radius-mui-full);
-    background: var(--color-mui-border-strong);
+    background: var(--color-mui-slider-track);
   }
 
   input.mui-slider::-moz-range-progress {
-    height: 6px;
+    height: var(--size-mui-slider-track);
     border-radius: var(--radius-mui-full);
-    background: var(--color-mui-primary);
+    background: var(--gradient-mui-slider-fill);
   }
 
   input.mui-slider::-webkit-slider-thumb {
     appearance: none;
-    margin-top: -6px;
-    width: 18px;
-    height: 18px;
+    margin-top: calc((var(--size-mui-slider-track) - var(--size-mui-slider-thumb)) / 2);
+    width: var(--size-mui-slider-thumb);
+    height: var(--size-mui-slider-thumb);
     border-radius: var(--radius-mui-full);
-    background: var(--color-mui-surface);
-    border: 2px solid var(--color-mui-primary);
-    box-shadow: var(--shadow-mui-sm);
+    background: var(--color-mui-slider-thumb);
+    border: 2px solid var(--color-mui-slider-thumb-border);
+    box-shadow: var(--shadow-mui-slider-thumb);
     cursor: pointer;
+    transition: box-shadow 150ms ease, scale 150ms ease;
   }
 
   input.mui-slider::-moz-range-thumb {
-    width: 18px;
-    height: 18px;
+    width: var(--size-mui-slider-thumb);
+    height: var(--size-mui-slider-thumb);
     border-radius: var(--radius-mui-full);
-    background: var(--color-mui-surface);
-    border: 2px solid var(--color-mui-primary);
-    box-shadow: var(--shadow-mui-sm);
+    background: var(--color-mui-slider-thumb);
+    border: 2px solid var(--color-mui-slider-thumb-border);
+    box-shadow: var(--shadow-mui-slider-thumb);
     cursor: pointer;
     box-sizing: border-box;
+    transition: box-shadow 150ms ease, scale 150ms ease;
+  }
+
+  input.mui-slider:hover::-webkit-slider-thumb {
+    scale: 1.08;
+  }
+
+  input.mui-slider:hover::-moz-range-thumb {
+    scale: 1.08;
+  }
+
+  input.mui-slider:focus-visible {
+    outline: none;
+  }
+
+  input.mui-slider:focus-visible::-webkit-slider-thumb {
+    box-shadow: var(--shadow-mui-slider-thumb), 0 0 0 3px var(--color-mui-slider-ring);
+  }
+
+  input.mui-slider:focus-visible::-moz-range-thumb {
+    box-shadow: var(--shadow-mui-slider-thumb), 0 0 0 3px var(--color-mui-slider-ring);
   }
 
   input.mui-slider:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+  }
+
+  input.mui-slider:disabled::-webkit-slider-thumb {
+    cursor: not-allowed;
+    scale: 1;
+  }
+
+  input.mui-slider:disabled::-moz-range-thumb {
+    cursor: not-allowed;
+    scale: 1;
+  }
+}
+
+@layer components {
+  .mui-card {
+    box-shadow: var(--shadow-mui-sm);
+  }
+
+  .mui-card-elevated {
+    box-shadow: var(--shadow-mui-card-elevated);
+  }
+
+  .mui-input {
+    box-shadow: var(--shadow-mui-input);
+  }
+
+  .mui-social-button {
+    box-shadow: var(--shadow-mui-social-button);
+  }
+
+  .mui-button-brand {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-color: var(--color-mui-brand);
+    background-color: var(--color-mui-brand);
+    color: var(--color-mui-brand-foreground);
+    box-shadow: var(--shadow-mui-brand-button);
+    transition: background-color 300ms var(--ease-mui-out), border-color 300ms var(--ease-mui-out);
+  }
+
+  .mui-button-brand::before,
+  .mui-button-brand::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    content: "";
+  }
+
+  .mui-button-brand::before {
+    background: var(--gradient-mui-brand-button-highlight);
+    opacity: 0.5;
+    transition: opacity 300ms var(--ease-mui-out);
+  }
+
+  .mui-button-brand::after {
+    background: var(--gradient-mui-brand-button-sheen);
+    mix-blend-mode: overlay;
+  }
+
+  .mui-button-brand:hover {
+    border-color: var(--color-mui-brand-hover);
+    background-color: var(--color-mui-brand-hover);
+  }
+
+  .mui-button-brand:hover::before {
+    opacity: 1;
+  }
+
+  .mui-button-destructive {
+    background-color: var(--color-mui-danger);
+    background-image: var(--gradient-mui-danger-button);
+    color: var(--color-mui-danger-foreground);
+    box-shadow: var(--shadow-mui-danger-button);
+    transition: background-color 150ms var(--ease-mui-out);
+  }
+
+  .mui-button-destructive:hover {
+    background-color: var(--color-mui-danger-button-hover);
+  }
+
+  .mui-button-spinner {
+    animation-duration: var(--duration-mui-spinner);
   }
 }

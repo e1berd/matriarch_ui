@@ -10,7 +10,7 @@ defmodule MatriarchUI.Button do
 
   attr(:variant, :string,
     default: "solid",
-    values: ~w(solid outline ghost soft destructive link)
+    values: ~w(solid brand outline ghost soft destructive link)
   )
 
   attr(:size, :string, default: "md", values: ~w(sm md lg icon))
@@ -46,7 +46,7 @@ defmodule MatriarchUI.Button do
       <button type={@type} disabled={@disabled || @loading} data-mui class={@class} {@rest}>
         <svg
           :if={@loading}
-          class="size-4 animate-spin"
+          class="mui-button-spinner size-4 animate-spin"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
@@ -81,6 +81,8 @@ defmodule MatriarchUI.Button do
     "bg-mui-primary text-mui-primary-foreground hover:bg-mui-primary-hover active:bg-mui-primary-hover"
   end
 
+  defp variant_classes("brand"), do: "mui-button-brand"
+
   defp variant_classes("outline") do
     "border-mui-border bg-transparent text-mui-primary hover:bg-mui-surface-hover active:bg-mui-border"
   end
@@ -94,7 +96,7 @@ defmodule MatriarchUI.Button do
   end
 
   defp variant_classes("destructive") do
-    "bg-mui-danger text-mui-danger-foreground hover:bg-mui-danger-hover active:bg-mui-danger-hover"
+    "mui-button-destructive"
   end
 
   defp variant_classes("link") do

@@ -1,9 +1,9 @@
 defmodule MatriarchUI.Autocomplete do
   @moduledoc """
-  Bare text input with a filtered floating listbox of suggestions, anchored
+  Searchable text input with a client-filtered floating listbox, anchored
   via `.MUIFloating` — pair with `MatriarchUI.Field` for a label and
   validation errors. The input's own value is the form field — pass an
-  already filtered `:option` list (e.g. from your own `phx-change`/
+  optionally filtered `:option` list (e.g. from your own `phx-change`/
   `phx-debounce` handler); picking one fills the input with that option's text.
   """
   use Phoenix.Component
@@ -50,10 +50,12 @@ defmodule MatriarchUI.Autocomplete do
         data-mui-placement="bottom-start"
         data-mui-axis="vertical"
         data-mui-role="listbox"
+        data-mui-filter="true"
+        data-mui-match-width="true"
         class={
           CN.cn([
-            "h-8 w-full rounded-mui-md border border-mui-border bg-mui-surface px-3 text-sm text-mui-foreground",
-            "placeholder:text-mui-input-placeholder focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
+            "mui-input h-8 w-full rounded-mui-md border border-transparent bg-mui-input-background px-3 text-sm text-mui-foreground",
+            "placeholder:text-mui-input-placeholder focus-visible:border-mui-brand focus-visible:ring-2 focus-visible:ring-mui-slider-ring",
             @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
             @class
           ])
@@ -67,7 +69,7 @@ defmodule MatriarchUI.Autocomplete do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 min-w-48 overflow-auto rounded-mui-lg bg-mui-surface p-0.5 text-sm shadow-mui-lg"
+            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg"
           ])
         }
       >
@@ -77,11 +79,13 @@ defmodule MatriarchUI.Autocomplete do
           tabindex="-1"
           data-mui-value={option.value}
           data-mui-label={option[:label] || option.value}
-          class="flex cursor-pointer items-center justify-between rounded-mui-md px-2 py-1 hover:bg-mui-surface-hover"
+          class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2 py-2 hover:bg-mui-surface-hover focus:bg-mui-surface-hover focus:outline-none"
         >
           {render_slot(option)}
         </div>
-        <p :if={@option == []} class="px-2.5 py-1.5 text-mui-subtle-foreground">No results</p>
+        <p data-mui-empty hidden={@option != []} class="px-2 py-2 text-mui-subtle-foreground">
+          No results
+        </p>
       </div>
     </div>
     """

@@ -7,7 +7,7 @@ defmodule MatriarchUI.PaginationTest do
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
 
   test "shows every page when total_pages is small" do
-    html = render_component(&pagination/1, %{page: 2, total_pages: 4})
+    html = render_component(&pagination/1, %{id: "pages", page: 2, total_pages: 4})
 
     assert query(html, ~s|button:not([aria-label])[phx-value-page="1"]|) == 1
     assert query(html, ~s|button:not([aria-label])[phx-value-page="4"]|) == 1
@@ -16,7 +16,7 @@ defmodule MatriarchUI.PaginationTest do
   end
 
   test "collapses the middle into an ellipsis for large ranges" do
-    html = render_component(&pagination/1, %{page: 10, total_pages: 30})
+    html = render_component(&pagination/1, %{id: "pages", page: 10, total_pages: 30})
 
     assert html =~ "…"
     assert query(html, ~s|button:not([aria-label])[phx-value-page="1"]|) == 1
@@ -25,7 +25,7 @@ defmodule MatriarchUI.PaginationTest do
   end
 
   test "prev button is disabled on the first page" do
-    html = render_component(&pagination/1, %{page: 1, total_pages: 5})
+    html = render_component(&pagination/1, %{id: "pages", page: 1, total_pages: 5})
     assert query(html, ~s(button[aria-label="Previous page"][disabled])) == 1
     assert query(html, ~s(button[aria-label="Next page"][disabled])) == 0
   end
