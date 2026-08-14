@@ -52,6 +52,41 @@ const liveSocket = new LiveSocket("/live", Socket, {
 })
 ```
 
+RichEditor additionally needs the vendored Tiptap 3.29.2 bundle imported before
+`LiveSocket.connect()`:
+
+```js
+import "../../deps/matriarch_ui/assets/tiptap.js"
+```
+
+The editor uses a Tiptap JSON document map for `value`; JSON strings from form
+submissions are accepted too. Toolbars support `top`, `bottom`, and `bubble`;
+toolbar controls render with the matriarchUI `Button` primitive and can be joined
+with `Group`:
+
+```heex
+<.rich_editor id="article-body" name="article[body]" value={@content}>
+  <:toolbar position="bubble">
+    <.group label="Formatting">
+      <.toolbar_bold />
+      <.toolbar_italic />
+      <.toolbar_link />
+    </.group>
+  </:toolbar>
+  <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
+  <:content />
+</.rich_editor>
+```
+
+Realtime collaboration uses Yjs binary updates over Phoenix Channels and needs
+no external service or container. The docs implementation consists of
+[`EditorSocket`](./matriarch_ui_docs/lib/matriarch_ui_docs_web/channels/editor_socket.ex),
+[`EditorChannel`](./matriarch_ui_docs/lib/matriarch_ui_docs_web/channels/editor_channel.ex),
+and a bounded in-memory
+[`CollaborationStore`](./matriarch_ui_docs/lib/matriarch_ui_docs/collaboration_store.ex).
+Set `document` and optionally `collaboration_socket` and `user_input_id` on the
+editor. Applications can replace the demo store with their persistent storage.
+
 See the docs site for the full component reference.
 
 ## Roadmap

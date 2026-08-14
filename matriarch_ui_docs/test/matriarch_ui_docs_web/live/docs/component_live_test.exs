@@ -3,7 +3,7 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLiveTest do
   import Phoenix.LiveViewTest
 
   @new_components ~w(
-    color-input date-input date-picker email-input file-upload list number-input password-input phone-input progressbar radio spinner
+    color-input date-input date-picker email-input file-upload list number-input password-input phone-input progressbar radio rich-editor spinner
   )
 
   test "new component pages render live examples", %{conn: conn} do

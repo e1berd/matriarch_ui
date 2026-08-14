@@ -21,12 +21,8 @@ defmodule MatriarchUIDocsWeb.SearchTest do
     test "title matches outrank content matches" do
       [first | _] = Search.search("button", "en")
       assert first.slug == "button"
-      assert first.snippet_segments == nil
-    end
-
-    test "highlights the matched substring within the title" do
-      [first | _] = Search.search("utt", "en")
-      assert first.title_segments == [{:text, "B"}, {:mark, "utt"}, {:text, "on"}]
+      assert first.title == "Button"
+      assert first.snippet == nil
     end
 
     test "is case-insensitive" do
@@ -43,37 +39,35 @@ defmodule MatriarchUIDocsWeb.SearchTest do
       assert Enum.any?(results, &(&1.slug == "button"))
     end
 
-    test "matches on-page content and returns a highlighted snippet" do
+    test "matches on-page content and returns a windowed snippet" do
       results = Search.search("show_modal", "en")
 
-      assert [%{slug: "modal", snippet_segments: segments}] =
+      assert [%{slug: "modal", snippet: snippet}] =
                Enum.filter(results, &(&1.slug == "modal"))
 
-      assert {:mark, "show_modal"} in segments
+      assert snippet =~ "show_modal"
     end
 
     test "content snippets never leak HEEx debug annotations or raw HTML" do
       for locale <- ["en", "ru"] do
-        for %{snippet_segments: segments} when is_list(segments) <-
-              Search.search("button", locale) do
-          text = segments |> Enum.map(&elem(&1, 1)) |> Enum.join()
-          refute text =~ "-->"
-          refute text =~ ~r/\.ex:\d+/
-          refute text =~ "&quot;"
-          refute text =~ "&gt;"
-          refute text =~ "&lt;"
+        for %{snippet: snippet} when is_binary(snippet) <- Search.search("button", locale) do
+          refute snippet =~ "-->"
+          refute snippet =~ ~r/\.ex:\d+/
+          refute snippet =~ "&quot;"
+          refute snippet =~ "&gt;"
+          refute snippet =~ "&lt;"
         end
       end
     end
 
-    test "finds a component by its title in the other language, without highlighting" do
+    test "finds a component by its title in the other language" do
       [match | _] = Enum.filter(Search.search("кнопка", "en"), &(&1.slug == "button"))
-      assert match.title_segments == [{:text, "Button"}]
-      assert match.snippet_segments == nil
+      assert match.title == "Button"
+      assert match.snippet == nil
 
       [match | _] = Enum.filter(Search.search("button", "ru"), &(&1.slug == "button"))
-      assert match.title_segments == [{:text, "Кнопка"}]
-      assert match.snippet_segments == nil
+      assert match.title == "Кнопка"
+      assert match.snippet == nil
     end
 
     test "other-language title matches outrank content-only matches" do

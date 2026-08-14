@@ -41,6 +41,9 @@ defmodule MatriarchUI do
       import MatriarchUI.Progress
       import MatriarchUI.Radio
       import MatriarchUI.RadioGroup
+      import MatriarchUI.RichEditor
+      import MatriarchUI.RichEditor.DragHandle
+      import MatriarchUI.RichEditor.Toolbar
       import MatriarchUI.ScrollArea
       import MatriarchUI.Select
       import MatriarchUI.Separator

@@ -1,6 +1,7 @@
 defmodule MatriarchUIDocsWeb.Search do
   @moduledoc "Component name + on-page content search, tolerant of a wrong keyboard layout."
 
+  require Logger
   alias MatriarchUIDocsWeb.{DocsI18n, Registry}
 
   @en_to_ru %{
@@ -74,12 +75,7 @@ defmodule MatriarchUIDocsWeb.Search do
 
     case Enum.find(needles, &String.contains?(title_downcased, &1)) do
       needle when is_binary(needle) ->
-        %{
-          slug: entry.slug,
-          title_segments: highlight_segments(entry.title, title_downcased, needle),
-          snippet_segments: nil,
-          rank: rank_for(needle, primary, 0)
-        }
+        %{slug: entry.slug, title: entry.title, snippet: nil, rank: rank_for(needle, primary, 0)}
 
       nil ->
         match_other_language_title(entry, needles, primary, locale) ||
@@ -96,12 +92,7 @@ defmodule MatriarchUIDocsWeb.Search do
          other_downcased = String.downcase(other_title),
          needle when is_binary(needle) <-
            Enum.find(needles, &String.contains?(other_downcased, &1)) do
-      %{
-        slug: entry.slug,
-        title_segments: [{:text, entry.title}],
-        snippet_segments: nil,
-        rank: rank_for(needle, primary, 10)
-      }
+      %{slug: entry.slug, title: entry.title, snippet: nil, rank: rank_for(needle, primary, 10)}
     else
       _no_match -> nil
     end
@@ -123,8 +114,8 @@ defmodule MatriarchUIDocsWeb.Search do
       needle when is_binary(needle) ->
         %{
           slug: entry.slug,
-          title_segments: [{:text, entry.title}],
-          snippet_segments: snippet_segments(content, needle),
+          title: entry.title,
+          snippet: snippet_text(content, needle),
           rank: rank_for(needle, primary, 20)
         }
 
@@ -141,11 +132,20 @@ defmodule MatriarchUIDocsWeb.Search do
     |> Phoenix.HTML.html_escape()
     |> Phoenix.HTML.safe_to_string()
     |> String.replace(~r/<!--.*?-->/s, " ")
+    |> String.replace(~r/<pre.*?<\/pre>/s, " ")
     |> String.replace(~r/<[^>]*>/, " ")
     |> unescape_entities()
     |> String.replace(~r/\s+/, " ")
     |> String.downcase()
     |> String.trim()
+  rescue
+    error ->
+      Logger.warning(
+        "MatriarchUIDocsWeb.Search: #{inspect(entry.module)}.examples/1 raised while indexing " <>
+          "for search, skipping its content — #{Exception.format(:error, error, __STACKTRACE__)}"
+      )
+
+      ""
   end
 
   defp unescape_entities(text) do
@@ -173,7 +173,7 @@ defmodule MatriarchUIDocsWeb.Search do
     end
   end
 
-  defp snippet_segments(content, needle) do
+  defp snippet_text(content, needle) do
     case String.split(content, needle, parts: 2) do
       [before, rest] ->
         before_length = String.length(before)
@@ -186,34 +186,10 @@ defmodule MatriarchUIDocsWeb.Search do
         left_ellipsis = if before_length > @snippet_radius, do: "…", else: ""
         right_ellipsis = if String.length(rest) > @snippet_radius * 2, do: "…", else: ""
 
-        [
-          {:text, left_ellipsis <> before_tail},
-          {:mark, needle},
-          {:text, after_head <> right_ellipsis}
-        ]
-        |> Enum.reject(fn {_kind, text} -> text == "" end)
+        String.trim(left_ellipsis <> before_tail <> needle <> after_head <> right_ellipsis)
 
       [^content] ->
         nil
-    end
-  end
-
-  defp highlight_segments(original, downcased, needle) do
-    case String.split(downcased, needle, parts: 2) do
-      [before, _rest] ->
-        before_length = String.length(before)
-        match_length = String.length(needle)
-        total_length = String.length(original)
-
-        [
-          {:text, String.slice(original, 0, before_length)},
-          {:mark, String.slice(original, before_length, match_length)},
-          {:text, String.slice(original, before_length + match_length, total_length)}
-        ]
-        |> Enum.reject(fn {_kind, text} -> text == "" end)
-
-      [^downcased] ->
-        [{:text, original}]
     end
   end
 end

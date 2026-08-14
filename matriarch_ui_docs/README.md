@@ -7,6 +7,10 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+The realtime RichEditor example runs through Phoenix Channels in this application.
+Its bounded in-memory Yjs store is intended for documentation and resets when the
+application restarts.
+
 Ready to run in production? Please [check our deployment guides](https://phoenix.hexdocs.pm/deployment.html).
 
 ## Learn more

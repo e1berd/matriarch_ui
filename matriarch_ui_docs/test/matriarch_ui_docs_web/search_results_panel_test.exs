@@ -1,8 +1,8 @@
-defmodule MatriarchUIDocsWeb.SearchPanelTest do
+defmodule MatriarchUIDocsWeb.SearchResultsPanelTest do
   use MatriarchUIDocsWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
-  @form "#docs-search-palette-form"
+  @form "#docs-search-form"
 
   test "typing a query renders matching component results", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/docs/components/badge")

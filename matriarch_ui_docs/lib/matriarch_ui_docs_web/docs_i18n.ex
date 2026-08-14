@@ -37,6 +37,7 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "progressbar" => "Индикатор прогресса",
     "radio" => "Радиокнопка",
     "radio-group" => "Группа радиокнопок",
+    "rich-editor" => "Текстовый редактор",
     "scroll-area" => "Область прокрутки",
     "select" => "Выпадающий список",
     "separator" => "Разделитель",
@@ -379,7 +380,24 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
       "корень; group/sidebar передаёт потомкам data-mui-state",
     "rows and cells with overrideable classes" => "строки и ячейки с переопределяемыми классами",
     "submits a list, keeps the panel open and separates labels with commas" =>
-      "отправляет список, оставляет панель открытой и разделяет подписи запятыми"
+      "отправляет список, оставляет панель открытой и разделяет подписи запятыми",
+    "Search over anything" => "Поиск по чему угодно",
+    "MatriarchUI.CommandPalette never touches your data — it only renders the trigger, dialog and results, and highlights title/subtitle against the current query for you. You write a small LiveComponent that owns query/results and looks them up however you like; the one below (shown in full further down this page) searches a handful of hardcoded names, but the same shape works over a database or an HTTP call." =>
+      "MatriarchUI.CommandPalette не трогает ваши данные — он только рисует кнопку, диалог и результаты, и сам подсвечивает title/subtitle по текущему запросу. Вы пишете небольшой LiveComponent, который хранит query/results и ищет их как угодно; тот, что ниже (его полный код показан дальше на этой странице), ищет по небольшому списку жёстко заданных имён, но точно так же можно искать в базе данных или через HTTP.",
+    "The LiveComponent above, in full" => "Полный код LiveComponent выше",
+    "This is everything MatriarchUIDocsWeb.Examples.CommandPaletteDemo does: own query/results, handle the search event, look results up. title/subtitle are plain strings — no highlighting math required." =>
+      "Это всё, что делает MatriarchUIDocsWeb.Examples.CommandPaletteDemo: хранит query/results, обрабатывает событие search, ищет результаты. title/subtitle — обычные строки, вычислять подсветку самостоятельно не нужно.",
+    "Without a LiveComponent" => "Без LiveComponent",
+    "The LiveComponent only matters if this page re-renders often for unrelated reasons — like this docs site's own header search does. If yours doesn't, own query/results on the LiveView itself:" =>
+      "LiveComponent нужен только если страница и так часто перерисовывается по несвязанным причинам — как в шапке этого сайта. Если у вас не так, храните query/results прямо в LiveView:",
+    "unique id, shared with the paired command_palette_search" =>
+      "уникальный id, общий с парным command_palette_search",
+    "current search box value" => "текущее значение поля поиска",
+    "phx-change event name pushed as the reader types" =>
+      "имя события phx-change, отправляемого по мере ввода",
+    "maxlength of the search input, defaults to 80" => "maxlength поля поиска, по умолчанию 80",
+    "one per result; id/value required, title/subtitle plain strings, auto-highlighted" =>
+      "по одному на результат; id/value обязательны, title/subtitle — обычные строки, подсвечиваются автоматически"
   }
 
   @english Map.new(@russian, fn {english, _russian} -> {english, english} end)

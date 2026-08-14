@@ -37,6 +37,7 @@ defmodule MatriarchUIDocsWeb.Registry do
     %{slug: "progressbar", title: "Progress Bar", module: Examples.Progress},
     %{slug: "radio", title: "Radio", module: Examples.Radio},
     %{slug: "radio-group", title: "Radio Group", module: Examples.RadioGroup},
+    %{slug: "rich-editor", title: "Rich Editor", module: Examples.RichEditor},
     %{slug: "scroll-area", title: "Scroll Area", module: Examples.ScrollArea},
     %{slug: "select", title: "Select", module: Examples.Select},
     %{slug: "separator", title: "Separator", module: Examples.Separator},

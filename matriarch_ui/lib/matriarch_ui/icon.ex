@@ -4,10 +4,14 @@ defmodule MatriarchUI.Icon do
   alias MatriarchUI.CN
 
   @names ~w(
-    arrow-right arrows-clockwise bell calendar-blank caret-down caret-left caret-right check check-circle
-    clock desktop dots-six-vertical dots-three eye eye-slash file folders gear git-branch github-logo
-    google-logo house image info magnifying-glass minus moon paper-plane-tilt plus sidebar-simple sign-out spinner-gap
-    sun timer trash upload-simple warning warning-circle x x-circle
+    arrow-bend-down-left arrow-right arrow-u-up-left arrow-u-up-right arrows-clockwise arrows-out-simple bell calendar-blank
+    caret-down caret-left caret-right check check-circle clock code code-block columns columns-plus-left columns-plus-right desktop
+    dots-six-vertical dots-three eraser eye eye-slash file folders gear git-branch github-logo google-logo highlighter house image info
+    line-segment link link-break list-bullets list-checks list-numbers magnifying-glass minus moon paint-bucket palette paper-plane-tilt
+    paragraph plus quotes rows rows-plus-bottom rows-plus-top selection selection-plus sidebar-simple sign-out spinner-gap sun table text-aa
+    text-align-center text-align-justify text-align-left text-align-right text-b text-h-five text-h-four text-h-one text-h-six text-h-three
+    text-h-two text-indent text-italic text-outdent text-strikethrough text-subscript text-superscript text-underline timer trash
+    upload-simple warning warning-circle x x-circle
   )
   @icon_directory Path.join([Mix.Project.deps_path(), "phosphor_icons", "core", "raw", "regular"])
   @icon_paths Map.new(@names, &{&1, Path.join(@icon_directory, "#{&1}.svg")})

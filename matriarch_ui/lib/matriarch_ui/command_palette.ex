@@ -1,63 +1,76 @@
 defmodule MatriarchUI.CommandPalette do
   @moduledoc """
-  ⌘K-style search dialog. The trigger, dialog shell, arrow-key navigation,
-  entrance animation and result rendering (with optional `<mark>`
-  highlighting) are all built in — where results come from is entirely up to
-  you. Wire it up the same way you would `.pagination` or `.table_filters`:
-  bind `event`/`target`, receive the query on your own `phx-change` handler
-  as `%{"search" => %{"query" => query}}`, look results up however you like
-  (in-process text match, a database query, an HTTP call, anything), and
-  assign them back as `results`.
+  ⌘K-style search dialog. The dialog shell, arrow-key navigation, entrance
+  animation and result highlighting are all built in — where results come
+  from, and what your trigger looks like, are entirely up to you. Unlike
+  `.popover`/`.dropdown_menu`, the trigger doesn't need to anchor anything —
+  the dialog opens centered near the top of the viewport regardless of where
+  the trigger sits on the page — so it lives in `command_palette/1`'s own
+  `:trigger` slot rather than a separate component.
+
+      <.command_palette id="search">
+        <:trigger><.button>Search</.button></:trigger>
+
+        <.command_palette_search id="search" query={@query} event="search" locale={@locale}>
+          <:command
+            :for={result <- @results}
+            id={result.id}
+            value={result.url}
+            title={result.title}
+            subtitle={result.description}
+          />
+        </.command_palette_search>
+      </.command_palette>
+
+  Wire the query the same way you would `.pagination` or `.table_filters`:
+  bind `event`/`target` on `command_palette_search/1`, receive the query on
+  your own `phx-change` handler as `%{"search" => %{"query" => query}}`, look
+  results up however you like (in-process text match, a database query, an
+  HTTP call, anything) and assign them back as a plain list of maps.
+  `title`/`subtitle` are plain strings — no highlighting math required, they
+  get `<mark>`-highlighted against the current query automatically.
 
       def handle_event("search", %{"search" => %{"query" => query}}, socket) do
         {:noreply, assign(socket, query: query, results: MyApp.Search.run(query))}
       end
 
-  Each result is a map: `%{id: unique_string, url: string, title: text, description: text | nil}`,
-  where `text` is either a plain string (rendered unhighlighted) or a list of
-  `{:text, string} | {:mark, string}` segments (rendered with `<mark>` runs
-  around the `:mark` parts) — see `MatriarchUI.Search.highlight/2` and
-  `MatriarchUI.Search.snippet/3` for building those from plain in-process
-  text matching.
-
-  Render `command_palette_trigger/1` (the ⌘K button) and `command_palette/1`
-  (the dialog) as a pair, anywhere in the same LiveView — most often once in
-  a shared header/layout.
+  `command_palette/1` (the trigger + the native `<dialog>` shell) and
+  `command_palette_search/1` (the input + results, which re-renders on every
+  keystroke) are separate components on purpose: if the page they're both on
+  re-renders often for an unrelated reason, wrap `command_palette_search/1`
+  in your own `Phoenix.LiveComponent` so only it re-renders, not the dialog
+  around it — a native `<dialog>`'s open/closed state is client-only, and a
+  LiveView patch reconstructing it from scratch (even for a sibling's sake)
+  resets that state and can steal focus back from the input.
+  `matriarch_ui_docs`'s own header search does exactly this.
   """
   use Phoenix.Component
-  alias MatriarchUI.{CN, I18n}
+  alias MatriarchUI.{CN, I18n, Search}
   import MatriarchUI.{Icon, Input, Modal}
   alias Phoenix.LiveView.JS
 
   attr :id, :string,
     required: true,
-    doc: "must match the `id` given to the paired `command_palette/1`"
+    doc: "must match the `id` given to the paired `command_palette_search/1`"
 
-  attr :locale, :string, default: "en"
   attr :class, :string, default: nil
+  slot :trigger, required: true, doc: "your own trigger content, e.g. a `.button`"
+  slot :inner_block, required: true, doc: "usually a `command_palette_search/1`"
 
-  def command_palette_trigger(assigns) do
+  def command_palette(assigns) do
     ~H"""
-    <button
-      type="button"
+    <div
       id={"#{@id}-trigger"}
       phx-hook=".MUICommandPaletteShortcut"
       phx-click={MatriarchUI.Modal.show_modal("#{@id}-modal") |> JS.focus(to: "##{@id}-input")}
-      class={
-        CN.cn([
-          "flex h-7 items-center gap-2 rounded-mui-md border border-mui-border bg-mui-surface px-2.5",
-          "text-[13px] text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground",
-          @class
-        ])
-      }
-      aria-label={I18n.t(@locale, "command_palette.trigger")}
+      class="inline-flex"
     >
-      <.icon name="magnifying-glass" class="size-3.5" />
-      <span class="hidden sm:inline">{I18n.t(@locale, "command_palette.trigger")}</span>
-      <kbd class="hidden rounded border border-mui-border bg-mui-surface-hover px-1 font-mono text-[10px] text-mui-subtle-foreground sm:inline">
-        ⌘K
-      </kbd>
-    </button>
+      {render_slot(@trigger)}
+    </div>
+
+    <.modal id={"#{@id}-modal"} class={CN.cn(["mt-[8vh]! max-w-lg", @class])}>
+      {render_slot(@inner_block)}
+    </.modal>
 
     <script :type={Phoenix.LiveView.ColocatedHook} name=".MUICommandPaletteShortcut">
       export default {
@@ -81,10 +94,9 @@ defmodule MatriarchUI.CommandPalette do
 
   attr :id, :string,
     required: true,
-    doc: "must match the `id` given to the paired `command_palette_trigger/1`"
+    doc: "must match the `id` given to the paired `command_palette/1`"
 
   attr :query, :string, default: ""
-  attr :results, :list, default: [], doc: "list of `%{id:, url:, title:, description:}` maps"
   attr :event, :string, required: true, doc: "phx-change event name pushed as the reader types"
 
   attr :target, :any,
@@ -93,9 +105,15 @@ defmodule MatriarchUI.CommandPalette do
 
   attr :locale, :string, default: "en"
   attr :max_length, :integer, default: 80, doc: "maxlength of the search input"
-  attr :class, :string, default: nil
 
-  def command_palette(assigns) do
+  slot :command, doc: "one per result" do
+    attr :id, :string, required: true
+    attr :value, :string, required: true, doc: "navigate destination"
+    attr :title, :string, required: true, doc: "highlighted against the current query"
+    attr :subtitle, :string, doc: "highlighted against the current query"
+  end
+
+  def command_palette_search(assigns) do
     assigns =
       assign(
         assigns,
@@ -104,127 +122,128 @@ defmodule MatriarchUI.CommandPalette do
       )
 
     ~H"""
-    <.modal id={"#{@id}-modal"} class={CN.cn(["mt-[8vh]! max-w-lg", @class])}>
-      <div id={"#{@id}-panel"} phx-hook=".MUICommandPaletteNav">
-        <.form for={@form} phx-change={@event} phx-target={@target}>
-          <.input
-            field={@form[:query]}
-            id={"#{@id}-input"}
-            autocomplete="off"
-            placeholder={I18n.t(@locale, "command_palette.placeholder")}
-            maxlength={@max_length}
-            phx-debounce="150"
-            role="combobox"
-            aria-expanded="true"
-            aria-autocomplete="list"
-            aria-controls={"#{@id}-listbox"}
-          >
-            <:leading><.icon name="magnifying-glass" class="size-4" /></:leading>
-          </.input>
-        </.form>
+    <div id={"#{@id}-panel"} phx-hook=".MUICommandPaletteNav">
+      <.form for={@form} phx-change={@event} phx-target={@target}>
+        <.input
+          field={@form[:query]}
+          id={"#{@id}-input"}
+          autocomplete="off"
+          placeholder={I18n.t(@locale, "command_palette.placeholder")}
+          maxlength={@max_length}
+          phx-debounce="150"
+          role="combobox"
+          aria-expanded="true"
+          aria-autocomplete="list"
+          aria-controls={"#{@id}-listbox"}
+        >
+          <:leading><.icon name="magnifying-glass" class="size-4" /></:leading>
+        </.input>
+      </.form>
 
-        <div class="mt-3 grid grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-mui-out">
-          <div class="overflow-hidden">
-            <.command_palette_idle :if={@query == ""} locale={@locale} />
-            <.command_palette_not_found :if={@query != "" and @results == []} locale={@locale} />
-            <ul
-              :if={@results != []}
-              id={"#{@id}-listbox"}
-              role="listbox"
-              class="flex max-h-80 flex-col gap-0.5 overflow-y-auto"
+      <div class="mt-3 grid grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-mui-out">
+        <div class="overflow-hidden">
+          <.command_palette_idle :if={@query == ""} locale={@locale} />
+          <.command_palette_not_found :if={@query != "" and @command == []} locale={@locale} />
+          <ul
+            :if={@command != []}
+            id={"#{@id}-listbox"}
+            role="listbox"
+            class="flex max-h-80 flex-col gap-0.5 overflow-y-auto"
+          >
+            <li
+              :for={command <- @command}
+              id={"#{@id}-result-#{command.id}"}
+              phx-mounted={
+                JS.transition(
+                  {"transition-all duration-500 ease-mui-out", "opacity-0 -translate-y-2",
+                   "opacity-100 translate-y-0"}
+                )
+              }
             >
-              <li
-                :for={result <- @results}
-                id={"#{@id}-result-#{result.id}"}
-                phx-mounted={
-                  JS.transition(
-                    {"transition-all duration-500 ease-mui-out", "opacity-0 -translate-y-2",
-                     "opacity-100 translate-y-0"}
-                  )
+              <.link
+                navigate={command.value}
+                id={"#{@id}-option-#{command.id}"}
+                role="option"
+                aria-selected="false"
+                class={
+                  CN.cn([
+                    "block rounded-mui-md px-2.5 py-2 outline-none hover:bg-mui-surface-hover",
+                    "aria-selected:bg-mui-surface-hover aria-selected:ring-2 aria-selected:ring-mui-brand/30"
+                  ])
                 }
               >
-                <.link
-                  navigate={result.url}
-                  id={"#{@id}-option-#{result.id}"}
-                  role="option"
-                  aria-selected="false"
-                  class={
-                    CN.cn([
-                      "block rounded-mui-md px-2.5 py-2 outline-none hover:bg-mui-surface-hover",
-                      "aria-selected:bg-mui-surface-hover aria-selected:ring-2 aria-selected:ring-mui-brand/30"
-                    ])
-                  }
+                <p class="text-sm font-medium text-mui-foreground">
+                  <.segments value={Search.highlight(command.title, @query)} />
+                </p>
+                <p
+                  :if={command[:subtitle]}
+                  class="mt-0.5 text-xs text-mui-muted-foreground"
                 >
-                  <p class="text-sm font-medium text-mui-foreground">
-                    <.segments value={result.title} />
-                  </p>
-                  <p :if={result[:description]} class="mt-0.5 text-xs text-mui-muted-foreground">
-                    <.segments value={result.description} />
-                  </p>
-                </.link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="mt-3 flex items-center gap-3 border-t border-mui-border pt-2.5 text-[11px] text-mui-subtle-foreground">
-          <span class="flex items-center gap-1">
-            <.kbd>↑</.kbd><.kbd>↓</.kbd>{I18n.t(@locale, "command_palette.kbd_navigate")}
-          </span>
-          <span class="flex items-center gap-1">
-            <.kbd>↵</.kbd>{I18n.t(@locale, "command_palette.kbd_select")}
-          </span>
-          <span class="flex items-center gap-1">
-            <.kbd>Esc</.kbd>{I18n.t(@locale, "command_palette.kbd_close")}
-          </span>
+                  <.segments value={Search.highlight(command.subtitle, @query)} />
+                </p>
+              </.link>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <script :type={Phoenix.LiveView.ColocatedHook} name=".MUICommandPaletteNav">
-        export default {
-          mounted() {
-            this.activeIndex = -1
-            this.onKeydown = (event) => {
-              const options = Array.from(this.el.querySelectorAll('[role="option"]'))
+      <div class="mt-3 flex items-center gap-3 border-t border-mui-border pt-2.5 text-[11px] text-mui-subtle-foreground">
+        <span class="flex items-center gap-1">
+          <.kbd>↑</.kbd><.kbd>↓</.kbd>{I18n.t(@locale, "command_palette.kbd_navigate")}
+        </span>
+        <span class="flex items-center gap-1">
+          <.kbd>↵</.kbd>{I18n.t(@locale, "command_palette.kbd_select")}
+        </span>
+        <span class="flex items-center gap-1">
+          <.kbd>Esc</.kbd>{I18n.t(@locale, "command_palette.kbd_close")}
+        </span>
+      </div>
+    </div>
 
-              if (event.key === "ArrowDown" && options.length > 0) {
-                event.preventDefault()
-                this.activeIndex = Math.min(this.activeIndex + 1, options.length - 1)
-                this.applyActive(options)
-              } else if (event.key === "ArrowUp" && options.length > 0) {
-                event.preventDefault()
-                this.activeIndex = Math.max(this.activeIndex - 1, 0)
-                this.applyActive(options)
-              } else if (event.key === "Enter") {
-                event.preventDefault()
-                if (options.length > 0) {
-                  options[this.activeIndex === -1 ? 0 : this.activeIndex]?.click()
-                }
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".MUICommandPaletteNav">
+      export default {
+        mounted() {
+          this.activeIndex = -1
+          this.onKeydown = (event) => {
+            const options = Array.from(this.el.querySelectorAll('[role="option"]'))
+
+            if (event.key === "ArrowDown" && options.length > 0) {
+              event.preventDefault()
+              this.activeIndex = Math.min(this.activeIndex + 1, options.length - 1)
+              this.applyActive(options)
+            } else if (event.key === "ArrowUp" && options.length > 0) {
+              event.preventDefault()
+              this.activeIndex = Math.max(this.activeIndex - 1, 0)
+              this.applyActive(options)
+            } else if (event.key === "Enter") {
+              event.preventDefault()
+              if (options.length > 0) {
+                options[this.activeIndex === -1 ? 0 : this.activeIndex]?.click()
               }
             }
-            this.el.addEventListener("keydown", this.onKeydown)
-          },
-          updated() {
-            this.activeIndex = -1
-          },
-          applyActive(options) {
-            const input = this.el.querySelector('[role="combobox"]')
-            options.forEach((option, index) => {
-              const active = index === this.activeIndex
-              option.setAttribute("aria-selected", active ? "true" : "false")
-              if (active) {
-                option.scrollIntoView({block: "nearest"})
-                input?.setAttribute("aria-activedescendant", option.id)
-              }
-            })
-            if (this.activeIndex === -1) input?.removeAttribute("aria-activedescendant")
-          },
-          destroyed() {
-            this.el.removeEventListener("keydown", this.onKeydown)
           }
+          this.el.addEventListener("keydown", this.onKeydown)
+        },
+        updated() {
+          this.activeIndex = -1
+        },
+        applyActive(options) {
+          const input = this.el.querySelector('[role="combobox"]')
+          options.forEach((option, index) => {
+            const active = index === this.activeIndex
+            option.setAttribute("aria-selected", active ? "true" : "false")
+            if (active) {
+              option.scrollIntoView({block: "nearest"})
+              input?.setAttribute("aria-activedescendant", option.id)
+            }
+          })
+          if (this.activeIndex === -1) input?.removeAttribute("aria-activedescendant")
+        },
+        destroyed() {
+          this.el.removeEventListener("keydown", this.onKeydown)
         }
-      </script>
-    </.modal>
+      }
+    </script>
     """
   end
 
@@ -255,13 +274,7 @@ defmodule MatriarchUI.CommandPalette do
     """
   end
 
-  attr :value, :any,
-    required: true,
-    doc: "a plain string, or a list of `{:text, _} | {:mark, _}` segments"
-
-  defp segments(%{value: value} = assigns) when is_binary(value) do
-    ~H"{@value}"
-  end
+  attr :value, :list, required: true, doc: "a list of `{:text, _} | {:mark, _}` segments"
 
   defp segments(assigns) do
     ~H"""

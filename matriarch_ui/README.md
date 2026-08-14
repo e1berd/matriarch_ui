@@ -37,4 +37,18 @@ const liveSocket = new LiveSocket("/live", Socket, {
 })
 ```
 
+RichEditor additionally needs the vendored Tiptap 3.29.2 bundle imported before
+`LiveSocket.connect()`:
+
+```js
+import "../../deps/matriarch_ui/assets/tiptap.js"
+```
+
+`RichEditor` accepts a Tiptap JSON document map or an encoded JSON document as
+`value`. It supports top, bottom, and bubble toolbars, a separate draggable-block
+handle, tables, task lists, media, typography, character limits, and Yjs
+collaboration over Phoenix Channels. The docs application contains an autonomous
+Socket, Channel, and bounded in-memory store implementation with no external
+service or container.
+
 Full reference: the [docs site](https://github.com/e1berd/matriarch_ui/tree/main/matriarch_ui_docs).

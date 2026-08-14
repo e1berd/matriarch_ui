@@ -13,6 +13,7 @@ defmodule MatriarchUIDocs.Application do
       {Phoenix.PubSub, name: MatriarchUIDocs.PubSub},
       MatriarchUIDocsWeb.Presence,
       MatriarchUIDocs.ChatStore,
+      MatriarchUIDocs.CollaborationStore,
       # Start a worker by calling: MatriarchUIDocs.Worker.start_link(arg)
       # {MatriarchUIDocs.Worker, arg},
       # Start to serve requests, typically the last entry

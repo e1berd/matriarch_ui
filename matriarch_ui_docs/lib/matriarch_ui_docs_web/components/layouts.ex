@@ -64,11 +64,29 @@ defmodule MatriarchUIDocsWeb.Layouts do
         </.link>
       </nav>
       <div class="ml-auto flex items-center gap-2.5">
-        <.live_component
-          module={MatriarchUIDocsWeb.SearchPanel}
-          id="docs-search"
-          locale={@locale}
-        />
+        <.command_palette id="docs-search">
+          <:trigger>
+            <.button
+              variant="ghost"
+              size="sm"
+              aria-label={MatriarchUI.I18n.t(@locale, "command_palette.trigger")}
+            >
+              <.icon name="magnifying-glass" class="size-3.5" />
+              <span class="hidden sm:inline">
+                {MatriarchUI.I18n.t(@locale, "command_palette.trigger")}
+              </span>
+              <kbd class="hidden rounded border border-mui-border bg-mui-surface-hover px-1 font-mono text-[10px] text-mui-subtle-foreground sm:inline">
+                ⌘K
+              </kbd>
+            </.button>
+          </:trigger>
+          <.live_component
+            module={MatriarchUIDocsWeb.SearchResultsPanel}
+            id="docs-search-results"
+            palette_id="docs-search"
+            locale={@locale}
+          />
+        </.command_palette>
         <.dropdown_menu id="docs-language" placement="bottom-end" class="min-w-32">
           <:trigger>
             <.button
