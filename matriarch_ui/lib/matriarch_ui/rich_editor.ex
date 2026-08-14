@@ -154,19 +154,15 @@ defmodule MatriarchUI.RichEditor do
 
       function animateBlocks(previous, current, duration, easing) {
         if (duration <= 0 || matchMedia("(prefers-reduced-motion: reduce)").matches) return
-        const blockCountChanged = previous.size !== current.size
+        const previousKeys = Array.from(previous.keys())
+        const currentKeys = Array.from(current.keys())
+        const sameBlocks = previousKeys.length === currentKeys.length && currentKeys.every(key => previous.has(key))
+        const reordered = sameBlocks && currentKeys.some((key, index) => key !== previousKeys[index])
+        if (!reordered) return
 
         current.forEach(({element, rect}, key) => {
           const before = previous.get(key)
-          if (!before) {
-            if (blockCountChanged) {
-              element.animate([{opacity: 0, transform: "scale(0.985)"}, {opacity: 1, transform: "scale(1)"}], {
-                duration,
-                easing,
-              })
-            }
-            return
-          }
+          if (!before) return
 
           const x = before.rect.left - rect.left
           const y = before.rect.top - rect.top
@@ -342,7 +338,7 @@ defmodule MatriarchUI.RichEditor do
         const dragTemplate = root.querySelector("template[data-mui-rich-drag-handle]")
         if (dragTemplate) {
           extensions.push(tiptap.DragHandle.configure({
-            nested: true,
+            nested: false,
             render: () => dragTemplate.content.firstElementChild.cloneNode(true),
           }))
         }
