@@ -10,12 +10,18 @@ defmodule MatriarchUIDocsWeb.Examples.Input do
       class="flex-col items-stretch"
       code={
         ~S'''
-        <.input name="email" id="email" type="email" label="Email" placeholder="you@example.com" />
+        <.field id="email" :let={id}>
+          <.field_label for={id}>Email</.field_label>
+          <.input id={id} name="email" type="email" placeholder="you@example.com" />
+        </.field>
         '''
       }
     >
       <div class="w-72">
-        <.input name="email" id="email" type="email" label="Email" placeholder="you@example.com" />
+        <.field :let={id} id="email">
+          <.field_label for={id}>Email</.field_label>
+          <.input id={id} name="email" type="email" placeholder="you@example.com" />
+        </.field>
       </div>
     </.example>
 
@@ -24,28 +30,32 @@ defmodule MatriarchUIDocsWeb.Examples.Input do
       class="flex-col items-stretch"
       code={
         ~S'''
-        <.input name="handle" id="handle" label="Handle" value="!!" errors={["only letters and numbers"]} />
+        <.field id="handle" errors={["only letters and numbers"]} :let={id}>
+          <.field_label for={id}>Handle</.field_label>
+          <.input id={id} name="handle" value="!!" invalid={true} />
+        </.field>
         '''
       }
     >
       <div class="w-72">
-        <.input
-          name="handle"
-          id="handle"
-          label="Handle"
-          value="!!"
-          errors={["only letters and numbers"]}
-        />
+        <.field :let={id} id="handle" errors={["only letters and numbers"]}>
+          <.field_label for={id}>Handle</.field_label>
+          <.input id={id} name="handle" value="!!" invalid={true} />
+        </.field>
       </div>
     </.example>
 
     <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value/errors from a form"},
+      {"field", "Phoenix.HTML.FormField", "binds name/id/value/invalid from a form"},
       {"type", "string", "any input type, defaults to \"text\""},
-      {"label", "string", "optional label above the field"},
-      {"errors", "list", "shown below the field with a danger border"},
+      {"invalid", "boolean", "shows the danger border and aria-invalid"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />
+
+    <p class="text-sm text-mui-muted-foreground">
+      Pair with <code>&lt;.field&gt;</code>
+      for a label and validation errors — see the Field docs page.
+    </p>
     """
   end
 end

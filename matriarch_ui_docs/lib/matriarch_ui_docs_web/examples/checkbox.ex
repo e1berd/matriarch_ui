@@ -9,18 +9,29 @@ defmodule MatriarchUIDocsWeb.Examples.Checkbox do
       title="Basic"
       code={
         ~S'''
-        <.checkbox name="tos" id="tos" label="Accept the terms" />
-        <.checkbox name="tos2" id="tos2" label="Checked" checked />
+        <.field id="tos" class="flex-row items-center gap-2" :let={id}>
+          <.checkbox id={id} name="tos" />
+          <.field_label for={id}>Accept the terms</.field_label>
+        </.field>
+        <.field id="tos2" class="flex-row items-center gap-2" :let={id}>
+          <.checkbox id={id} name="tos2" checked />
+          <.field_label for={id}>Checked</.field_label>
+        </.field>
         '''
       }
     >
-      <.checkbox name="tos" id="tos" label="Accept the terms" />
-      <.checkbox name="tos2" id="tos2" label="Checked" checked />
+      <.field :let={id} id="tos" class="flex-row items-center gap-2">
+        <.checkbox id={id} name="tos" />
+        <.field_label for={id}>Accept the terms</.field_label>
+      </.field>
+      <.field :let={id} id="tos2" class="flex-row items-center gap-2">
+        <.checkbox id={id} name="tos2" checked />
+        <.field_label for={id}>Checked</.field_label>
+      </.field>
     </.example>
 
     <.props_table rows={[
       {"field", "Phoenix.HTML.FormField", "binds name/id/checked from a form"},
-      {"label", "string", "text next to the box"},
       {"checked", "boolean", "initial checked state"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />

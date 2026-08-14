@@ -9,18 +9,29 @@ defmodule MatriarchUIDocsWeb.Examples.Switch do
       title="Basic"
       code={
         ~S'''
-        <.switch name="notify" id="notify" label="Email notifications" />
-        <.switch name="notify2" id="notify2" label="On" checked />
+        <.field id="notify" class="flex-row items-center gap-2" :let={id}>
+          <.switch id={id} name="notify" />
+          <.field_label for={id}>Email notifications</.field_label>
+        </.field>
+        <.field id="notify2" class="flex-row items-center gap-2" :let={id}>
+          <.switch id={id} name="notify2" checked />
+          <.field_label for={id}>On</.field_label>
+        </.field>
         '''
       }
     >
-      <.switch name="notify" id="notify" label="Email notifications" />
-      <.switch name="notify2" id="notify2" label="On" checked />
+      <.field :let={id} id="notify" class="flex-row items-center gap-2">
+        <.switch id={id} name="notify" />
+        <.field_label for={id}>Email notifications</.field_label>
+      </.field>
+      <.field :let={id} id="notify2" class="flex-row items-center gap-2">
+        <.switch id={id} name="notify2" checked />
+        <.field_label for={id}>On</.field_label>
+      </.field>
     </.example>
 
     <.props_table rows={[
       {"field", "Phoenix.HTML.FormField", "binds name/id/checked from a form"},
-      {"label", "string", "text next to the switch"},
       {"checked", "boolean", "initial checked state"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />

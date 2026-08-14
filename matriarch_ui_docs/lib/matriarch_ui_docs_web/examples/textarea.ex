@@ -10,19 +10,24 @@ defmodule MatriarchUIDocsWeb.Examples.Textarea do
       class="flex-col items-stretch"
       code={
         ~S'''
-        <.textarea name="bio" id="bio" label="Bio" placeholder="Tell us about yourself" />
+        <.field id="bio" :let={id}>
+          <.field_label for={id}>Bio</.field_label>
+          <.textarea id={id} name="bio" placeholder="Tell us about yourself" />
+        </.field>
         '''
       }
     >
       <div class="w-96">
-        <.textarea name="bio" id="bio" label="Bio" placeholder="Tell us about yourself" />
+        <.field :let={id} id="bio">
+          <.field_label for={id}>Bio</.field_label>
+          <.textarea id={id} name="bio" placeholder="Tell us about yourself" />
+        </.field>
       </div>
     </.example>
 
     <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value/errors from a form"},
-      {"label", "string", "optional label above the field"},
-      {"errors", "list", "shown below the field with a danger border"},
+      {"field", "Phoenix.HTML.FormField", "binds name/id/value/invalid from a form"},
+      {"invalid", "boolean", "shows the danger border and aria-invalid"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />
     """

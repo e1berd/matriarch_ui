@@ -18,6 +18,9 @@ defmodule MatriarchUIDocsWeb.Examples.Tooltip do
         <.tooltip id="tip-bottom" text="Bottom" placement="bottom">
           <.button variant="outline" size="sm">Bottom</.button>
         </.tooltip>
+        <.tooltip id="tip-auto" text="Auto" placement="auto">
+          <.button variant="outline" size="sm">Auto</.button>
+        </.tooltip>
         '''
       }
     >
@@ -30,12 +33,16 @@ defmodule MatriarchUIDocsWeb.Examples.Tooltip do
       <.tooltip id="tip-bottom" text="Bottom" placement="bottom">
         <.button variant="outline" size="sm">Bottom</.button>
       </.tooltip>
+      <.tooltip id="tip-auto" text="Auto" placement="auto">
+        <.button variant="outline" size="sm">Auto</.button>
+      </.tooltip>
     </.example>
 
     <.props_table rows={[
       {"id", "string, required", "unique id for the trigger/panel pair"},
       {"text", "string, required", "tooltip content"},
-      {"placement", "string", "any .MUIFloating placement, defaults to \"top\""}
+      {"placement", "string",
+       "any .MUIFloating placement, or \"auto\" to pick top/bottom based on room, defaults to \"top\". Falls back to any side that fits if the requested one doesn't."}
     ]} />
     """
   end
