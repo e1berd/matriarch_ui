@@ -60,9 +60,9 @@ Phoenix/LiveView-native components — built on Presence, PubSub, and streams,
 not portable to a generic JS component kit:
 
 - [ ] `Kanban` — drag & drop board synced live across participants
-- [ ] `Chat` — message thread on streams (insert/delete without full re-render)
+- [x] `Chat` — message thread on streams (insert/delete without full re-render)
 - [ ] `PresenceList` — online/offline/"last seen" via `Phoenix.Presence`
-- [ ] `TypingIndicator` — "X is typing…" via presence metadata
+- [x] `TypingIndicator` — "X is typing…" via presence metadata
 
 ## License
 

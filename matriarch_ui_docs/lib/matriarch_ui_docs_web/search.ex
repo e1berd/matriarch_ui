@@ -1,7 +1,7 @@
 defmodule MatriarchUIDocsWeb.Search do
   @moduledoc "Component name + on-page content search, tolerant of a wrong keyboard layout."
 
-  alias MatriarchUIDocsWeb.Registry
+  alias MatriarchUIDocsWeb.{DocsI18n, Registry}
 
   @en_to_ru %{
     "`" => "ё",
@@ -70,16 +70,51 @@ defmodule MatriarchUIDocsWeb.Search do
   end
 
   defp match_entry(entry, [primary | _] = needles, locale) do
-    title = String.downcase(entry.title)
+    title_downcased = String.downcase(entry.title)
 
-    case Enum.find(needles, &String.contains?(title, &1)) do
+    case Enum.find(needles, &String.contains?(title_downcased, &1)) do
       needle when is_binary(needle) ->
-        %{slug: entry.slug, title: entry.title, snippet: nil, rank: rank_for(needle, primary, 0)}
+        %{
+          slug: entry.slug,
+          title_segments: highlight_segments(entry.title, title_downcased, needle),
+          snippet_segments: nil,
+          rank: rank_for(needle, primary, 0)
+        }
 
       nil ->
-        match_content(entry, needles, primary, locale)
+        match_other_language_title(entry, needles, primary, locale) ||
+          match_content(entry, needles, primary, locale)
     end
   end
+
+  # A query typed in the language the reader *isn't* currently browsing in
+  # (e.g. typing "кнопка" while viewing the English docs) should still find
+  # "Button" — but there's nothing to literally highlight in that case, since
+  # the displayed title doesn't contain the query as a substring.
+  defp match_other_language_title(entry, needles, primary, locale) do
+    with other_title when is_binary(other_title) <- other_language_title(entry, locale),
+         other_downcased = String.downcase(other_title),
+         needle when is_binary(needle) <-
+           Enum.find(needles, &String.contains?(other_downcased, &1)) do
+      %{
+        slug: entry.slug,
+        title_segments: [{:text, entry.title}],
+        snippet_segments: nil,
+        rank: rank_for(needle, primary, 10)
+      }
+    else
+      _no_match -> nil
+    end
+  end
+
+  defp other_language_title(entry, "ru") do
+    case Registry.fetch(entry.slug) do
+      nil -> nil
+      base_entry -> base_entry.title
+    end
+  end
+
+  defp other_language_title(entry, _locale), do: DocsI18n.component_titles("ru")[entry.slug]
 
   defp match_content(entry, needles, primary, locale) do
     content = render_content(entry, locale)
@@ -88,9 +123,9 @@ defmodule MatriarchUIDocsWeb.Search do
       needle when is_binary(needle) ->
         %{
           slug: entry.slug,
-          title: entry.title,
-          snippet: snippet_around(content, needle),
-          rank: rank_for(needle, primary, 2)
+          title_segments: [{:text, entry.title}],
+          snippet_segments: snippet_segments(content, needle),
+          rank: rank_for(needle, primary, 20)
         }
 
       nil ->
@@ -101,24 +136,44 @@ defmodule MatriarchUIDocsWeb.Search do
   defp rank_for(needle, primary, base), do: if(needle == primary, do: base, else: base + 1)
 
   defp render_content(entry, locale) do
-    assigns = %{
-      page: 4,
-      table_page: 1,
-      filters: %{"query" => "", "status" => ""},
-      locale: locale
-    }
-
-    entry.module
-    |> apply(:examples, [assigns])
+    entry
+    |> searchable_content(locale)
     |> Phoenix.HTML.html_escape()
     |> Phoenix.HTML.safe_to_string()
+    |> String.replace(~r/<!--.*?-->/s, " ")
     |> String.replace(~r/<[^>]*>/, " ")
+    |> unescape_entities()
     |> String.replace(~r/\s+/, " ")
     |> String.downcase()
     |> String.trim()
   end
 
-  defp snippet_around(content, needle) do
+  defp unescape_entities(text) do
+    text
+    |> String.replace("&quot;", "\"")
+    |> String.replace("&#39;", "'")
+    |> String.replace("&apos;", "'")
+    |> String.replace("&lt;", "<")
+    |> String.replace("&gt;", ">")
+    |> String.replace("&amp;", "&")
+  end
+
+  defp searchable_content(entry, locale) do
+    if Code.ensure_loaded?(entry.module) && function_exported?(entry.module, :search_content, 1) do
+      apply(entry.module, :search_content, [locale])
+    else
+      assigns = %{
+        page: 4,
+        table_page: 1,
+        filters: %{"query" => "", "status" => ""},
+        locale: locale
+      }
+
+      apply(entry.module, :examples, [assigns])
+    end
+  end
+
+  defp snippet_segments(content, needle) do
     case String.split(content, needle, parts: 2) do
       [before, rest] ->
         before_length = String.length(before)
@@ -131,10 +186,34 @@ defmodule MatriarchUIDocsWeb.Search do
         left_ellipsis = if before_length > @snippet_radius, do: "…", else: ""
         right_ellipsis = if String.length(rest) > @snippet_radius * 2, do: "…", else: ""
 
-        String.trim(left_ellipsis <> before_tail <> needle <> after_head <> right_ellipsis)
+        [
+          {:text, left_ellipsis <> before_tail},
+          {:mark, needle},
+          {:text, after_head <> right_ellipsis}
+        ]
+        |> Enum.reject(fn {_kind, text} -> text == "" end)
 
       [^content] ->
         nil
+    end
+  end
+
+  defp highlight_segments(original, downcased, needle) do
+    case String.split(downcased, needle, parts: 2) do
+      [before, _rest] ->
+        before_length = String.length(before)
+        match_length = String.length(needle)
+        total_length = String.length(original)
+
+        [
+          {:text, String.slice(original, 0, before_length)},
+          {:mark, String.slice(original, before_length, match_length)},
+          {:text, String.slice(original, before_length + match_length, total_length)}
+        ]
+        |> Enum.reject(fn {_kind, text} -> text == "" end)
+
+      [^downcased] ->
+        [{:text, original}]
     end
   end
 end

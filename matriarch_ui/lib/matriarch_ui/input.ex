@@ -12,7 +12,8 @@ defmodule MatriarchUI.Input do
   attr :class, :string, default: nil
 
   attr :rest, :global,
-    include: ~w(placeholder autocomplete disabled readonly required min max step)
+    include:
+      ~w(placeholder autocomplete disabled readonly required min max step maxlength minlength)
 
   slot :leading
 

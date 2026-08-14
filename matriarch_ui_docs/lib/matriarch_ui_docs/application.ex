@@ -12,6 +12,7 @@ defmodule MatriarchUIDocs.Application do
       {DNSCluster, query: Application.get_env(:matriarch_ui_docs, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: MatriarchUIDocs.PubSub},
       MatriarchUIDocsWeb.Presence,
+      MatriarchUIDocs.ChatStore,
       # Start a worker by calling: MatriarchUIDocs.Worker.start_link(arg)
       # {MatriarchUIDocs.Worker, arg},
       # Start to serve requests, typically the last entry

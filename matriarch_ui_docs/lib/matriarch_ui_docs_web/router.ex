@@ -16,6 +16,7 @@ defmodule MatriarchUIDocsWeb.Router do
     live_session :default do
       live "/", LandingLive, :index
       live "/docs", Docs.OverviewLive, :index
+      live "/docs/components/chat", Docs.ChatLive, :show
       live "/docs/components/:slug", Docs.ComponentLive, :show
     end
   end

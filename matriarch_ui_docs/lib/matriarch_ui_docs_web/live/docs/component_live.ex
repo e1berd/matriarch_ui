@@ -23,6 +23,8 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
            pagination_page: 4,
            table_page: 1,
            table_filters: %{"query" => "", "status" => ""},
+           command_palette_query: "",
+           command_palette_results: [],
            reader_topic: reader_topic,
            reader_count: reader_count
          )}
@@ -43,6 +45,8 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
                 page: @pagination_page,
                 table_page: @table_page,
                 filters: @table_filters,
+                command_palette_query: @command_palette_query,
+                command_palette_results: @command_palette_results,
                 locale: @locale
               }
             ])}
@@ -83,6 +87,11 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
 
     params = with_locale(params, socket.assigns.locale)
     {:noreply, push_patch(socket, to: ~p"/docs/components/table?#{params}")}
+  end
+
+  def handle_event("command-palette-demo-search", %{"search" => %{"query" => query}}, socket) do
+    results = MatriarchUIDocsWeb.Examples.CommandPalette.search(query)
+    {:noreply, assign(socket, command_palette_query: query, command_palette_results: results)}
   end
 
   def handle_info(message, socket) do

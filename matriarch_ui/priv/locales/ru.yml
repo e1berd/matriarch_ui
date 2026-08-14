@@ -17,9 +17,14 @@ docs.docs: Документация
 docs.components: Компоненты
 docs.getting_started: Начало работы
 docs.installation: Установка
-docs.search: Поиск
-docs.search_placeholder: Поиск по компонентам и документации…
-docs.search_empty: Ничего не найдено
 docs.reading_now.one: Эту страницу читает %{count} человек
 docs.reading_now.few: Эту страницу читают %{count} человека
 docs.reading_now.many: Эту страницу читают %{count} человек
+command_palette.trigger: Поиск
+command_palette.placeholder: Поиск…
+command_palette.hint: Поиск по названию или содержимому страницы
+command_palette.no_results: Ничего не найдено
+command_palette.no_results_hint: Попробуйте другой запрос
+command_palette.kbd_navigate: навигация
+command_palette.kbd_select: выбрать
+command_palette.kbd_close: закрыть

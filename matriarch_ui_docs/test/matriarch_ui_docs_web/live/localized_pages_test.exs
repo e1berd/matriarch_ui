@@ -36,12 +36,18 @@ defmodule MatriarchUIDocsWeb.LocalizedPagesTest do
   end
 
   test "search returns localized component titles and content" do
-    assert [%{title: "Автодополнение"} | _results] =
+    assert [%{title_segments: [mark: "Автодополнение"]} | _results] =
              MatriarchUIDocsWeb.Search.search("автодополнение", "ru")
 
     assert Enum.any?(
              MatriarchUIDocsWeb.Search.search("состояние валидации", "ru"),
-             &(&1.snippet =~ "состояние валидации")
+             fn result ->
+               match?(%{snippet_segments: segments} when is_list(segments), result) and
+                 Enum.any?(result.snippet_segments, fn
+                   {:mark, text} -> text =~ "состояние валидации"
+                   _segment -> false
+                 end)
+             end
            )
   end
 end

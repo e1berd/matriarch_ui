@@ -73,13 +73,13 @@ defmodule MatriarchUI.Modal do
         mounted() {
           const dialog = this.el
 
-          const open = () => {
+          this.open = () => {
             dialog.showModal()
             document.body.style.overflow = "hidden"
             requestAnimationFrame(() => (dialog.dataset.muiState = "open"))
           }
 
-          const close = () => {
+          this.close = () => {
             if (dialog.dataset.muiState === "closed") return
             dialog.dataset.muiState = "closed"
             const onEnd = (event) => {
@@ -90,16 +90,36 @@ defmodule MatriarchUI.Modal do
             dialog.addEventListener("transitionend", onEnd)
           }
 
-          dialog.addEventListener("mui:open", open)
-          dialog.addEventListener("mui:close", close)
+          dialog.addEventListener("mui:open", this.open)
+          dialog.addEventListener("mui:close", this.close)
           dialog.addEventListener("cancel", (event) => {
             event.preventDefault()
-            close()
+            this.close()
           })
           dialog.addEventListener("close", () => document.body.style.removeProperty("overflow"))
           dialog.addEventListener("click", (event) => {
-            if (event.target === dialog) close()
+            if (event.target === dialog) this.close()
           })
+        },
+        // A server-rendered patch reconstructs this dialog's full markup from
+        // its (static, "closed") template every time — if a LiveView patch
+        // lands anywhere near this element while it's open (e.g. a sibling
+        // live-searching as the reader types), the diff engine resets
+        // data-mui-state/[open] to match that template. Restore the state we
+        // actually had before the patch landed.
+        beforeUpdate() {
+          this.wasOpen = this.el.dataset.muiState === "open"
+        },
+        updated() {
+          if (this.wasOpen && this.el.dataset.muiState !== "open") {
+            this.el.dataset.muiState = "open"
+            if (!this.el.open) this.open()
+          }
+        },
+        destroyed() {
+          if (this.el.dataset.muiState === "open") {
+            document.body.style.removeProperty("overflow")
+          }
         }
       }
     </script>

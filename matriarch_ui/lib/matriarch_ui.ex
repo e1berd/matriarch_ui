@@ -15,8 +15,11 @@ defmodule MatriarchUI do
       import MatriarchUI.Button
       import MatriarchUI.Card
       import MatriarchUI.Carousel
+      import MatriarchUI.Chat
+      import MatriarchUI.ChatMessages
       import MatriarchUI.Checkbox
       import MatriarchUI.ColorInput
+      import MatriarchUI.CommandPalette
       import MatriarchUI.DateInput
       import MatriarchUI.DatePicker
       import MatriarchUI.DropdownMenu

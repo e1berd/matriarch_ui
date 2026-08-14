@@ -17,8 +17,13 @@ docs.docs: Docs
 docs.components: Components
 docs.getting_started: Getting started
 docs.installation: Installation
-docs.search: Search
-docs.search_placeholder: Search components and documentation…
-docs.search_empty: Nothing found
 docs.reading_now.one: %{count} person reading this page
 docs.reading_now.other: %{count} people reading this page
+command_palette.trigger: Search
+command_palette.placeholder: Search…
+command_palette.hint: Search by name or on-page content
+command_palette.no_results: Nothing found
+command_palette.no_results_hint: Try a different search term
+command_palette.kbd_navigate: to navigate
+command_palette.kbd_select: to select
+command_palette.kbd_close: to close

@@ -342,6 +342,85 @@
     animation: mui-progress-slide 1.2s ease-in-out infinite;
   }
 
+  @keyframes mui-chat-message-enter-tail {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem) scale(0.985);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes mui-chat-message-enter-older {
+    from {
+      opacity: 0;
+      transform: translateY(-0.4rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes mui-chat-message-enter-newer {
+    from {
+      opacity: 0;
+      transform: translateY(0.4rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes mui-chat-typing {
+    0%, 60%, 100% {
+      opacity: 0.35;
+      transform: translateY(0);
+    }
+
+    30% {
+      opacity: 1;
+      transform: translateY(-0.2rem);
+    }
+  }
+
+  [data-mui-chat-message][data-mui-enter="tail"] {
+    animation: mui-chat-message-enter-tail 240ms var(--ease-mui-out) both;
+    animation-delay: var(--mui-chat-enter-delay, 0ms);
+  }
+
+  [data-mui-chat-message][data-mui-enter="older"] {
+    animation: mui-chat-message-enter-older 200ms var(--ease-mui-out) both;
+    animation-delay: var(--mui-chat-enter-delay, 0ms);
+  }
+
+  [data-mui-chat-message][data-mui-enter="newer"] {
+    animation: mui-chat-message-enter-newer 200ms var(--ease-mui-out) both;
+    animation-delay: var(--mui-chat-enter-delay, 0ms);
+  }
+
+  [data-mui-chat-message][aria-current="true"] [data-mui-chat-bubble] {
+    outline: 2px solid var(--color-mui-ring);
+    outline-offset: 3px;
+  }
+
+  .mui-chat-typing-dot {
+    animation: mui-chat-typing 900ms ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-mui-chat-message][data-mui-enter],
+    .mui-chat-typing-dot {
+      animation: none;
+    }
+  }
+
   .mui-card {
     box-shadow: var(--shadow-mui-sm);
   }

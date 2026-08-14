@@ -65,7 +65,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
       </nav>
       <div class="ml-auto flex items-center gap-2.5">
         <.live_component
-          module={MatriarchUIDocsWeb.SearchPalette}
+          module={MatriarchUIDocsWeb.SearchPanel}
           id="docs-search"
           locale={@locale}
         />
