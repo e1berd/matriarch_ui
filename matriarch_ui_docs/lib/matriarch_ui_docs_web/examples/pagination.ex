@@ -10,7 +10,7 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
     ~H"""
     <.example
       title="Basic"
-      description="Every button emits the requested page. The LiveView stores it in ?page=N with push_patch and restores it in handle_params/3."
+      description="Use the arrows or enter a page directly. The input is clamped between 1 and total_pages."
       code={
         ~S'''
         <.pagination
@@ -54,7 +54,6 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
       {"id", "string, required", "unique DOM id used by the navigation controls"},
       {"page", "integer, required", "current page, 1-indexed"},
       {"total_pages", "integer, required", "total number of pages"},
-      {"siblings", "integer", "page numbers shown on each side of the current page, default 1"},
       {"event", "string", "phx-click event name, default \"paginate\""},
       {"target", "any", "phx-target, e.g. @myself in a LiveComponent"},
       {"locale", "en | ru", "translation locale loaded from the package YAML files"},

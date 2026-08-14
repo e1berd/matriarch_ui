@@ -105,7 +105,7 @@ defmodule MatriarchUI.Select do
           data-mui-value={option.value}
           data-mui-label={option[:label]}
           aria-selected={to_string(to_string(option.value) in @selected_values)}
-          class="group/option flex min-h-7 cursor-pointer items-center justify-between gap-2 rounded-mui-sm px-2 py-1 hover:bg-mui-surface-hover focus:bg-mui-surface-hover focus:outline-none aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
+          class="group/option flex min-h-7 cursor-pointer items-center justify-between gap-2 rounded-mui-sm px-2 py-1 hover:bg-mui-surface-hover focus-visible:bg-mui-surface-hover focus-visible:outline-none aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
         >
           <span class="truncate">{render_slot(option)}</span>
           <.icon

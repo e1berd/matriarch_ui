@@ -40,6 +40,24 @@ defmodule MatriarchUI.FieldTest do
     assert query(html, "p.text-mui-danger") == 2
   end
 
+  test "orientation controls the field content direction" do
+    horizontal =
+      render_component(&field/1, %{
+        id: "choice",
+        orientation: "horizontal",
+        inner_block: [%{inner_block: fn _, _ -> "Choice" end}]
+      })
+
+    vertical =
+      render_component(&field/1, %{
+        id: "name",
+        inner_block: [%{inner_block: fn _, _ -> "Name" end}]
+      })
+
+    assert query(horizontal, ~s([data-mui-orientation="horizontal"])) == 1
+    assert query(vertical, ~s([data-mui-orientation="vertical"])) == 1
+  end
+
   test "fieldset renders a legend only when given" do
     with_legend =
       render_component(&fieldset/1, %{

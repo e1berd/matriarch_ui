@@ -18,6 +18,12 @@ end
 use MatriarchUI
 ```
 
+Application-wide component defaults are configured in the consuming app:
+
+```elixir
+config :matriarch_ui, date_format: "DD.MM.YYYY"
+```
+
 Select/Tooltip/Popover/DropdownMenu need their JS hook wired into
 `assets/js/app.js` (each app's colocated hooks live in their own manifest,
 there's no automatic cross-dependency bundling):

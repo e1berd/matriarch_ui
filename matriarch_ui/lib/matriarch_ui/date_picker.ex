@@ -131,16 +131,17 @@ defmodule MatriarchUI.DatePicker do
           const root = panel.closest("[data-mui-date-picker]")
           const input = document.getElementById(root.dataset.muiDateTarget)
           if (!input) return
+          const value = document.getElementById(input.dataset.muiDateValueTarget) || input
 
           const heading = panel.querySelector("[data-mui-date-heading]")
           const weekdays = panel.querySelector("[data-mui-date-weekdays]")
           const grid = panel.querySelector("[data-mui-date-grid]")
           const locale = root.dataset.muiLocale || document.documentElement.lang || navigator.language
           const weekStart = Number(root.dataset.muiWeekStart || "1")
-          const min = parseDate(root.dataset.muiMin || input.min)
-          const max = parseDate(root.dataset.muiMax || input.max)
+          const min = parseDate(root.dataset.muiMin || input.dataset.muiDateMin || input.min)
+          const max = parseDate(root.dataset.muiMax || input.dataset.muiDateMax || input.max)
           const today = new Date()
-          let selected = parseDate(input.value)
+          let selected = parseDate(value.value)
           let cursor = new Date((selected || today).getFullYear(), (selected || today).getMonth(), 1)
           let active = selected || today
           const abort = new AbortController()
@@ -210,9 +211,9 @@ defmodule MatriarchUI.DatePicker do
             selected = date
             active = date
             cursor = new Date(date.getFullYear(), date.getMonth(), 1)
-            input.value = isoDate(date)
-            input.dispatchEvent(new Event("input", { bubbles: true }))
-            input.dispatchEvent(new Event("change", { bubbles: true }))
+            input.dispatchEvent(new CustomEvent("mui:date-value", {
+              detail: { value: isoDate(date) }
+            }))
             render()
           }
 
@@ -258,14 +259,12 @@ defmodule MatriarchUI.DatePicker do
           panel.querySelector("[data-mui-date-today]").addEventListener("click", () => select(today), { signal })
           panel.querySelector("[data-mui-date-clear]").addEventListener("click", () => {
             selected = null
-            input.value = ""
-            input.dispatchEvent(new Event("input", { bubbles: true }))
-            input.dispatchEvent(new Event("change", { bubbles: true }))
+            input.dispatchEvent(new CustomEvent("mui:date-value", { detail: { value: "" } }))
             render()
           }, { signal })
 
-          input.addEventListener("change", () => {
-            selected = parseDate(input.value)
+          value.addEventListener("change", () => {
+            selected = parseDate(value.value)
             if (selected) {
               active = selected
               cursor = new Date(selected.getFullYear(), selected.getMonth(), 1)

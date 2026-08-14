@@ -2,6 +2,8 @@ pagination.aria_label: Pagination
 pagination.previous_page: Previous page
 pagination.next_page: Next page
 pagination.results_per_page: Results per page
+pagination.current_page: Current page
+pagination.of: of
 date_picker.open_calendar: Open calendar
 date_picker.choose_date: Choose date
 date_picker.previous_month: Previous month

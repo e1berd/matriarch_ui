@@ -51,6 +51,8 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
     {:noreply, push_patch(socket, to: ~p"/docs/components/pagination?#{params}")}
   end
 
+  def handle_event("resume-selected", %{"files" => _files}, socket), do: {:noreply, socket}
+
   def handle_event("filter-table", %{"filters" => filters}, socket) do
     params = [
       query: Map.get(filters, "query", ""),

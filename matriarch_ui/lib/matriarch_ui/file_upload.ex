@@ -1,5 +1,5 @@
 defmodule MatriarchUI.FileUpload do
-  @moduledoc "Styled native file input with form field binding and selected-file feedback."
+  @moduledoc "File picker and drop zone that emits selection events without rendering file state."
   use Phoenix.Component
   alias MatriarchUI.CN
   import MatriarchUI.Icon
@@ -10,7 +10,8 @@ defmodule MatriarchUI.FileUpload do
   attr :invalid, :boolean, default: false
   attr :multiple, :boolean, default: false
   attr :prompt, :string, default: "Choose file"
-  attr :empty_text, :string, default: "No file selected"
+  attr :description, :string, default: "or drop it here"
+  attr :event, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(accept capture disabled required)
 
@@ -30,7 +31,10 @@ defmodule MatriarchUI.FileUpload do
     <div
       id={"#{@id}-upload"}
       data-mui
-      class={CN.cn(["flex min-w-0 items-stretch", @class])}
+      data-mui-file-upload
+      data-mui-upload-event={@event}
+      data-mui-disabled={to_string(@rest[:disabled] || false)}
+      class={CN.cn(["w-full", @class])}
     >
       <input
         type="file"
@@ -46,23 +50,20 @@ defmodule MatriarchUI.FileUpload do
       <label
         for={@id}
         data-mui-control
+        data-mui-file-dropzone
+        data-mui-state="idle"
         class={[
-          "inline-flex h-8 shrink-0 cursor-pointer items-center gap-2 rounded-l-mui-md border border-mui-border bg-mui-surface px-3 text-sm font-medium text-mui-foreground hover:bg-mui-surface-hover",
+          "flex min-h-24 w-full cursor-pointer flex-col items-center justify-center gap-1 rounded-mui-md border border-dashed border-mui-border bg-mui-input-background px-4 py-3 text-center",
+          "hover:border-mui-brand hover:bg-mui-surface-hover data-[mui-state=dragging]:border-mui-brand data-[mui-state=dragging]:bg-mui-primary-subtle",
+          "has-[:focus-visible]:border-mui-brand has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-mui-slider-ring",
+          @rest[:disabled] && "pointer-events-none cursor-not-allowed opacity-50",
           @invalid && "border-mui-danger"
         ]}
       >
-        <.icon name="upload-simple" />
-        {@prompt}
+        <.icon name="upload-simple" class="mb-1 size-5 text-mui-muted-foreground" />
+        <span class="text-sm font-medium text-mui-foreground">{@prompt}</span>
+        <span :if={@description} class="text-xs text-mui-muted-foreground">{@description}</span>
       </label>
-      <span
-        data-mui-file-name
-        class={[
-          "flex h-8 min-w-0 flex-1 items-center truncate rounded-r-mui-md border border-l-0 border-mui-border bg-mui-input-background px-3 text-sm text-mui-muted-foreground",
-          @invalid && "border-mui-danger"
-        ]}
-      >
-        {@empty_text}
-      </span>
     </div>
     """
   end
@@ -83,16 +84,63 @@ defmodule MatriarchUI.FileUpload do
       export default {
         mounted() {
           const input = this.el
-          const root = input.closest("[data-mui]")
-          const name = root.querySelector("[data-mui-file-name]")
-          const emptyText = name.textContent.trim()
+          const root = input.closest("[data-mui-file-upload]")
+          const dropzone = root.querySelector("[data-mui-file-dropzone]")
+          const abort = new AbortController()
+          const signal = abort.signal
 
-          input.addEventListener("change", () => {
-            const files = Array.from(input.files || [])
-            name.textContent = files.length === 0 ? emptyText : files.map((file) => file.name).join(", ")
-            name.classList.toggle("text-mui-muted-foreground", files.length === 0)
-            name.classList.toggle("text-mui-foreground", files.length > 0)
-          })
+          const filesPayload = () => Array.from(input.files || []).map((file) => ({
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            last_modified: file.lastModified
+          }))
+
+          const emit = () => {
+            const files = filesPayload()
+            root.dispatchEvent(new CustomEvent("mui:file-upload", {
+              bubbles: true,
+              detail: { files }
+            }))
+            if (root.dataset.muiUploadEvent) {
+              this.pushEvent(root.dataset.muiUploadEvent, { files })
+            }
+          }
+
+          const idle = () => { dropzone.dataset.muiState = "idle" }
+
+          dropzone.addEventListener("dragenter", (event) => {
+            event.preventDefault()
+            if (root.dataset.muiDisabled !== "true") dropzone.dataset.muiState = "dragging"
+          }, { signal })
+
+          dropzone.addEventListener("dragover", (event) => {
+            event.preventDefault()
+            if (event.dataTransfer) event.dataTransfer.dropEffect = "copy"
+          }, { signal })
+
+          dropzone.addEventListener("dragleave", (event) => {
+            if (!dropzone.contains(event.relatedTarget)) idle()
+          }, { signal })
+
+          dropzone.addEventListener("drop", (event) => {
+            event.preventDefault()
+            idle()
+            if (root.dataset.muiDisabled === "true" || !event.dataTransfer) return
+            const transfer = new DataTransfer()
+            const files = Array.from(event.dataTransfer.files)
+            const accepted = input.multiple ? files : files.slice(0, 1)
+            accepted.forEach((file) => transfer.items.add(file))
+            input.files = transfer.files
+            input.dispatchEvent(new Event("input", { bubbles: true }))
+            input.dispatchEvent(new Event("change", { bubbles: true }))
+          }, { signal })
+
+          input.addEventListener("change", emit, { signal })
+          this.muiAbort = abort
+        },
+        destroyed() {
+          if (this.muiAbort) this.muiAbort.abort()
         }
       }
     </script>

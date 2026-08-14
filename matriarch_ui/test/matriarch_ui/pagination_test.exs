@@ -6,31 +6,30 @@ defmodule MatriarchUI.PaginationTest do
   defp query(html, selector),
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
 
-  test "shows every page when total_pages is small" do
-    html = render_component(&pagination/1, %{id: "pages", page: 2, total_pages: 4})
+  test "renders only arrows, editable current page, and total pages" do
+    html = render_component(&pagination/1, %{id: "pages", page: 2, total_pages: 12})
 
-    assert query(html, ~s|button:not([aria-label])[phx-value-page="1"]|) == 1
-    assert query(html, ~s|button:not([aria-label])[phx-value-page="4"]|) == 1
-    assert query(html, ~s(button[aria-current="page"])) == 1
-    refute html =~ "…"
+    assert query(html, ~s(button#pages-previous[phx-value-page="1"])) == 1
+    assert query(html, ~s(button#pages-next[phx-value-page="3"])) == 1
+    assert query(html, ~s(input#pages-page[name="page"][value="2"][min="1"][max="12"])) == 1
+    assert html =~ "of 12"
+    assert query(html, ~s(button[id^="pages-page-"])) == 0
   end
 
-  test "collapses the middle into an ellipsis for large ranges" do
-    html = render_component(&pagination/1, %{id: "pages", page: 10, total_pages: 30})
+  test "clamps server-rendered page state to the available range" do
+    html = render_component(&pagination/1, %{id: "pages", page: 99, total_pages: 12})
 
-    assert html =~ "…"
-    assert query(html, ~s|button:not([aria-label])[phx-value-page="1"]|) == 1
-    assert query(html, ~s|button:not([aria-label])[phx-value-page="30"]|) == 1
-    assert query(html, ~s(button[phx-value-page="10"][aria-current="page"])) == 1
+    assert query(html, ~s(input#pages-page[value="12"])) == 1
+    assert query(html, ~s(button#pages-next[disabled])) == 1
   end
 
-  test "prev button is disabled on the first page" do
+  test "previous button is disabled on the first page" do
     html = render_component(&pagination/1, %{id: "pages", page: 1, total_pages: 5})
     assert query(html, ~s(button[aria-label="Previous page"][disabled])) == 1
     assert query(html, ~s(button[aria-label="Next page"][disabled])) == 0
   end
 
-  test "renders the translated table-style page-size area" do
+  test "renders the translated page-size area and page input label" do
     html =
       render_component(&pagination/1, %{
         id: "pages",
@@ -41,7 +40,8 @@ defmodule MatriarchUI.PaginationTest do
       })
 
     assert html =~ "Результатов на странице"
+    assert html =~ "из 5"
     assert query(html, ~s(nav[aria-label="Пагинация"])) == 1
-    assert query(html, ~s(button[aria-label="Следующая страница"])) == 1
+    assert query(html, ~s(input[aria-label="Текущая страница"])) == 1
   end
 end

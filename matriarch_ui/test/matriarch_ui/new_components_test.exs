@@ -7,6 +7,7 @@ defmodule MatriarchUI.NewComponentsTest do
   import MatriarchUI.EmailInput
   import MatriarchUI.FileUpload
   import MatriarchUI.List
+  import MatriarchUI.NumberInput
   import MatriarchUI.PasswordInput
   import MatriarchUI.PhoneInput
   import MatriarchUI.Progress
@@ -26,6 +27,7 @@ defmodule MatriarchUI.NewComponentsTest do
           "email" => "a@b.test",
           "password" => "secret",
           "phone" => "+12025550123",
+          "quantity" => "12",
           "attachment" => nil,
           "birthday" => "2020-01-02",
           "color" => "#6c47ff"
@@ -37,6 +39,7 @@ defmodule MatriarchUI.NewComponentsTest do
       {&email_input/1, form[:email], "email"},
       {&password_input/1, form[:password], "password"},
       {&phone_input/1, form[:phone], "phone"},
+      {&number_input/1, form[:quantity], "quantity"},
       {&file_upload/1, form[:attachment], "attachment"},
       {&date_input/1, form[:birthday], "birthday"},
       {&color_input/1, form[:color], "color"}
@@ -85,6 +88,7 @@ defmodule MatriarchUI.NewComponentsTest do
 
     assert count(html, ~s(button#phone-region[phx-hook="MatriarchUI.Floating.MUIFloating"])) == 1
     assert count(html, ~s(#phone-region-panel [role="option"][data-mui-value])) > 200
+    assert html =~ "🇫🇮"
   end
 
   test "file upload preserves multiple form semantics" do
@@ -102,6 +106,8 @@ defmodule MatriarchUI.NewComponentsTest do
            ) == 1
 
     assert count(html, ~s(label[for="documents"][data-mui-control])) == 1
+    assert count(html, ~s([data-mui-file-name])) == 0
+    assert count(html, ~s([data-mui-file-dropzone])) == 1
 
     assert count(html, ~s(input#documents[phx-hook="MatriarchUI.FileUpload.MUIFileUpload"])) ==
              1
@@ -146,17 +152,39 @@ defmodule MatriarchUI.NewComponentsTest do
     assert count(pending_html, ~S|[role="progressbar"]:not([aria-valuenow])|) == 1
   end
 
-  test "date input submits an ISO value and native constraints" do
+  test "date input displays a regional mask and submits an ISO value" do
     html =
       render_component(&date_input/1, %{
         id: "birthday",
         name: "birthday",
         value: ~D[2025-04-12],
-        min: ~D[1900-01-01]
+        min: ~D[1900-01-01],
+        format: "DD.MM.YYYY"
       })
 
-    assert count(html, ~s(input#birthday[type="date"][value="2025-04-12"][min="1900-01-01"])) == 1
-    assert count(html, "input.mui-date-input") == 1
+    assert count(html, ~s(input#birthday[type="text"][value="12.04.2025"])) == 1
+    assert count(html, ~s(input#birthday-value[type="hidden"][value="2025-04-12"])) == 1
+    assert count(html, ~s(input#birthday[data-mui-date-min="1900-01-01"])) == 1
+  end
+
+  test "number input keeps formatting separate from the raw form value" do
+    html =
+      render_component(&number_input/1, %{
+        id: "budget",
+        name: "budget",
+        value: 100_000,
+        min: 0,
+        max: 1_000_000,
+        step: 1_000,
+        mask: "### ###",
+        suffix: "₽"
+      })
+
+    assert count(html, ~s(input#budget[type="text"][inputmode="decimal"])) == 1
+    assert count(html, ~s(input#budget-value[type="hidden"][name="budget"][value="100000"])) == 1
+    assert count(html, ~s([data-mui-number-step="1"])) == 1
+    assert count(html, ~s([data-mui-number-step="-1"])) == 1
+    assert html =~ "₽"
   end
 
   test "date picker renders only a calendar trigger targeting a separate input" do

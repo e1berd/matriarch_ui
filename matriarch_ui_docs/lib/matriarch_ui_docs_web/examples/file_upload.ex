@@ -6,13 +6,13 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
   def examples(assigns) do
     ~H"""
     <.example
-      title="Field usage"
+      title="Choose or drop a file"
       class="flex-col items-stretch"
       code={
         ~S'''
         <.field :let={id} id="resume">
           <.field_label for={id}>Resume</.field_label>
-          <.file_upload id={id} name="resume" accept=".pdf,.doc,.docx" />
+          <.file_upload id={id} name="resume" accept=".pdf,.doc,.docx" event="resume-selected" />
         </.field>
         '''
       }
@@ -20,7 +20,7 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
       <div class="w-full max-w-lg">
         <.field :let={id} id="resume">
           <.field_label for={id}>Resume</.field_label>
-          <.file_upload id={id} name="resume" accept=".pdf,.doc,.docx" />
+          <.file_upload id={id} name="resume" accept=".pdf,.doc,.docx" event="resume-selected" />
         </.field>
       </div>
     </.example>
@@ -35,7 +35,7 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
           name="attachments"
           multiple
           prompt="Add files"
-          empty_text="PDF, PNG, or JPEG"
+          description="PDF, PNG, or JPEG"
         />
         '''
       }
@@ -46,15 +46,16 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
           name="attachments"
           multiple
           prompt="Add files"
-          empty_text="PDF, PNG, or JPEG"
+          description="PDF, PNG, or JPEG"
         />
       </div>
     </.example>
 
     <.props_table rows={[
       {"field", "Phoenix.HTML.FormField", "binds name/id and validation state from a form"},
-      {"multiple", "boolean", "submits the input name with [] and accepts multiple files"},
-      {"prompt / empty_text", "string", "labels for the picker action and empty selection"},
+      {"multiple", "boolean", "accepts one file by default or several files when enabled"},
+      {"event", "string", "optional LiveView event receiving selected file metadata"},
+      {"prompt / description", "string", "static drop-zone copy; selected files are not rendered"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />
     """

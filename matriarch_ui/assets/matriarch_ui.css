@@ -234,12 +234,14 @@
     --mui-slider-fill: 0%;
   }
 
-  input.mui-date-input {
+  input.mui-pagination-page {
     appearance: textfield;
   }
 
-  input.mui-date-input::-webkit-calendar-picker-indicator {
-    display: none;
+  input.mui-pagination-page::-webkit-inner-spin-button,
+  input.mui-pagination-page::-webkit-outer-spin-button {
+    appearance: none;
+    margin: 0;
   }
 
   input.mui-slider::-webkit-slider-runnable-track {

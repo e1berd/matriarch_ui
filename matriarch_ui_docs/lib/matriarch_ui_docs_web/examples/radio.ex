@@ -9,14 +9,14 @@ defmodule MatriarchUIDocsWeb.Examples.Radio do
       title="Field usage"
       code={
         ~S'''
-        <.field :let={id} id="updates" class="flex-row items-center gap-2">
+        <.field :let={id} id="updates" orientation="horizontal">
           <.radio id={id} name="updates" value="enabled" checked />
           <.field_label for={id}>Email updates</.field_label>
         </.field>
         '''
       }
     >
-      <.field :let={id} id="updates" class="flex-row items-center gap-2">
+      <.field :let={id} id="updates" orientation="horizontal">
         <.radio id={id} name="updates" value="enabled" checked />
         <.field_label for={id}>Email updates</.field_label>
       </.field>

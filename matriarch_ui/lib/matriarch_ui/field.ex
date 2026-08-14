@@ -10,14 +10,14 @@ defmodule MatriarchUI.Field do
         <.input id={id} name="name" placeholder="John Doe" />
       </.field>
 
-      <.field id="accept" class="flex-row items-center gap-2" :let={id}>
+      <.field id="accept" orientation="horizontal" :let={id}>
         <.checkbox id={id} name="accept" />
         <.field_label for={id}>Accept terms</.field_label>
       </.field>
 
   Default layout is a vertical stack (label above or below the control,
-  depending on which you write first) — override `class` (e.g.
-  `"flex-row items-center gap-2"`) for a horizontal row instead. Pass
+  depending on which you write first). Set `orientation="horizontal"` for
+  a horizontal row. Pass
   `field={@form[:name]}` instead of `id` to also derive the id and the
   field's own validation errors from a `Phoenix.HTML.FormField`.
   """
@@ -27,6 +27,7 @@ defmodule MatriarchUI.Field do
   attr :id, :string, default: nil
   attr :field, Phoenix.HTML.FormField
   attr :errors, :list, default: []
+  attr :orientation, :string, default: "vertical", values: ~w(horizontal vertical)
   attr :class, :string, default: nil
   slot :inner_block, required: true
 
@@ -41,7 +42,18 @@ defmodule MatriarchUI.Field do
 
   def field(assigns) do
     ~H"""
-    <div data-mui class={CN.cn(["flex flex-col gap-1.5", @class])}>
+    <div
+      data-mui
+      data-mui-orientation={@orientation}
+      class={
+        CN.cn([
+          "flex",
+          @orientation == "vertical" && "flex-col gap-1.5",
+          @orientation == "horizontal" && "flex-row items-center gap-2",
+          @class
+        ])
+      }
+    >
       {render_slot(@inner_block, @id)}
       <p :for={error <- @errors} class="text-sm text-mui-danger">{error}</p>
     </div>

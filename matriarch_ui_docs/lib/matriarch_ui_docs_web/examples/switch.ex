@@ -9,22 +9,22 @@ defmodule MatriarchUIDocsWeb.Examples.Switch do
       title="Basic"
       code={
         ~S'''
-        <.field id="notify" class="flex-row items-center gap-2" :let={id}>
+        <.field :let={id} id="notify" orientation="horizontal">
           <.switch id={id} name="notify" />
           <.field_label for={id}>Email notifications</.field_label>
         </.field>
-        <.field id="notify2" class="flex-row items-center gap-2" :let={id}>
+        <.field :let={id} id="notify2" orientation="horizontal">
           <.switch id={id} name="notify2" checked />
           <.field_label for={id}>On</.field_label>
         </.field>
         '''
       }
     >
-      <.field :let={id} id="notify" class="flex-row items-center gap-2">
+      <.field :let={id} id="notify" orientation="horizontal">
         <.switch id={id} name="notify" />
         <.field_label for={id}>Email notifications</.field_label>
       </.field>
-      <.field :let={id} id="notify2" class="flex-row items-center gap-2">
+      <.field :let={id} id="notify2" orientation="horizontal">
         <.switch id={id} name="notify2" checked />
         <.field_label for={id}>On</.field_label>
       </.field>

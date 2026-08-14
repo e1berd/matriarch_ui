@@ -2,6 +2,8 @@ pagination.aria_label: Пагинация
 pagination.previous_page: Предыдущая страница
 pagination.next_page: Следующая страница
 pagination.results_per_page: Результатов на странице
+pagination.current_page: Текущая страница
+pagination.of: из
 date_picker.open_calendar: Открыть календарь
 date_picker.choose_date: Выбрать дату
 date_picker.previous_month: Предыдущий месяц

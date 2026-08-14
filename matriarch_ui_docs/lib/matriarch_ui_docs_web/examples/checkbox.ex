@@ -9,30 +9,30 @@ defmodule MatriarchUIDocsWeb.Examples.Checkbox do
       title="Basic"
       code={
         ~S'''
-        <.field id="tos" class="flex-row items-center gap-2" :let={id}>
+        <.field :let={id} id="tos" orientation="horizontal">
           <.checkbox id={id} name="tos" />
           <.field_label for={id}>Accept the terms</.field_label>
         </.field>
-        <.field id="tos2" class="flex-row items-center gap-2" :let={id}>
+        <.field :let={id} id="tos2" orientation="horizontal">
           <.checkbox id={id} name="tos2" checked />
           <.field_label for={id}>Checked</.field_label>
         </.field>
-        <.field id="tos3" class="flex-row items-center gap-2" :let={id}>
+        <.field :let={id} id="tos3" orientation="horizontal">
           <.checkbox id={id} name="tos3" indeterminate />
           <.field_label for={id}>Indeterminate</.field_label>
         </.field>
         '''
       }
     >
-      <.field :let={id} id="tos" class="flex-row items-center gap-2">
+      <.field :let={id} id="tos" orientation="horizontal">
         <.checkbox id={id} name="tos" />
         <.field_label for={id}>Accept the terms</.field_label>
       </.field>
-      <.field :let={id} id="tos2" class="flex-row items-center gap-2">
+      <.field :let={id} id="tos2" orientation="horizontal">
         <.checkbox id={id} name="tos2" checked />
         <.field_label for={id}>Checked</.field_label>
       </.field>
-      <.field :let={id} id="tos3" class="flex-row items-center gap-2">
+      <.field :let={id} id="tos3" orientation="horizontal">
         <.checkbox id={id} name="tos3" indeterminate />
         <.field_label for={id}>Indeterminate</.field_label>
       </.field>

@@ -30,6 +30,7 @@ defmodule MatriarchUI do
       import MatriarchUI.List
       import MatriarchUI.Listbox
       import MatriarchUI.Modal
+      import MatriarchUI.NumberInput
       import MatriarchUI.Pagination
       import MatriarchUI.PasswordInput
       import MatriarchUI.PhoneInput

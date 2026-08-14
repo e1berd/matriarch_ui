@@ -20,7 +20,6 @@ defmodule MatriarchUI.PhoneInput do
   attr :region_name, :any, default: nil
   attr :regions, :list, default: @regions
   attr :calling_codes, :map, default: @calling_codes
-  attr :locale, :string, default: nil
   attr :invalid, :boolean, default: false
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(placeholder autocomplete disabled readonly required)
@@ -55,19 +54,24 @@ defmodule MatriarchUI.PhoneInput do
       data-mui
       data-mui-phone-input
       data-mui-phone-codes={@dial_codes}
-      data-mui-phone-locale={@locale}
       class={CN.cn(["mui-control-group inline-flex w-full items-stretch", @class])}
     >
-      <div data-mui-phone-region class="w-44 shrink-0">
+      <div data-mui-phone-region class="w-20 shrink-0">
         <.select
           id={"#{@id}-region"}
           name={@region_name}
           value={@region}
-          placeholder="Region"
+          placeholder="🌐"
           disabled={@rest[:disabled] || @rest[:readonly]}
           class="w-full"
         >
-          <:option :for={code <- @regions} value={code} label={code}>{code}</:option>
+          <:option
+            :for={code <- @regions}
+            value={code}
+            label={"#{flag(code)} #{Map.fetch!(@calling_codes, code)}"}
+          >
+            {flag(code)} {Map.fetch!(@calling_codes, code)}
+          </:option>
         </.select>
       </div>
       <input type="hidden" id={"#{@id}-value"} name={@name} value={@value} data-mui-phone-value />
@@ -128,6 +132,12 @@ defmodule MatriarchUI.PhoneInput do
     end
   end
 
+  defp flag(region) do
+    region
+    |> String.to_charlist()
+    |> Enum.map_join(&<<&1 + 127_397::utf8>>)
+  end
+
   attr :rest, :global
 
   def hook(assigns) do
@@ -154,24 +164,23 @@ defmodule MatriarchUI.PhoneInput do
           const regionLabel = regionTrigger.querySelector("[data-mui-select-label]")
           const regionOptions = Array.from(regionRoot.querySelectorAll('[role="option"]'))
           const codes = parseCallingCodes(root.dataset.muiPhoneCodes)
-          const locale = root.dataset.muiPhoneLocale || document.documentElement.lang || navigator.language
-          const names = new Intl.DisplayNames([locale], { type: "region" })
           const abort = new AbortController()
           const signal = abort.signal
           let region = regionValue.value
 
-          const regionText = (code) => {
-            const name = names.of(code) || code
-            return `${name} (${codes.get(code)})`
-          }
+          const flag = (code) => Array.from(code)
+            .map((letter) => String.fromCodePoint(letter.charCodeAt(0) + 127397))
+            .join("")
+
+          const optionText = (code) => `${flag(code)} ${codes.get(code)}`
 
           const renderRegion = () => {
             prefix.textContent = codes.get(region) || ""
-            regionLabel.textContent = regionText(region)
+            regionLabel.textContent = flag(region)
             regionOptions.forEach((option) => {
               const code = option.dataset.muiValue
-              option.dataset.muiLabel = regionText(code)
-              option.querySelector("span").textContent = regionText(code)
+              option.dataset.muiLabel = optionText(code)
+              option.querySelector("span").textContent = optionText(code)
               option.setAttribute("aria-selected", String(code === region))
             })
           }
@@ -241,8 +250,8 @@ defmodule MatriarchUI.PhoneInput do
 
           regionOptions.forEach((option) => {
             const code = option.dataset.muiValue
-            option.dataset.muiLabel = regionText(code)
-            option.querySelector("span").textContent = regionText(code)
+            option.dataset.muiLabel = optionText(code)
+            option.querySelector("span").textContent = optionText(code)
           })
 
           if (value.value?.startsWith("+")) acceptInternational(value.value)

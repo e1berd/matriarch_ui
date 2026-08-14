@@ -1,18 +1,12 @@
 defmodule MatriarchUI.Pagination do
-  @moduledoc """
-  Static page-number nav — every button fires `phx-click={@event}
-  phx-value-page={n}`, you own the page state and re-render with the new
-  `page`.
-  """
+  @moduledoc "Previous/next navigation with an editable, bounded current page."
   use Phoenix.Component
-  alias MatriarchUI.CN
-  alias MatriarchUI.I18n
+  alias MatriarchUI.{CN, I18n}
   import MatriarchUI.Icon
 
   attr :id, :string, required: true
   attr :page, :integer, required: true
   attr :total_pages, :integer, required: true
-  attr :siblings, :integer, default: 1
   attr :event, :string, default: "paginate"
   attr :target, :any, default: nil
   attr :locale, :string, default: "en"
@@ -21,7 +15,9 @@ defmodule MatriarchUI.Pagination do
 
   def pagination(assigns) do
     assigns =
-      assign(assigns, :items, page_items(assigns.page, assigns.total_pages, assigns.siblings))
+      assigns
+      |> assign(:total_pages, max(assigns.total_pages, 1))
+      |> assign(:page, assigns.page |> max(1) |> min(max(assigns.total_pages, 1)))
 
     ~H"""
     <div
@@ -36,76 +32,90 @@ defmodule MatriarchUI.Pagination do
         <span>{I18n.t(@locale, "pagination.results_per_page")}</span>
         {render_slot(@page_size)}
       </div>
-      <nav aria-label={I18n.t(@locale, "pagination.aria_label")} class="flex items-center gap-1">
-      <button
-        id={"#{@id}-previous"}
-        type="button"
-        phx-click={@event}
-        phx-value-page={@page - 1}
-        phx-target={@target}
-        disabled={@page <= 1}
-        aria-label={I18n.t(@locale, "pagination.previous_page")}
-        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
+      <nav
+        aria-label={I18n.t(@locale, "pagination.aria_label")}
+        class="flex items-center gap-1.5"
       >
-        <.icon name="caret-left" />
-      </button>
+          <button
+            id={"#{@id}-previous"}
+            type="button"
+            phx-click={@event}
+            phx-value-page={@page - 1}
+            phx-target={@target}
+            disabled={@page <= 1}
+            aria-label={I18n.t(@locale, "pagination.previous_page")}
+            class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
+          >
+            <.icon name="caret-left" />
+          </button>
 
-      <%= for item <- @items do %>
-        <span
-          :if={item == :ellipsis}
-          class="flex h-9 min-w-9 items-center justify-center text-sm text-mui-subtle-foreground select-none"
-        >
-          …
-        </span>
-        <button
-          :if={item != :ellipsis}
-          id={"#{@id}-page-#{item}"}
-          type="button"
-          phx-click={@event}
-          phx-value-page={item}
-          phx-target={@target}
-          aria-current={item == @page && "page"}
-          class="flex h-8 min-w-9 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface px-2 text-sm font-medium text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 aria-[current=page]:border-mui-brand aria-[current=page]:bg-mui-brand aria-[current=page]:text-mui-brand-foreground aria-[current=page]:hover:bg-mui-brand-hover"
-        >
-          {item}
-        </button>
-      <% end %>
+          <input
+            id={"#{@id}-page"}
+            name="page"
+            type="number"
+            inputmode="numeric"
+            min="1"
+            max={@total_pages}
+            step="1"
+            value={@page}
+            phx-hook=".MUIPagination"
+            phx-change={@event}
+            phx-target={@target}
+            phx-debounce="300"
+            aria-label={I18n.t(@locale, "pagination.current_page")}
+            class="mui-input mui-pagination-page h-8 w-12 rounded-mui-md border border-transparent bg-mui-input-background px-1 text-center text-sm text-mui-foreground focus-visible:border-mui-brand focus-visible:ring-2 focus-visible:ring-mui-slider-ring"
+          />
+          <span class="min-w-8 text-sm text-mui-muted-foreground">
+            {I18n.t(@locale, "pagination.of")} {@total_pages}
+          </span>
 
-      <button
-        id={"#{@id}-next"}
-        type="button"
-        phx-click={@event}
-        phx-value-page={@page + 1}
-        phx-target={@target}
-        disabled={@page >= @total_pages}
-        aria-label={I18n.t(@locale, "pagination.next_page")}
-        class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
-      >
-        <.icon name="caret-right" />
-      </button>
+          <button
+            id={"#{@id}-next"}
+            type="button"
+            phx-click={@event}
+            phx-value-page={@page + 1}
+            phx-target={@target}
+            disabled={@page >= @total_pages}
+            aria-label={I18n.t(@locale, "pagination.next_page")}
+            class="flex size-8 items-center justify-center rounded-mui-md border border-mui-border bg-mui-surface text-mui-foreground transition-all hover:bg-mui-surface-hover active:scale-97 disabled:pointer-events-none disabled:opacity-40"
+          >
+            <.icon name="caret-right" />
+          </button>
       </nav>
     </div>
     """
   end
 
-  defp page_items(_page, total_pages, _siblings) when total_pages <= 1, do: [1]
+  attr :rest, :global
 
-  defp page_items(page, total_pages, siblings) do
-    left = max(page - siblings, 1)
-    right = min(page + siblings, total_pages)
-
-    cond do
-      left > 2 and right < total_pages - 1 ->
-        [1, :ellipsis] ++ Enum.to_list(left..right) ++ [:ellipsis, total_pages]
-
-      left > 2 ->
-        [1, :ellipsis] ++ Enum.to_list(left..total_pages)
-
-      right < total_pages - 1 ->
-        Enum.to_list(1..right) ++ [:ellipsis, total_pages]
-
-      true ->
-        Enum.to_list(1..total_pages)
-    end
+  def hook(assigns) do
+    ~H"""
+    <script :type={Phoenix.LiveView.ColocatedHook} name=".MUIPagination">
+      export default {
+        mounted() {
+          const input = this.el
+          const min = Number(input.min)
+          const max = Number(input.max)
+          const abort = new AbortController()
+          const signal = abort.signal
+          const clamp = () => {
+            if (input.value === "") return
+            input.value = String(Math.min(max, Math.max(min, Number(input.value) || min)))
+          }
+          input.addEventListener("input", clamp, { signal })
+          input.addEventListener("blur", () => {
+            if (input.value === "") {
+              input.value = String(min)
+              input.dispatchEvent(new Event("input", { bubbles: true }))
+            }
+          }, { signal })
+          this.muiAbort = abort
+        },
+        destroyed() {
+          if (this.muiAbort) this.muiAbort.abort()
+        }
+      }
+    </script>
+    """
   end
 end

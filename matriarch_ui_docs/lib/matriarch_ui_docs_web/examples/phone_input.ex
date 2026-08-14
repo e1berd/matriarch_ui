@@ -4,11 +4,9 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
   import MatriarchUIDocsWeb.Showcase
 
   def examples(assigns) do
-    assigns = Map.put_new(assigns, :locale, "en")
-
     ~H"""
     <.example
-      title="Region and unmasked number"
+      title="Compact region and protected prefix"
       class="flex-col items-stretch"
       code={
         ~S'''
@@ -18,8 +16,7 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
             id={id}
             name="phone"
             region="FI"
-            locale={@locale}
-            placeholder="+358 40 123 4567"
+            placeholder="40 123 4567"
           />
         </.field>
         '''
@@ -32,8 +29,7 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
             id={id}
             name="phone"
             region="FI"
-            locale={@locale}
-            placeholder="+358 40 123 4567"
+            placeholder="40 123 4567"
           />
         </.field>
       </div>
@@ -44,7 +40,6 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
       {"region / region_name", "string", "selected ISO region and the separate submitted field name"},
       {"regions", "list", "ISO regions shown in the selector; defaults to the complete list"},
       {"calling_codes", "map", "region to international-prefix overrides"},
-      {"locale", "string", "locale used for region names; defaults to the document locale"},
       {"class", "string", "merged with the joined control classes"}
     ]} />
     """

@@ -3,7 +3,7 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLiveTest do
   import Phoenix.LiveViewTest
 
   @new_components ~w(
-    color-input date-input date-picker email-input file-upload list password-input phone-input progressbar radio spinner
+    color-input date-input date-picker email-input file-upload list number-input password-input phone-input progressbar radio spinner
   )
 
   test "new component pages render live examples", %{conn: conn} do
@@ -29,12 +29,12 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLiveTest do
     view |> element("#results-pagination-next") |> render_click()
 
     assert_patch(view, ~p"/docs/components/pagination?#{[page: 5]}")
-    assert has_element?(view, ~s(#results-pagination-page-5[aria-current="page"]))
+    assert has_element?(view, ~s(#results-pagination-page[value="5"]))
   end
 
   test "pagination restores its state from query parameters", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/docs/components/pagination?#{[page: 8]}")
-    assert has_element?(view, ~s(#results-pagination-page-8[aria-current="page"]))
+    assert has_element?(view, ~s(#results-pagination-page[value="8"]))
   end
 
   test "table filters update query parameters and visible rows", %{conn: conn} do
