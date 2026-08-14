@@ -16,7 +16,7 @@ defmodule MatriarchUIDocsWeb.EditorChannelTest do
   end
 
   test "joins with an empty binary Yjs sync packet", %{document: document, socket: socket} do
-    assert {:ok, packet, _socket} =
+    assert {:ok, {:binary, packet}, _socket} =
              subscribe_and_join(socket, "mui_editor:#{document}", %{"client_id" => 101})
 
     assert <<0::unsigned-big-64, 0::unsigned-big-32, 0::unsigned-big-32>> = packet
@@ -40,13 +40,13 @@ defmodule MatriarchUIDocsWeb.EditorChannelTest do
 
     {:ok, joining_socket} = connect(EditorSocket, %{})
 
-    assert {:ok, sync, _joining_socket} =
+    assert {:ok, {:binary, sync}, _joining_socket} =
              subscribe_and_join(joining_socket, "mui_editor:#{document}", %{
                "client_id" => 303
              })
 
-    assert <<1::unsigned-big-64, 0::unsigned-big-32, 1::unsigned-big-32,
-             4::unsigned-big-32, ^update::binary>> = sync
+    assert <<1::unsigned-big-64, 0::unsigned-big-32, 1::unsigned-big-32, 4::unsigned-big-32,
+             ^update::binary>> = sync
   end
 
   test "compacts only the current document version", %{document: document, socket: socket} do
@@ -88,8 +88,8 @@ defmodule MatriarchUIDocsWeb.EditorChannelTest do
   test "encodes sync and compaction packets" do
     packet = EditorProtocol.encode_sync(%{version: 4, snapshot: <<1, 2>>, updates: [<<3>>]})
 
-    assert <<4::unsigned-big-64, 2::unsigned-big-32, 1, 2, 1::unsigned-big-32,
-             1::unsigned-big-32, 3>> = packet
+    assert <<4::unsigned-big-64, 2::unsigned-big-32, 1, 2, 1::unsigned-big-32, 1::unsigned-big-32,
+             3>> = packet
 
     assert {:ok, 4, <<7, 8>>} =
              EditorProtocol.decode_compaction(<<4::unsigned-big-64, 7, 8>>)

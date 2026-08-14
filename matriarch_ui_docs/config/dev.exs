@@ -12,6 +12,7 @@ config :matriarch_ui_docs, MatriarchUIDocsWeb.Endpoint,
   http: [ip: {127, 0, 0, 1}, port: 4010],
   check_origin: false,
   code_reloader: true,
+  reloadable_apps: [:matriarch_ui, :matriarch_ui_docs],
   debug_errors: true,
   secret_key_base: "VqXg5GRKUiZ5i+Y6VGUzBHswUbMbPK5evbudJzcqcGEMqukVDDGm87YRMImh77CO",
   watchers: [

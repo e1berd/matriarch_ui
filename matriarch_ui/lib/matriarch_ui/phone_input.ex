@@ -12,17 +12,17 @@ defmodule MatriarchUI.PhoneInput do
                  end)
   @regions Map.keys(@calling_codes) |> Enum.sort()
 
-  attr :field, Phoenix.HTML.FormField
-  attr :name, :any, default: nil
-  attr :id, :string, default: nil
-  attr :value, :any, default: nil
-  attr :region, :string, default: "US"
-  attr :region_name, :any, default: nil
-  attr :regions, :list, default: @regions
-  attr :calling_codes, :map, default: @calling_codes
-  attr :invalid, :boolean, default: false
-  attr :class, :string, default: nil
-  attr :rest, :global, include: ~w(placeholder autocomplete disabled readonly required)
+  attr(:field, Phoenix.HTML.FormField)
+  attr(:name, :any, default: nil)
+  attr(:id, :string, default: nil)
+  attr(:value, :any, default: nil)
+  attr(:region, :string, default: "US")
+  attr(:region_name, :any, default: nil)
+  attr(:regions, :list, default: @regions)
+  attr(:calling_codes, :map, default: @calling_codes)
+  attr(:invalid, :boolean, default: false)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global, include: ~w(placeholder autocomplete disabled readonly required))
 
   def phone_input(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
@@ -63,6 +63,8 @@ defmodule MatriarchUI.PhoneInput do
           value={@region}
           placeholder="🌐"
           disabled={@rest[:disabled] || @rest[:readonly]}
+          match_width={false}
+          panel_class="w-48"
           class="w-full"
         >
           <:option
@@ -138,7 +140,7 @@ defmodule MatriarchUI.PhoneInput do
     |> Enum.map_join(&<<&1 + 127_397::utf8>>)
   end
 
-  attr :rest, :global
+  attr(:rest, :global)
 
   def hook(assigns) do
     ~H"""

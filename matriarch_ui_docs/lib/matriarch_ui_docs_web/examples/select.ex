@@ -71,7 +71,9 @@ defmodule MatriarchUIDocsWeb.Examples.Select do
         {"placeholder", "string", "shown when no option is selected"},
         {"multiple", "boolean",
          "submits a list, keeps the panel open and separates labels with commas"},
-        {"invalid", "boolean", "shows the danger border and aria-invalid"}
+        {"invalid", "boolean", "shows the danger border and aria-invalid"},
+        {"match_width", "boolean", "keeps the panel as wide as the trigger; defaults to true"},
+        {"panel_class", "string", "merged with the dropdown panel classes"}
       ]}
     />
     """

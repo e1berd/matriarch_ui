@@ -51,4 +51,11 @@ collaboration over Phoenix Channels. The docs application contains an autonomous
 Socket, Channel, and bounded in-memory store implementation with no external
 service or container.
 
+`Draggable` sorts arbitrary slotted content with an animated destination placeholder,
+drag-and-drop and keyboard controls. It emits a DOM event, can push a LiveView event,
+submits its order as JSON, and synchronizes order through a Phoenix Channel when
+`document` is set. The docs application includes the bounded channel store.
+`NotionEditor` composes the RichEditor with grouped bubble controls and the shared
+draggable handle while retaining realtime cursors and remote text selections.
+
 Full reference: the [docs site](https://github.com/e1berd/matriarch_ui/tree/main/matriarch_ui_docs).

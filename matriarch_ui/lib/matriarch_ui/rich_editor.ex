@@ -127,6 +127,10 @@ defmodule MatriarchUI.RichEditor do
         phoenixSockets.delete(path)
       }
 
+      function collaboratorColor(value) {
+        return value || "#6c47ff"
+      }
+
       function activeState(editor, command, value) {
         if (command === "heading") return editor.isActive("heading", {level: Number(value)})
         if (command.startsWith("align-")) return editor.isActive({textAlign: command.slice(6)})
@@ -224,7 +228,7 @@ defmodule MatriarchUI.RichEditor do
 
         return {
           name: storedName || `Guest ${Math.floor(Math.random() * 9000) + 1000}`,
-          color: storedColor || `var(--color-mui-collaborator-${colorIndex})`,
+          color: collaboratorColor(storedColor || `var(--color-mui-collaborator-${colorIndex})`),
         }
       }
 
@@ -235,7 +239,7 @@ defmodule MatriarchUI.RichEditor do
         const generatedUser = collaborator()
         const user = {
           name: root.dataset.muiUserName || generatedUser.name,
-          color: root.dataset.muiUserColor || generatedUser.color,
+          color: collaboratorColor(root.dataset.muiUserColor || generatedUser.color),
         }
         const updateStatus = ({status}) => {
           root.dataset.muiCollaborationStatus = status
@@ -251,7 +255,15 @@ defmodule MatriarchUI.RichEditor do
         })
         const extensions = [
           tiptap.Collaboration.configure({document: provider.document}),
-          tiptap.CollaborationCaret.configure({provider, user}),
+          tiptap.CollaborationCaret.configure({
+            provider,
+            user,
+            selectionRender: collaborator => ({
+              class: "collaboration-carets__selection",
+              style: `background-color: color-mix(in oklab, ${collaborator.color}, transparent 78%)`,
+              "data-mui-collaborator": collaborator.name,
+            }),
+          }),
         ]
 
         return {extensions, provider, release: connection.release, user}

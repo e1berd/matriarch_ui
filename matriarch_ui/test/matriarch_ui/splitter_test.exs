@@ -36,4 +36,46 @@ defmodule MatriarchUI.SplitterTest do
 
     assert html =~ "flex-basis: 30%"
   end
+
+  test "min_size defaults to 0 so a panel can fully close" do
+    html =
+      render_component(&splitter/1, %{
+        id: "layout",
+        panel: [
+          %{inner_block: fn _, _ -> "Left" end},
+          %{inner_block: fn _, _ -> "Right" end}
+        ]
+      })
+
+    assert html =~ ~s(data-mui-min-size="0")
+  end
+
+  test "min_size and max_size are passed through as panel data attributes" do
+    html =
+      render_component(&splitter/1, %{
+        id: "layout",
+        panel: [
+          %{inner_block: fn _, _ -> "Left" end, min_size: 20, max_size: 60},
+          %{inner_block: fn _, _ -> "Right" end}
+        ]
+      })
+
+    assert html =~ ~s(data-mui-min-size="20")
+    assert html =~ ~s(data-mui-max-size="60")
+    assert html =~ ~s(data-mui-max-size="100")
+  end
+
+  test "storage_key is rendered as a data attribute when set" do
+    html =
+      render_component(&splitter/1, %{
+        id: "layout",
+        storage_key: "docs-layout",
+        panel: [
+          %{inner_block: fn _, _ -> "Left" end},
+          %{inner_block: fn _, _ -> "Right" end}
+        ]
+      })
+
+    assert html =~ ~s(data-mui-storage-key="docs-layout")
+  end
 end

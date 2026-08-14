@@ -263,6 +263,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
           id="collaboration-editor"
           document="matriarch-ui-docs-rich-editor"
           user_input_id="collaboration-user-name"
+          class="rounded-none border-0 bg-transparent shadow-none"
         >
           <:toolbar position="top">
             <.group label="Collaborative formatting">
@@ -276,7 +277,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
             </.group>
           </:toolbar>
           <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-          <:content />
+          <:content class="mui-notion-editor-content" />
         </.rich_editor>
         '''
       }
@@ -292,6 +293,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
         id="collaboration-editor"
         document="matriarch-ui-docs-rich-editor"
         user_input_id="collaboration-user-name"
+        class="rounded-none border-0 bg-transparent shadow-none"
       >
         <:toolbar position="top">
           <.group label="Collaborative formatting">
@@ -305,7 +307,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
           </.group>
         </:toolbar>
         <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-        <:content />
+        <:content class="mui-notion-editor-content" />
       </.rich_editor>
     </.example>
 

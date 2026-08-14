@@ -11,11 +11,12 @@ defmodule MatriarchUI.CommandPalette do
       <.command_palette id="search">
         <:trigger><.button>Search</.button></:trigger>
 
-        <.command_palette_search id="search" query={@query} event="search" locale={@locale}>
+        <.command_palette_search id="search" query={@query} event="search" mode="search" locale={@locale}>
           <:command
             :for={result <- @results}
             id={result.id}
             value={result.url}
+            icon={result.icon}
             title={result.title}
             subtitle={result.description}
           />
@@ -34,6 +35,11 @@ defmodule MatriarchUI.CommandPalette do
         {:noreply, assign(socket, query: query, results: MyApp.Search.run(query))}
       end
 
+  `mode` defaults to `"raw"` — always render `:command`, even before the
+  reader types anything, for a fixed list of tools/actions. Pass
+  `mode="search"` (as above) to wait for a query first, showing an idle hint
+  until then, for searching over content instead.
+
   `command_palette/1` (the trigger + the native `<dialog>` shell) and
   `command_palette_search/1` (the input + results, which re-renders on every
   keystroke) are separate components on purpose: if the page they're both on
@@ -46,7 +52,7 @@ defmodule MatriarchUI.CommandPalette do
   """
   use Phoenix.Component
   alias MatriarchUI.{CN, I18n, Search}
-  import MatriarchUI.{Icon, Input, Modal}
+  import MatriarchUI.{Icon, Input, Kbd, Modal}
   alias Phoenix.LiveView.JS
 
   attr :id, :string,
@@ -106,9 +112,18 @@ defmodule MatriarchUI.CommandPalette do
   attr :locale, :string, default: "en"
   attr :max_length, :integer, default: 80, doc: "maxlength of the search input"
 
+  attr :mode, :string,
+    default: "raw",
+    values: ~w(search raw),
+    doc:
+      "\"raw\" (the default) always renders :command, even with an empty query — for a fixed " <>
+        "list of tools/actions. \"search\" waits for a query before rendering anything, " <>
+        "showing an idle hint until then — for searching over content."
+
   slot :command, doc: "one per result" do
     attr :id, :string, required: true
     attr :value, :string, required: true, doc: "navigate destination"
+    attr :icon, :string, doc: "phosphor icon name shown to the left, e.g. \"file\""
     attr :title, :string, required: true, doc: "highlighted against the current query"
     attr :subtitle, :string, doc: "highlighted against the current query"
   end
@@ -142,10 +157,13 @@ defmodule MatriarchUI.CommandPalette do
 
       <div class="mt-3 grid grid-rows-[1fr] transition-[grid-template-rows] duration-300 ease-mui-out">
         <div class="overflow-hidden">
-          <.command_palette_idle :if={@query == ""} locale={@locale} />
-          <.command_palette_not_found :if={@query != "" and @command == []} locale={@locale} />
+          <.command_palette_idle :if={@query == "" and @mode == "search"} locale={@locale} />
+          <.command_palette_not_found
+            :if={(@query != "" or @mode == "raw") and @command == []}
+            locale={@locale}
+          />
           <ul
-            :if={@command != []}
+            :if={@command != [] and (@query != "" or @mode == "raw")}
             id={"#{@id}-listbox"}
             role="listbox"
             class="flex max-h-80 flex-col gap-0.5 overflow-y-auto"
@@ -167,20 +185,27 @@ defmodule MatriarchUI.CommandPalette do
                 aria-selected="false"
                 class={
                   CN.cn([
-                    "block rounded-mui-md px-2.5 py-2 outline-none hover:bg-mui-surface-hover",
+                    "flex items-start gap-2.5 rounded-mui-md px-2.5 py-2 outline-none hover:bg-mui-surface-hover",
                     "aria-selected:bg-mui-surface-hover aria-selected:ring-2 aria-selected:ring-mui-brand/30"
                   ])
                 }
               >
-                <p class="text-sm font-medium text-mui-foreground">
-                  <.segments value={Search.highlight(command.title, @query)} />
-                </p>
-                <p
-                  :if={command[:subtitle]}
-                  class="mt-0.5 text-xs text-mui-muted-foreground"
-                >
-                  <.segments value={Search.highlight(command.subtitle, @query)} />
-                </p>
+                <.icon
+                  :if={command[:icon]}
+                  name={command.icon}
+                  class="mt-0.5 size-4 shrink-0 text-mui-subtle-foreground"
+                />
+                <div class="min-w-0 flex-1">
+                  <p class="text-sm font-medium text-mui-foreground">
+                    <.segments value={Search.highlight(command.title, @query)} />
+                  </p>
+                  <p
+                    :if={command[:subtitle]}
+                    class="mt-0.5 text-xs text-mui-muted-foreground"
+                  >
+                    <.segments value={Search.highlight(command.subtitle, @query)} />
+                  </p>
+                </div>
               </.link>
             </li>
           </ul>
@@ -189,7 +214,10 @@ defmodule MatriarchUI.CommandPalette do
 
       <div class="mt-3 flex items-center gap-3 border-t border-mui-border pt-2.5 text-[11px] text-mui-subtle-foreground">
         <span class="flex items-center gap-1">
-          <.kbd>↑</.kbd><.kbd>↓</.kbd>{I18n.t(@locale, "command_palette.kbd_navigate")}
+          <.kbd_group><.kbd>↑</.kbd><.kbd>↓</.kbd></.kbd_group>{I18n.t(
+            @locale,
+            "command_palette.kbd_navigate"
+          )}
         </span>
         <span class="flex items-center gap-1">
           <.kbd>↵</.kbd>{I18n.t(@locale, "command_palette.kbd_select")}
@@ -282,16 +310,6 @@ defmodule MatriarchUI.CommandPalette do
       <mark :if={kind == :mark} class="rounded-sm bg-mui-accent-subtle px-0.5 text-mui-accent-subtle-foreground">{text}</mark>
       <span :if={kind == :text}>{text}</span>
     <% end %>
-    """
-  end
-
-  slot :inner_block, required: true
-
-  defp kbd(assigns) do
-    ~H"""
-    <kbd class="rounded border border-mui-border bg-mui-surface-hover px-1 py-0.5 font-mono text-[10px]">
-      {render_slot(@inner_block)}
-    </kbd>
     """
   end
 end

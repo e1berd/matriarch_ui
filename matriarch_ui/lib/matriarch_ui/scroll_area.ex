@@ -5,6 +5,7 @@ defmodule MatriarchUI.ScrollArea do
 
   attr :id, :string, required: true
   attr :orientation, :string, default: "vertical", values: ~w(vertical horizontal both)
+  attr :persist_scroll, :boolean, default: false
   attr :class, :string, default: nil
   attr :viewport_class, :string, default: nil
   attr :content_class, :string, default: nil
@@ -17,6 +18,7 @@ defmodule MatriarchUI.ScrollArea do
       id={@id}
       data-mui
       data-mui-orientation={@orientation}
+      data-mui-persist-scroll={@persist_scroll}
       phx-hook=".MUIScrollArea"
       class={CN.cn(["relative overflow-hidden", @class])}
       {@rest}
@@ -113,11 +115,24 @@ defmodule MatriarchUI.ScrollArea do
           const cleanups = []
           let scrollTimer
 
+          const persistScroll = "muiPersistScroll" in root.dataset
+          const storageKey = `mui-scroll-area:${root.id}`
+          const restoreScrollPosition = () => {
+            const saved = sessionStorage.getItem(storageKey)
+            if (!saved) return
+            const { top, left } = JSON.parse(saved)
+            viewport.scrollTop = top
+            viewport.scrollLeft = left
+          }
+
           const update = () => tracks.forEach((track) => updateScrollbar(viewport, track))
           const setActive = (active) => tracks.forEach((track) => track.dataset.active = String(active))
           const onScroll = () => {
             setActive(true)
             update()
+            if (persistScroll) {
+              sessionStorage.setItem(storageKey, JSON.stringify({ top: viewport.scrollTop, left: viewport.scrollLeft }))
+            }
             clearTimeout(scrollTimer)
             scrollTimer = setTimeout(() => setActive(root.matches(":hover")), 700)
           }
@@ -181,7 +196,11 @@ defmodule MatriarchUI.ScrollArea do
           const mutationObserver = new MutationObserver(update)
           mutationObserver.observe(content, { childList: true, subtree: true, characterData: true })
 
-          requestAnimationFrame(update)
+          if (persistScroll) restoreScrollPosition()
+          requestAnimationFrame(() => {
+            if (persistScroll) restoreScrollPosition()
+            update()
+          })
           this.muiScrollAreaCleanup = () => {
             clearTimeout(scrollTimer)
             resizeObserver.disconnect()

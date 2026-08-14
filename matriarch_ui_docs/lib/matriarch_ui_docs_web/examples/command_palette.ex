@@ -5,7 +5,7 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
   alias MatriarchUIDocsWeb.DocsI18n
 
   def search_content(_locale) do
-    "search over anything database HTTP call in-process list command palette dialog keyboard navigation highlight live component"
+    "search over anything database HTTP call in-process list command palette dialog keyboard navigation highlight live component mode search raw fixed tool action picker icon phosphor"
   end
 
   def examples(assigns) do
@@ -17,8 +17,8 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
     ~H"""
     <.example
       locale={@locale}
-      title="Search over anything"
-      description="MatriarchUI.CommandPalette never touches your data — it only renders the trigger, dialog and results, and highlights title/subtitle against the current query for you. You write a small LiveComponent that owns query/results and looks them up however you like; the one below (shown in full further down this page) searches a handful of hardcoded names, but the same shape works over a database or an HTTP call."
+      title={"mode=\"search\""}
+      description={"MatriarchUI.CommandPalette never touches your data — it only renders the trigger, dialog and results, and highlights title/subtitle against the current query for you. You write a small LiveComponent that owns query/results and looks them up however you like; the one below (shown in full further down this page) searches a handful of hardcoded names, but the same shape works over a database or an HTTP call. mode=\"search\" waits for a query before showing anything, with an idle hint until then."}
       code={
         ~S'''
         <.command_palette id="demo-command-palette">
@@ -40,6 +40,36 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
           module={MatriarchUIDocsWeb.Examples.CommandPaletteDemo}
           id="demo-command-palette-results"
           palette_id="demo-command-palette"
+          locale={@locale}
+        />
+      </.command_palette>
+    </.example>
+
+    <.example
+      locale={@locale}
+      title={"mode=\"raw\" (the default)"}
+      description="Leave mode at its default and seed results with everything up front — the full list (each with a leading phosphor icon) shows before the reader types anything, and your own handle_event narrows it down as they do. Good for a command menu of actions rather than a search over content."
+      code={
+        ~S'''
+        <.command_palette id="demo-command-palette-tools">
+          <:trigger><.button>Actions</.button></:trigger>
+          <.live_component
+            module={MatriarchUIDocsWeb.Examples.CommandPaletteToolsDemo}
+            id="demo-command-palette-tools-results"
+            palette_id="demo-command-palette-tools"
+          />
+        </.command_palette>
+        '''
+      }
+    >
+      <.command_palette id="demo-command-palette-tools">
+        <:trigger>
+          <.button>{DocsI18n.t(@locale, "Actions")}</.button>
+        </:trigger>
+        <.live_component
+          module={MatriarchUIDocsWeb.Examples.CommandPaletteToolsDemo}
+          id="demo-command-palette-tools-results"
+          palette_id="demo-command-palette-tools"
           locale={@locale}
         />
       </.command_palette>
@@ -83,8 +113,10 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
         {"event", "string, required", "phx-change event name pushed as the reader types"},
         {"target", "any", "phx-target, e.g. @myself in a LiveComponent"},
         {"max_length", "integer", "maxlength of the search input, defaults to 80"},
+        {"mode", "\"search\" | \"raw\"",
+         "raw (default) always renders command; search waits for a query, with an idle hint until then"},
         {"command", "slot",
-         "one per result; id/value required, title/subtitle plain strings, auto-highlighted"}
+         "one per result; id/value required, icon optional (a phosphor icon name), title/subtitle plain strings, auto-highlighted"}
       ]}
     />
     """
@@ -114,11 +146,13 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
             query={@query}
             event="search"
             target={@myself}
+            mode="search"
           >
             <:command
               :for={result <- @results}
               id={result.id}
               value={result.url}
+              icon={result.icon}
               title={result.title}
               subtitle={result.description}
             />
@@ -144,11 +178,12 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPalette do
     # in your template
     <.command_palette id="search">
       <:trigger><.button>Search</.button></:trigger>
-      <.command_palette_search id="search" query={@query} event="search">
+      <.command_palette_search id="search" query={@query} event="search" mode="search">
         <:command
           :for={result <- @results}
           id={result.id}
           value={result.url}
+          icon={result.icon}
           title={result.title}
           subtitle={result.description}
         />

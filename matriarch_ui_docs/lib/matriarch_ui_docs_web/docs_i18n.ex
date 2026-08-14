@@ -19,6 +19,7 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "command-palette" => "Палитра команд",
     "date-input" => "Поле даты",
     "date-picker" => "Календарь",
+    "draggable" => "Перетаскивание",
     "dropdown-menu" => "Выпадающее меню",
     "email-input" => "Поле email",
     "field" => "Поле",
@@ -26,9 +27,11 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "file-upload" => "Загрузка файлов",
     "group" => "Группа",
     "input" => "Поле ввода",
+    "kbd" => "Клавиша",
     "list" => "Список",
     "listbox" => "Список выбора",
     "modal" => "Модальное окно",
+    "notion-editor" => "Notion-редактор",
     "number-input" => "Числовое поле",
     "pagination" => "Пагинация",
     "password-input" => "Поле пароля",
@@ -382,8 +385,9 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "submits a list, keeps the panel open and separates labels with commas" =>
       "отправляет список, оставляет панель открытой и разделяет подписи запятыми",
     "Search over anything" => "Поиск по чему угодно",
-    "MatriarchUI.CommandPalette never touches your data — it only renders the trigger, dialog and results, and highlights title/subtitle against the current query for you. You write a small LiveComponent that owns query/results and looks them up however you like; the one below (shown in full further down this page) searches a handful of hardcoded names, but the same shape works over a database or an HTTP call." =>
-      "MatriarchUI.CommandPalette не трогает ваши данные — он только рисует кнопку, диалог и результаты, и сам подсвечивает title/subtitle по текущему запросу. Вы пишете небольшой LiveComponent, который хранит query/results и ищет их как угодно; тот, что ниже (его полный код показан дальше на этой странице), ищет по небольшому списку жёстко заданных имён, но точно так же можно искать в базе данных или через HTTP.",
+    "mode=\"search\"" => "mode=\"search\"",
+    "MatriarchUI.CommandPalette never touches your data — it only renders the trigger, dialog and results, and highlights title/subtitle against the current query for you. You write a small LiveComponent that owns query/results and looks them up however you like; the one below (shown in full further down this page) searches a handful of hardcoded names, but the same shape works over a database or an HTTP call. mode=\"search\" waits for a query before showing anything, with an idle hint until then." =>
+      "MatriarchUI.CommandPalette не трогает ваши данные — он только рисует кнопку, диалог и результаты, и сам подсвечивает title/subtitle по текущему запросу. Вы пишете небольшой LiveComponent, который хранит query/results и ищет их как угодно; тот, что ниже (его полный код показан дальше на этой странице), ищет по небольшому списку жёстко заданных имён, но точно так же можно искать в базе данных или через HTTP. mode=\"search\" ждёт запрос, прежде чем что-либо показать, и до этого момента отображает подсказку-заглушку.",
     "The LiveComponent above, in full" => "Полный код LiveComponent выше",
     "This is everything MatriarchUIDocsWeb.Examples.CommandPaletteDemo does: own query/results, handle the search event, look results up. title/subtitle are plain strings — no highlighting math required." =>
       "Это всё, что делает MatriarchUIDocsWeb.Examples.CommandPaletteDemo: хранит query/results, обрабатывает событие search, ищет результаты. title/subtitle — обычные строки, вычислять подсветку самостоятельно не нужно.",
@@ -396,8 +400,22 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "phx-change event name pushed as the reader types" =>
       "имя события phx-change, отправляемого по мере ввода",
     "maxlength of the search input, defaults to 80" => "maxlength поля поиска, по умолчанию 80",
-    "one per result; id/value required, title/subtitle plain strings, auto-highlighted" =>
-      "по одному на результат; id/value обязательны, title/subtitle — обычные строки, подсвечиваются автоматически"
+    "one per result; id/value required, icon optional (a phosphor icon name), title/subtitle plain strings, auto-highlighted" =>
+      "по одному на результат; id/value обязательны, icon необязателен (имя иконки phosphor), title/subtitle — обычные строки, подсвечиваются автоматически",
+    "raw (default) always renders command; search waits for a query, with an idle hint until then" =>
+      "raw (по умолчанию) всегда рендерит command; search ждёт запрос и до этого показывает подсказку-заглушку",
+    "mode=\"raw\" (the default)" => "mode=\"raw\" (по умолчанию)",
+    "Leave mode at its default and seed results with everything up front — the full list (each with a leading phosphor icon) shows before the reader types anything, and your own handle_event narrows it down as they do. Good for a command menu of actions rather than a search over content." =>
+      "Оставьте mode по умолчанию и сразу заполните results полным списком — он показывается ещё до ввода (у каждого пункта — своя иконка phosphor), а ваш handle_event сужает его по мере набора текста. Подходит для меню команд, а не для поиска по содержимому.",
+    "Actions" => "Действия",
+    "Single key" => "Одна клавиша",
+    "Renders as a native <kbd>." => "Рендерится как нативный <kbd>.",
+    "Combination" => "Сочетание клавиш",
+    "kbd_group wraps its own <kbd> around nested .kbd calls — the standard HTML pattern for representing a keystroke made of several keys." =>
+      "kbd_group оборачивает вложенные вызовы .kbd в собственный <kbd> — стандартный HTML-приём для сочетания из нескольких клавиш.",
+    "In context" => "В контексте",
+    "Used throughout matriarchUI itself — the ⌘K shortcut hint on a trigger, and the keyboard hints in command_palette_search." =>
+      "Используется в самом matriarchUI — подсказка ⌘K на кнопке и подсказки клавиш в command_palette_search."
   }
 
   @english Map.new(@russian, fn {english, _russian} -> {english, english} end)

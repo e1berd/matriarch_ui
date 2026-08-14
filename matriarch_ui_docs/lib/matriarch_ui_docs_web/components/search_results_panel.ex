@@ -38,6 +38,7 @@ defmodule MatriarchUIDocsWeb.SearchResultsPanel do
         event="search"
         target={@myself}
         locale={@locale}
+        mode="search"
       >
         <:command
           :for={result <- @results}

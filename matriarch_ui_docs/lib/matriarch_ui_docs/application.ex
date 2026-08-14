@@ -14,6 +14,7 @@ defmodule MatriarchUIDocs.Application do
       MatriarchUIDocsWeb.Presence,
       MatriarchUIDocs.ChatStore,
       MatriarchUIDocs.CollaborationStore,
+      MatriarchUIDocs.DraggableStore,
       # Start a worker by calling: MatriarchUIDocs.Worker.start_link(arg)
       # {MatriarchUIDocs.Worker, arg},
       # Start to serve requests, typically the last entry

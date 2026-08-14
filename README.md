@@ -78,6 +78,41 @@ with `Group`:
 </.rich_editor>
 ```
 
+Arbitrary sortable content uses the standalone draggable primitives. Reorders
+animate around a destination placeholder, emit `mui:draggable-change`, optionally
+push a LiveView event, update the hidden JSON order input, and synchronize through
+Phoenix Channels when `document` is set:
+
+```heex
+<.draggable
+  id="sections"
+  name="page[section_order]"
+  event="reorder_sections"
+  document="team-page-sections"
+>
+  <:item id="intro">
+    <.draggable_handle label="Move introduction" />
+    Introduction
+  </:item>
+  <:item id="details">
+    <.draggable_handle label="Move details" />
+    Details
+  </:item>
+</.draggable>
+```
+
+`<.notion_editor>` composes the RichEditor, grouped bubble toolbar, and the same
+draggable handle primitive. Set `document` to enable realtime Yjs content,
+cursor, name, and text-selection synchronization:
+
+```heex
+<.notion_editor
+  id="team-page"
+  document="team-page-42"
+  user_input_id="collaborator-name"
+/>
+```
+
 Realtime collaboration uses Yjs binary updates over Phoenix Channels and needs
 no external service or container. The docs implementation consists of
 [`EditorSocket`](./matriarch_ui_docs/lib/matriarch_ui_docs_web/channels/editor_socket.ex),
@@ -86,6 +121,12 @@ and a bounded in-memory
 [`CollaborationStore`](./matriarch_ui_docs/lib/matriarch_ui_docs/collaboration_store.ex).
 Set `document` and optionally `collaboration_socket` and `user_input_id` on the
 editor. Applications can replace the demo store with their persistent storage.
+
+Realtime draggable order uses the same `EditorSocket` with
+[`DraggableChannel`](./matriarch_ui_docs/lib/matriarch_ui_docs_web/channels/draggable_channel.ex)
+and the bounded in-memory
+[`DraggableStore`](./matriarch_ui_docs/lib/matriarch_ui_docs/draggable_store.ex).
+Consumers can copy that pair or implement the same `join`/`reorder` protocol.
 
 See the docs site for the full component reference.
 

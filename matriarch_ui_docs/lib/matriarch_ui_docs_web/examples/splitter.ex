@@ -35,8 +35,10 @@ defmodule MatriarchUIDocsWeb.Examples.Splitter do
       locale={@locale}
       rows={[
         {"orientation", "horizontal | vertical", "resize axis, defaults to horizontal"},
+        {"storage_key", "string",
+         "localStorage key panel sizes persist under and restore from, defaults to none"},
         {"panel", "slot, required",
-         "one per pane; takes default_size and min_size (percent, defaults to an even split / 10)"}
+         "one per pane; takes default_size (percent, defaults to an even split), min_size and max_size (percent, default to 0 and 100)"}
       ]}
     />
     """

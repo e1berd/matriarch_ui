@@ -23,6 +23,7 @@ defmodule MatriarchUI do
       import MatriarchUI.DateInput
       import MatriarchUI.DatePicker
       import MatriarchUI.DropdownMenu
+      import MatriarchUI.Draggable
       import MatriarchUI.EmailInput
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
@@ -30,9 +31,11 @@ defmodule MatriarchUI do
       import MatriarchUI.Group
       import MatriarchUI.Input
       import MatriarchUI.Icon
+      import MatriarchUI.Kbd
       import MatriarchUI.List
       import MatriarchUI.Listbox
       import MatriarchUI.Modal
+      import MatriarchUI.NotionEditor
       import MatriarchUI.NumberInput
       import MatriarchUI.Pagination
       import MatriarchUI.PasswordInput
@@ -55,6 +58,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Table
       import MatriarchUI.Tabs
       import MatriarchUI.Textarea
+      import MatriarchUI.ThemeToggle
       import MatriarchUI.Tooltip
     end
   end

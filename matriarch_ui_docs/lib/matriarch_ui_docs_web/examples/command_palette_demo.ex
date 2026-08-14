@@ -35,6 +35,7 @@ defmodule MatriarchUIDocsWeb.Examples.CommandPaletteDemo do
         event="search"
         target={@myself}
         locale={@locale}
+        mode="search"
       >
         <:command
           :for={result <- @results}

@@ -12,7 +12,9 @@ defmodule MatriarchUI.Select do
   attr :disabled, :boolean, default: false
   attr :placeholder, :string, default: "Select…"
   attr :invalid, :boolean, default: false
+  attr :match_width, :boolean, default: true
   attr :class, :string, default: nil
+  attr :panel_class, :string, default: nil
 
   slot :option, required: true do
     attr :value, :string, required: true
@@ -65,7 +67,7 @@ defmodule MatriarchUI.Select do
         data-mui-placement="bottom-start"
         data-mui-axis="vertical"
         data-mui-role="listbox"
-        data-mui-match-width="true"
+        data-mui-match-width={to_string(@match_width)}
         data-mui-value-target={"#{@id}-value"}
         data-mui-multiple={to_string(@multiple)}
         data-mui-placeholder={@placeholder}
@@ -94,7 +96,8 @@ defmodule MatriarchUI.Select do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-[13px] shadow-mui-lg"
+            "max-h-64 overflow-auto rounded-mui-md border border-mui-border bg-mui-surface p-1 text-[13px] shadow-mui-lg",
+            @panel_class
           ])
         }
       >

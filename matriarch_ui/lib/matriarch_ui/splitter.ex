@@ -6,11 +6,17 @@ defmodule MatriarchUI.Splitter do
 
   attr :id, :string, required: true
   attr :orientation, :string, default: "horizontal", values: ~w(horizontal vertical)
+
+  attr :storage_key, :string,
+    default: nil,
+    doc: "localStorage key panel sizes persist under and restore from"
+
   attr :class, :string, default: nil
 
   slot :panel, required: true do
     attr :default_size, :integer, doc: "percent, defaults to an even split"
-    attr :min_size, :integer, doc: "percent, defaults to 10"
+    attr :min_size, :integer, doc: "percent, defaults to 0"
+    attr :max_size, :integer, doc: "percent, defaults to 100"
   end
 
   def splitter(assigns) do
@@ -24,6 +30,7 @@ defmodule MatriarchUI.Splitter do
       id={@id}
       data-mui
       data-mui-orientation={@orientation}
+      data-mui-storage-key={@storage_key}
       phx-hook=".MUISplitter"
       class={
         CN.cn([
@@ -36,7 +43,8 @@ defmodule MatriarchUI.Splitter do
       <%= for {panel, index} <- Enum.with_index(@panel) do %>
         <div
           data-mui-panel
-          data-mui-min-size={panel[:min_size] || 10}
+          data-mui-min-size={panel[:min_size] || 0}
+          data-mui-max-size={panel[:max_size] || 100}
           data-mui-default-size={panel[:default_size] || @default_size}
           style={"flex-basis: #{panel[:default_size] || @default_size}%"}
           class="min-h-0 min-w-0 flex-1 overflow-auto"
@@ -82,15 +90,39 @@ defmodule MatriarchUI.Splitter do
         mounted() {
           const root = this.el
           const orientation = root.dataset.muiOrientation || "horizontal"
+          const storageKey = root.dataset.muiStorageKey
+          const panels = Array.from(root.querySelectorAll("[data-mui-panel]"))
 
           const sizeOf = (panel) => parseFloat(panel.style.flexBasis || panel.dataset.muiDefaultSize || "50")
 
-          const resize = (prev, next, delta, minPrev, minNext) => {
+          const persist = () => {
+            if (!storageKey) return
+            localStorage.setItem(storageKey, JSON.stringify(panels.map(sizeOf)))
+          }
+
+          const restore = () => {
+            if (!storageKey) return
+            let stored
+            try {
+              stored = JSON.parse(localStorage.getItem(storageKey))
+            } catch {
+              return
+            }
+            if (!Array.isArray(stored) || stored.length !== panels.length) return
+            panels.forEach((panel, index) => {
+              panel.style.flexBasis = `${stored[index]}%`
+            })
+          }
+
+          restore()
+
+          const resize = (prev, next, delta, minPrev, minNext, maxPrev, maxNext) => {
             let newPrev = sizeOf(prev) + delta
             let newNext = sizeOf(next) - delta
-            if (newPrev < minPrev || newNext < minNext) return
+            if (newPrev < minPrev || newNext < minNext || newPrev > maxPrev || newNext > maxNext) return
             prev.style.flexBasis = `${newPrev}%`
             next.style.flexBasis = `${newNext}%`
+            persist()
           }
 
           Array.from(root.querySelectorAll("[data-mui-handle]")).forEach((handle) => {
@@ -98,8 +130,10 @@ defmodule MatriarchUI.Splitter do
             const next = handle.nextElementSibling
             if (!prev || !next) return
 
-            const minPrev = parseFloat(prev.dataset.muiMinSize || "10")
-            const minNext = parseFloat(next.dataset.muiMinSize || "10")
+            const minPrev = parseFloat(prev.dataset.muiMinSize || "0")
+            const minNext = parseFloat(next.dataset.muiMinSize || "0")
+            const maxPrev = parseFloat(prev.dataset.muiMaxSize || "100")
+            const maxNext = parseFloat(next.dataset.muiMaxSize || "100")
 
             handle.addEventListener("pointerdown", (event) => {
               event.preventDefault()
@@ -116,8 +150,10 @@ defmodule MatriarchUI.Splitter do
                 let newNext = startNext - deltaPercent
                 if (newPrev < minPrev) newNext -= minPrev - newPrev
                 if (newNext < minNext) newPrev -= minNext - newNext
-                newPrev = Math.max(newPrev, minPrev)
-                newNext = Math.max(newNext, minNext)
+                if (newPrev > maxPrev) newNext += newPrev - maxPrev
+                if (newNext > maxNext) newPrev += newNext - maxNext
+                newPrev = Math.min(Math.max(newPrev, minPrev), maxPrev)
+                newNext = Math.min(Math.max(newNext, minNext), maxNext)
                 prev.style.flexBasis = `${newPrev}%`
                 next.style.flexBasis = `${newNext}%`
               }
@@ -125,6 +161,7 @@ defmodule MatriarchUI.Splitter do
               const onUp = () => {
                 document.removeEventListener("pointermove", onMove)
                 document.removeEventListener("pointerup", onUp)
+                persist()
               }
 
               document.addEventListener("pointermove", onMove)
@@ -140,7 +177,7 @@ defmodule MatriarchUI.Splitter do
               if (orientation === "vertical" && event.key === "ArrowDown") delta = step
               if (delta === 0) return
               event.preventDefault()
-              resize(prev, next, delta, minPrev, minNext)
+              resize(prev, next, delta, minPrev, minNext, maxPrev, maxNext)
             })
           })
         }

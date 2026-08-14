@@ -31,7 +31,7 @@ defmodule MatriarchUI.Switch do
         class={CN.cn(["peer sr-only", @class])}
         {@rest}
       />
-      <span class="absolute inset-0 rounded-mui-full bg-mui-border-strong transition-colors peer-checked:bg-mui-primary peer-focus-visible:ring-2 peer-focus-visible:ring-mui-ring/30 peer-disabled:cursor-not-allowed peer-disabled:opacity-50">
+      <span class="absolute inset-0 rounded-mui-full bg-mui-border-strong transition-colors peer-checked:bg-mui-brand peer-focus-visible:ring-2 peer-focus-visible:ring-mui-ring/30 peer-disabled:cursor-not-allowed peer-disabled:opacity-50">
       </span>
       <span class="pointer-events-none absolute left-0.5 size-5 rounded-mui-full bg-white shadow-mui-sm transition-transform peer-checked:translate-x-5">
       </span>

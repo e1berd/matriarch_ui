@@ -75,9 +75,9 @@ defmodule MatriarchUIDocsWeb.Layouts do
               <span class="hidden sm:inline">
                 {MatriarchUI.I18n.t(@locale, "command_palette.trigger")}
               </span>
-              <kbd class="hidden rounded border border-mui-border bg-mui-surface-hover px-1 font-mono text-[10px] text-mui-subtle-foreground sm:inline">
-                ⌘K
-              </kbd>
+              <.kbd_group class="hidden sm:inline-flex">
+                <.kbd>⌘</.kbd><.kbd>K</.kbd>
+              </.kbd_group>
             </.button>
           </:trigger>
           <.live_component
@@ -110,7 +110,12 @@ defmodule MatriarchUIDocsWeb.Layouts do
         >
           GitHub
         </a>
-        <.theme_toggle locale={@locale} />
+        <.theme_toggle
+          id="docs-theme-toggle"
+          system_label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "System theme")}
+          light_label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Light theme")}
+          dark_label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Dark theme")}
+        />
       </div>
     </header>
 
@@ -166,52 +171,6 @@ defmodule MatriarchUIDocsWeb.Layouts do
         {MatriarchUIDocsWeb.DocsI18n.t(@locale, "Attempting to reconnect")}
         <.icon name="arrows-clockwise" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
-    </div>
-    """
-  end
-
-  @doc """
-  Provides dark vs light theme toggle based on themes defined in app.css.
-
-  See <head> in root.html.heex which applies the theme before page load.
-  """
-  attr :locale, :string, default: "en"
-
-  def theme_toggle(assigns) do
-    ~H"""
-    <div class="relative flex items-center rounded-mui-full border border-mui-border bg-mui-surface-hover">
-      <div class="absolute left-0 h-full w-1/3 rounded-mui-full bg-mui-surface shadow-mui-sm transition-[left] [[data-theme-source=system]_&]:left-0 [[data-theme=light]_&]:left-1/3 [[data-theme=dark]_&]:left-2/3">
-      </div>
-
-      <button
-        id="theme-system"
-        class="z-10 flex w-1/3 cursor-pointer p-1.5"
-        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "System theme")}
-        phx-click={JS.dispatch("phx:set-theme")}
-        data-phx-theme="system"
-      >
-        <.icon name="desktop" class="size-4 text-mui-muted-foreground" />
-      </button>
-
-      <button
-        id="theme-light"
-        class="z-10 flex w-1/3 cursor-pointer p-1.5"
-        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Light theme")}
-        phx-click={JS.dispatch("phx:set-theme")}
-        data-phx-theme="light"
-      >
-        <.icon name="sun" class="size-4 text-mui-muted-foreground" />
-      </button>
-
-      <button
-        id="theme-dark"
-        class="z-10 flex w-1/3 cursor-pointer p-1.5"
-        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Dark theme")}
-        phx-click={JS.dispatch("phx:set-theme")}
-        data-phx-theme="dark"
-      >
-        <.icon name="moon" class="size-4 text-mui-muted-foreground" />
-      </button>
     </div>
     """
   end
