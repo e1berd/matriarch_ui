@@ -11,6 +11,7 @@ defmodule MatriarchUI.DraggableTest do
         event: "sort_tasks",
         target: "#project",
         document: "project-sections",
+        preview: [%{class: "custom-preview", inner_block: fn _, _ -> "Preview" end}],
         item: [
           %{
             id: "first",

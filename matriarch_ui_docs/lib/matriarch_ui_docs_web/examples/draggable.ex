@@ -20,6 +20,7 @@ defmodule MatriarchUIDocsWeb.Examples.Draggable do
           document="matriarch-ui-docs-project-sections"
           class="gap-2"
         >
+          <:preview class="border-mui-accent bg-mui-accent-subtle" />
           <:item id="research">
             <div class="flex items-center gap-3 rounded-mui-lg border border-mui-border bg-mui-surface p-3">
               <.draggable_handle label="Move Research" />
@@ -50,6 +51,7 @@ defmodule MatriarchUIDocsWeb.Examples.Draggable do
         document="matriarch-ui-docs-project-sections"
         class="gap-2"
       >
+        <:preview class="border-mui-accent bg-mui-accent-subtle" />
         <:item id="research">
           <div class="flex items-center gap-3 rounded-mui-lg border border-mui-border bg-mui-surface p-3">
             <.draggable_handle label="Move Research" />
@@ -83,10 +85,10 @@ defmodule MatriarchUIDocsWeb.Examples.Draggable do
         {"collaboration_socket", "string", "Phoenix Socket path used for realtime order"},
         {"document", "string", "shared realtime document name; nil disables collaboration"},
         {"animation_duration", "integer", "movement animation duration in milliseconds"},
-        {"placeholder_label", "string", "accessible destination placeholder label"},
         {"disabled", "boolean", "disables reordering for the entire list"},
         {"class", "string", "merged with the sortable root classes"},
         {"item_class", "string", "merged into every item wrapper"},
+        {":preview", "slot", "optional content and classes for the destination preview"},
         {":item", "slot", "sortable content; requires a stable id and accepts disabled/class"}
       ]}
     />

@@ -1,12 +1,12 @@
 defmodule MatriarchUI.RichEditor.DragHandle do
-  @moduledoc "Drag handle template for Notion-style block reordering in `MatriarchUI.RichEditor`."
+  @moduledoc "Drag handle template for block reordering in `MatriarchUI.RichEditor`."
   use Phoenix.Component
   alias MatriarchUI.CN
   import MatriarchUI.Draggable
 
-  attr :label, :string, default: "Drag block"
-  attr :class, :string, default: nil
-  slot :inner_block
+  attr(:label, :string, default: "Drag block")
+  attr(:class, :string, default: nil)
+  slot(:inner_block)
 
   def rich_editor_drag_handle(assigns) do
     ~H"""

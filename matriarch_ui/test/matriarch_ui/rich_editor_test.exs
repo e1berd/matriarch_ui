@@ -112,13 +112,14 @@ defmodule MatriarchUI.RichEditorTest do
         collaboration_socket: "/custom_editor_socket",
         document: "team-notes",
         user_input_id: "display-name",
+        block_animation_duration: 240,
         toolbar: [%{inner_block: fn _, _ -> "" end}],
         content: [%{inner_block: fn _, _ -> "" end}]
       })
 
     assert has_element?(
              html,
-             ~s(#shared-notes[data-mui-collaboration-socket="/custom_editor_socket"][data-mui-document="team-notes"][data-mui-user-input-id="display-name"])
+             ~s(#shared-notes[data-mui-collaboration-socket="/custom_editor_socket"][data-mui-document="team-notes"][data-mui-user-input-id="display-name"][data-mui-block-animation-duration="240"])
            )
   end
 

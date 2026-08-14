@@ -8,7 +8,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
       assigns
       |> Map.put_new(:complete_content, complete_content())
       |> Map.put_new(:bubble_content, bubble_content())
-      |> Map.put_new(:draggable_content, draggable_content())
+      |> Map.put_new(:outliner_content, outliner_content())
 
     ~H"""
     <.example
@@ -205,50 +205,74 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
 
     <.example
       locale={@locale}
-      title="Notion-style draggable blocks"
-      description="Move the handle next to a block, then drag it to reorder the document."
+      title="Outliner"
+      description="Compose RichEditor with a grouped bubble toolbar, draggable blocks, and a wider writing surface to quickly build a Notion-like outliner."
       class="flex-col items-stretch"
       code={
         ~S'''
         <.rich_editor
-          id="draggable-editor"
-          value={@draggable_content}
+          id="outliner-editor"
+          value={@outliner_content}
+          class="rounded-none border-0 bg-transparent shadow-none"
         >
-          <:toolbar position="bottom">
-            <.group label="Block formatting">
-              <.toolbar_heading level={2} />
+          <:toolbar position="bubble">
+            <.group label="Text formatting">
               <.toolbar_paragraph />
+              <.toolbar_heading level={1} />
+              <.toolbar_heading level={2} />
+              <.toolbar_bold />
+              <.toolbar_italic />
+              <.toolbar_underline />
+              <.toolbar_strike />
+              <.toolbar_link />
+            </.group>
+            <.group label="Blocks">
               <.toolbar_bullet_list />
+              <.toolbar_ordered_list />
               <.toolbar_task_list />
+              <.toolbar_blockquote />
+              <.toolbar_code_block />
             </.group>
           </:toolbar>
           <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-          <:content />
+          <:content class="mui-outliner-content" />
         </.rich_editor>
         '''
       }
     >
       <.rich_editor
-        id="draggable-editor"
-        value={@draggable_content}
+        id="outliner-editor"
+        value={@outliner_content}
+        class="rounded-none border-0 bg-transparent shadow-none"
       >
-        <:toolbar position="bottom">
-          <.group label="Block formatting">
-            <.toolbar_heading level={2} />
+        <:toolbar position="bubble">
+          <.group label="Text formatting">
             <.toolbar_paragraph />
+            <.toolbar_heading level={1} />
+            <.toolbar_heading level={2} />
+            <.toolbar_bold />
+            <.toolbar_italic />
+            <.toolbar_underline />
+            <.toolbar_strike />
+            <.toolbar_link />
+          </.group>
+          <.group label="Blocks">
             <.toolbar_bullet_list />
+            <.toolbar_ordered_list />
             <.toolbar_task_list />
+            <.toolbar_blockquote />
+            <.toolbar_code_block />
           </.group>
         </:toolbar>
         <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-        <:content />
+        <:content class="mui-outliner-content" />
       </.rich_editor>
     </.example>
 
     <.example
       locale={@locale}
       title="Realtime collaboration"
-      description="Open this page in two tabs. Phoenix Channels synchronize Yjs content, selections, names, and colored cursors."
+      description="Open this page in two tabs. Phoenix Channels synchronize Yjs content, animated block reordering, selections, names, and colored cursors."
       class="flex-col items-stretch gap-3"
       code={
         ~S'''
@@ -277,7 +301,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
             </.group>
           </:toolbar>
           <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-          <:content class="mui-notion-editor-content" />
+          <:content class="text-left" />
         </.rich_editor>
         '''
       }
@@ -307,7 +331,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
           </.group>
         </:toolbar>
         <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
-        <:content class="mui-notion-editor-content" />
+        <:content class="text-left" />
       </.rich_editor>
     </.example>
 
@@ -326,6 +350,7 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
         {"user_name", "string", "initial collaboration display name"},
         {"user_color", "string", "initial collaboration cursor color"},
         {"user_input_id", "string", "id of an input that edits the display name"},
+        {"block_animation_duration", "integer", "local and remote block animation duration"},
         {"class", "string", "merged with the root editor classes"},
         {":toolbar", "slot", "toolbar content with top, bottom, or bubble position"},
         {":drag_handle", "slot", "optional draggable block handle template"},
@@ -346,13 +371,17 @@ defmodule MatriarchUIDocsWeb.Examples.RichEditor do
     document([paragraph("Select any part of this sentence.")])
   end
 
-  defp draggable_content do
+  defp outliner_content do
     document([
-      heading(2, "Project notes"),
-      paragraph("Drag this paragraph by its handle."),
+      heading(1, "Project outline"),
+      paragraph("Select text to open the bubble toolbar. Drag any block by its handle."),
       %{
         type: "bulletList",
-        content: [%{type: "listItem", content: [paragraph("Nested blocks are supported")]}]
+        content: [
+          %{type: "listItem", content: [paragraph("Research the problem")]},
+          %{type: "listItem", content: [paragraph("Write the first draft")]},
+          %{type: "listItem", content: [paragraph("Share it with the team")]}
+        ]
       }
     ])
   end

@@ -31,7 +31,6 @@ defmodule MatriarchUIDocsWeb.DocsI18n do
     "list" => "Список",
     "listbox" => "Список выбора",
     "modal" => "Модальное окно",
-    "notion-editor" => "Notion-редактор",
     "number-input" => "Числовое поле",
     "pagination" => "Пагинация",
     "password-input" => "Поле пароля",

@@ -31,7 +31,6 @@ defmodule MatriarchUIDocsWeb.Registry do
     %{slug: "list", title: "List", module: Examples.List},
     %{slug: "listbox", title: "Listbox", module: Examples.Listbox},
     %{slug: "modal", title: "Modal", module: Examples.Modal},
-    %{slug: "notion-editor", title: "Notion Editor", module: Examples.NotionEditor},
     %{slug: "number-input", title: "Number Input", module: Examples.NumberInput},
     %{slug: "pagination", title: "Pagination", module: Examples.Pagination},
     %{slug: "password-input", title: "Password Input", module: Examples.PasswordInput},

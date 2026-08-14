@@ -22,10 +22,10 @@ defmodule MatriarchUI.Icon do
 
   @icons Map.new(@icon_paths, fn {name, path} -> {name, File.read!(path)} end)
 
-  attr :name, :string, required: true, values: @names
-  attr :label, :string, default: nil
-  attr :class, :string, default: nil
-  attr :rest, :global
+  attr(:name, :string, required: true, values: @names)
+  attr(:label, :string, default: nil)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global)
 
   def icon(assigns) do
     assigns = assign(assigns, :svg, Map.fetch!(@icons, assigns.name))
@@ -36,7 +36,7 @@ defmodule MatriarchUI.Icon do
       role={@label && "img"}
       aria-label={@label}
       aria-hidden={to_string(is_nil(@label))}
-      class={CN.cn(["inline-flex size-4 shrink-0 [&>svg]:size-full", @class])}
+      class={CN.cn(["inline-flex size-4 shrink-0 [&>svg]:size-full [&>svg]:fill-current", @class])}
       {@rest}
     >
       {Phoenix.HTML.raw(@svg)}

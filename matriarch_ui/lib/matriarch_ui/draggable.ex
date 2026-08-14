@@ -11,11 +11,14 @@ defmodule MatriarchUI.Draggable do
   attr(:name, :string, default: nil)
   attr(:collaboration_socket, :string, default: "/editor_socket")
   attr(:document, :string, default: nil)
-  attr(:animation_duration, :integer, default: 180)
-  attr(:placeholder_label, :string, default: "Drop here")
+  attr(:animation_duration, :integer, default: 240)
   attr(:disabled, :boolean, default: false)
   attr(:class, :string, default: nil)
   attr(:item_class, :string, default: nil)
+
+  slot :preview do
+    attr(:class, :string)
+  end
 
   slot :item, required: true do
     attr(:id, :string, required: true)
@@ -24,7 +27,14 @@ defmodule MatriarchUI.Draggable do
   end
 
   def draggable(assigns) do
-    assigns = assign(assigns, :order_json, Jason.encode!(Enum.map(assigns.item, & &1.id)))
+    preview = List.first(assigns.preview)
+
+    assigns =
+      assign(assigns,
+        order_json: Jason.encode!(Enum.map(assigns.item, & &1.id)),
+        preview_class: preview && Map.get(preview, :class),
+        preview_content?: preview && Map.get(preview, :inner_block)
+      )
 
     ~H"""
     <div
@@ -55,9 +65,16 @@ defmodule MatriarchUI.Draggable do
         <div
           data-mui-draggable-placeholder
           aria-hidden="true"
-          class="flex min-h-12 items-center justify-center rounded-mui-lg border-2 border-dashed border-mui-accent bg-mui-accent-subtle px-3 text-xs font-medium text-mui-accent-subtle-foreground"
+          class={
+            CN.cn([
+              "min-h-2 rounded-mui-md border border-mui-border-strong bg-mui-surface-hover",
+              @preview_class
+            ])
+          }
         >
-          {@placeholder_label}
+          <%= if @preview_content? do %>
+            {render_slot(@preview)}
+          <% end %>
         </div>
       </template>
       <div
@@ -94,7 +111,7 @@ defmodule MatriarchUI.Draggable do
       class={
         CN.cn([
           "mui-drag-handle flex size-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-mui-md",
-          "text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground",
+          "text-mui-foreground hover:bg-mui-surface-hover hover:text-mui-foreground",
           "active:cursor-grabbing disabled:pointer-events-none disabled:opacity-40",
           @class
         ])
@@ -141,10 +158,15 @@ defmodule MatriarchUI.Draggable do
         mounted() {
           this.items = () => Array.from(this.el.querySelectorAll(itemSelector))
           this.order = () => this.items().map(item => item.dataset.muiItemId)
-          this.duration = () => Number(this.el.dataset.muiAnimationDuration) || 180
+          this.duration = () => {
+            const duration = Number(this.el.dataset.muiAnimationDuration)
+            return Number.isFinite(duration) && duration >= 0 ? duration : 240
+          }
+          this.easing = getComputedStyle(document.documentElement).getPropertyValue("--ease-mui-out").trim() || "cubic-bezier(0.4, 0.36, 0, 1)"
+          this.motionEnabled = () => this.duration() > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches
           this.positions = () => new Map(this.items().filter(item => item !== this.dragged).map(item => [item, item.getBoundingClientRect()]))
           this.animateFrom = (positions) => {
-            if (matchMedia("(prefers-reduced-motion: reduce)").matches) return
+            if (!this.motionEnabled()) return
             this.items().forEach((item) => {
               const previous = positions.get(item)
               if (!previous || item === this.dragged) return
@@ -154,7 +176,7 @@ defmodule MatriarchUI.Draggable do
               if (x === 0 && y === 0) return
               item.animate(
                 [{transform: `translate(${x}px, ${y}px)`}, {transform: "translate(0, 0)"}],
-                {duration: this.duration(), easing: "cubic-bezier(0.4, 0.36, 0, 1)"},
+                {duration: this.duration(), easing: this.easing},
               )
             })
           }
@@ -237,13 +259,13 @@ defmodule MatriarchUI.Draggable do
             this.placeholder = null
             this.dragged = null
             this.animateFrom(positions)
-            if (commit) {
+            if (commit && this.motionEnabled()) {
               item.animate([{opacity: 0, transform: "scale(0.98)"}, {opacity: 1, transform: "scale(1)"}], {
                 duration: this.duration(),
-                easing: "cubic-bezier(0.4, 0.36, 0, 1)",
+                easing: this.easing,
               })
-              this.notify(item, this.previousIndex, "local")
             }
+            if (commit) this.notify(item, this.previousIndex, "local")
             if (this.pendingOrder) {
               const order = this.pendingOrder
               this.pendingOrder = null

@@ -101,16 +101,21 @@ Phoenix Channels when `document` is set:
 </.draggable>
 ```
 
-`<.notion_editor>` composes the RichEditor, grouped bubble toolbar, and the same
-draggable handle primitive. Set `document` to enable realtime Yjs content,
-cursor, name, and text-selection synchronization:
+An outliner is composed directly from `RichEditor`, the grouped bubble toolbar,
+and its draggable block handle:
 
 ```heex
-<.notion_editor
-  id="team-page"
-  document="team-page-42"
-  user_input_id="collaborator-name"
-/>
+<.rich_editor id="outliner" value={@content}>
+  <:toolbar position="bubble">
+    <.group label="Text formatting">
+      <.toolbar_heading level={2} />
+      <.toolbar_bold />
+      <.toolbar_italic />
+    </.group>
+  </:toolbar>
+  <:drag_handle><.rich_editor_drag_handle /></:drag_handle>
+  <:content class="mui-outliner-content" />
+</.rich_editor>
 ```
 
 Realtime collaboration uses Yjs binary updates over Phoenix Channels and needs

@@ -662,22 +662,22 @@
     border-radius: var(--radius-mui-md);
   }
 
-  .mui-notion-editor-content {
+  .mui-outliner-content {
     margin-inline: auto;
     max-width: 46rem;
   }
 
-  .mui-notion-editor-content .mui-rich-editor-content {
+  .mui-outliner-content .mui-rich-editor-content {
     padding: 4rem 6rem;
   }
 
-  .mui-notion-editor-content .mui-rich-editor-content h1 {
+  .mui-outliner-content .mui-rich-editor-content h1 {
     font-size: 2.25rem;
     font-weight: 700;
     line-height: 1.2;
   }
 
-  .mui-notion-editor-content .mui-rich-editor-content h2 {
+  .mui-outliner-content .mui-rich-editor-content h2 {
     font-size: 1.5rem;
     font-weight: 650;
   }

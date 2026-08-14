@@ -35,7 +35,6 @@ defmodule MatriarchUI do
       import MatriarchUI.List
       import MatriarchUI.Listbox
       import MatriarchUI.Modal
-      import MatriarchUI.NotionEditor
       import MatriarchUI.NumberInput
       import MatriarchUI.Pagination
       import MatriarchUI.PasswordInput

@@ -5,31 +5,32 @@ defmodule MatriarchUI.RichEditor do
 
   @empty_document %{"type" => "doc", "content" => [%{"type" => "paragraph"}]}
 
-  attr :id, :string, required: true
-  attr :field, Phoenix.HTML.FormField
-  attr :name, :any, default: nil
-  attr :value, :any, default: nil
-  attr :editable, :boolean, default: true
-  attr :label, :string, default: "Rich text editor"
-  attr :placeholder, :string, default: "Write something…"
-  attr :character_limit, :integer, default: nil
-  attr :collaboration_socket, :string, default: "/editor_socket"
-  attr :document, :string, default: nil
-  attr :user_name, :string, default: nil
-  attr :user_color, :string, default: nil
-  attr :user_input_id, :string, default: nil
-  attr :class, :string, default: nil
-  attr :rest, :global
+  attr(:id, :string, required: true)
+  attr(:field, Phoenix.HTML.FormField)
+  attr(:name, :any, default: nil)
+  attr(:value, :any, default: nil)
+  attr(:editable, :boolean, default: true)
+  attr(:label, :string, default: "Rich text editor")
+  attr(:placeholder, :string, default: "Write something…")
+  attr(:character_limit, :integer, default: nil)
+  attr(:collaboration_socket, :string, default: "/editor_socket")
+  attr(:document, :string, default: nil)
+  attr(:user_name, :string, default: nil)
+  attr(:user_color, :string, default: nil)
+  attr(:user_input_id, :string, default: nil)
+  attr(:block_animation_duration, :integer, default: 240)
+  attr(:class, :string, default: nil)
+  attr(:rest, :global)
 
   slot :toolbar, required: true do
-    attr :position, :string, values: ~w(top bottom bubble)
-    attr :class, :string
+    attr(:position, :string, values: ~w(top bottom bubble))
+    attr(:class, :string)
   end
 
-  slot :drag_handle
+  slot(:drag_handle)
 
   slot :content, required: true do
-    attr :class, :string
+    attr(:class, :string)
   end
 
   def rich_editor(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
@@ -66,6 +67,7 @@ defmodule MatriarchUI.RichEditor do
       data-mui-user-name={@user_name}
       data-mui-user-color={@user_color}
       data-mui-user-input-id={@user_input_id}
+      data-mui-block-animation-duration={@block_animation_duration}
       phx-hook=".MUIRichEditor"
       phx-update="ignore"
       class={CN.cn(["flex flex-col rounded-mui-lg border border-mui-border bg-mui-surface", @class])}
@@ -91,7 +93,7 @@ defmodule MatriarchUI.RichEditor do
     """
   end
 
-  attr :rest, :global
+  attr(:rest, :global)
 
   def hook(assigns) do
     ~H"""
@@ -129,6 +131,51 @@ defmodule MatriarchUI.RichEditor do
 
       function collaboratorColor(value) {
         return value || "#6c47ff"
+      }
+
+      function blockPositions(editor) {
+        const positions = new Map()
+        const occurrences = new Map()
+
+        editor.state.doc.forEach((node, offset) => {
+          const element = editor.view.nodeDOM(offset)
+          if (!(element instanceof Element)) return
+          const signature = JSON.stringify(node.toJSON())
+          const occurrence = occurrences.get(signature) || 0
+          occurrences.set(signature, occurrence + 1)
+          positions.set(`${signature}:${occurrence}`, {
+            element,
+            rect: element.getBoundingClientRect(),
+          })
+        })
+
+        return positions
+      }
+
+      function animateBlocks(previous, current, duration, easing) {
+        if (duration <= 0 || matchMedia("(prefers-reduced-motion: reduce)").matches) return
+        const blockCountChanged = previous.size !== current.size
+
+        current.forEach(({element, rect}, key) => {
+          const before = previous.get(key)
+          if (!before) {
+            if (blockCountChanged) {
+              element.animate([{opacity: 0, transform: "scale(0.985)"}, {opacity: 1, transform: "scale(1)"}], {
+                duration,
+                easing,
+              })
+            }
+            return
+          }
+
+          const x = before.rect.left - rect.left
+          const y = before.rect.top - rect.top
+          if (x === 0 && y === 0) return
+          element.animate(
+            [{transform: `translate(${x}px, ${y}px)`}, {transform: "translate(0, 0)"}],
+            {duration, easing},
+          )
+        })
       }
 
       function activeState(editor, command, value) {
@@ -328,6 +375,26 @@ defmodule MatriarchUI.RichEditor do
           this.editable = editable
           this.provider = collaboration.provider
           this.releaseCollaborationSocket = collaboration.release
+          this.blockPositions = new Map()
+          this.blockAnimationFrame = null
+          this.blockAnimationEasing = getComputedStyle(document.documentElement).getPropertyValue("--ease-mui-out").trim() || "cubic-bezier(0.4, 0.36, 0, 1)"
+          this.captureBlockPositions = (editor = this.editor) => {
+            if (editor?.isDestroyed) return
+            this.blockPositions = blockPositions(editor)
+          }
+          this.animateBlockChanges = (editor) => {
+            if (this.blockAnimationFrame) cancelAnimationFrame(this.blockAnimationFrame)
+            const previous = this.blockPositions
+            this.blockAnimationFrame = requestAnimationFrame(() => {
+              this.blockAnimationFrame = null
+              if (editor.isDestroyed) return
+              const current = blockPositions(editor)
+              const configuredDuration = Number(root.dataset.muiBlockAnimationDuration)
+              const duration = Number.isFinite(configuredDuration) && configuredDuration >= 0 ? configuredDuration : 240
+              animateBlocks(previous, current, duration, this.blockAnimationEasing)
+              this.blockPositions = current
+            })
+          }
           this.editor = new tiptap.Editor({
             element: surface,
             extensions,
@@ -341,10 +408,14 @@ defmodule MatriarchUI.RichEditor do
                 "aria-multiline": "true",
               },
             },
-            onCreate: ({editor}) => refreshToolbar(root, editor),
+            onCreate: ({editor}) => {
+              refreshToolbar(root, editor)
+              this.captureBlockPositions(editor)
+            },
             onSelectionUpdate: ({editor}) => refreshToolbar(root, editor),
             onTransaction: ({editor}) => refreshToolbar(root, editor),
             onUpdate: ({editor}) => {
+              this.animateBlockChanges(editor)
               const json = editor.getJSON()
               input.value = JSON.stringify(json)
               input.dispatchEvent(new Event("input", {bubbles: true}))
@@ -358,6 +429,7 @@ defmodule MatriarchUI.RichEditor do
           this.handleMouseDown = (event) => {
             if (event.target.closest("[data-mui-rich-command]")) event.preventDefault()
           }
+          this.handleDragStart = () => this.captureBlockPositions()
           this.handleClick = (event) => {
             const button = event.target.closest("[data-mui-rich-command]")
             if (!button || !root.contains(button)) return
@@ -381,6 +453,7 @@ defmodule MatriarchUI.RichEditor do
             this.userInput.addEventListener("input", this.handleUserInput)
           }
           root.addEventListener("mousedown", this.handleMouseDown)
+          root.addEventListener("dragstart", this.handleDragStart)
           root.addEventListener("click", this.handleClick)
         },
 
@@ -403,8 +476,10 @@ defmodule MatriarchUI.RichEditor do
 
         destroyed() {
           this.el.removeEventListener("mousedown", this.handleMouseDown)
+          this.el.removeEventListener("dragstart", this.handleDragStart)
           this.el.removeEventListener("click", this.handleClick)
           this.userInput?.removeEventListener("input", this.handleUserInput)
+          if (this.blockAnimationFrame) cancelAnimationFrame(this.blockAnimationFrame)
           this.editor?.destroy()
           this.provider?.destroy()
           this.releaseCollaborationSocket?.()
