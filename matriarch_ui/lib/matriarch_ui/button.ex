@@ -27,7 +27,7 @@ defmodule MatriarchUI.Button do
         assigns,
         :class,
         CN.cn([
-          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-mui-sm font-medium leading-none",
+          "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-mui-md border border-transparent font-medium leading-none",
           "transition-colors duration-150 disabled:pointer-events-none disabled:opacity-50",
           size_classes(assigns.size),
           variant_classes(assigns.variant),
@@ -73,20 +73,20 @@ defmodule MatriarchUI.Button do
   end
 
   defp size_classes("sm"), do: "h-7 px-2.5 text-xs gap-1"
-  defp size_classes("md"), do: "h-[30px] px-3 text-[13px] gap-1.5"
-  defp size_classes("lg"), do: "h-10 px-4 text-sm gap-2"
-  defp size_classes("icon"), do: "size-[30px] p-0"
+  defp size_classes("md"), do: "h-8 px-3 text-sm gap-2"
+  defp size_classes("lg"), do: "h-9 px-3 text-base gap-2"
+  defp size_classes("icon"), do: "size-8 p-0"
 
   defp variant_classes("solid") do
-    gloss_classes("ring-mui-primary", "bg-mui-primary", "text-mui-primary-foreground")
+    "bg-mui-primary text-mui-primary-foreground hover:bg-mui-primary-hover active:bg-mui-primary-hover"
   end
 
   defp variant_classes("outline") do
-    "border border-mui-border-strong bg-mui-surface text-mui-foreground shadow-mui-xs hover:bg-mui-surface-hover"
+    "border-mui-border bg-transparent text-mui-primary hover:bg-mui-surface-hover active:bg-mui-border"
   end
 
   defp variant_classes("ghost") do
-    "text-mui-foreground hover:bg-mui-surface-hover"
+    "text-mui-primary hover:bg-mui-surface-hover active:bg-mui-border"
   end
 
   defp variant_classes("soft") do
@@ -94,21 +94,10 @@ defmodule MatriarchUI.Button do
   end
 
   defp variant_classes("destructive") do
-    gloss_classes("ring-mui-danger", "bg-mui-danger", "text-mui-danger-foreground")
+    "bg-mui-danger text-mui-danger-foreground hover:bg-mui-danger-hover active:bg-mui-danger-hover"
   end
 
   defp variant_classes("link") do
     "h-auto! p-0! text-mui-primary underline-offset-4 hover:underline"
-  end
-
-  defp gloss_classes(ring_color, bg_color, text_color) do
-    "relative isolate overflow-hidden" <>
-      " ring-[0.5px] #{ring_color} #{bg_color} #{text_color} shadow-mui-button" <>
-      " transition duration-300 ease-mui-out" <>
-      " before:absolute before:inset-0 before:-z-10 before:rounded-[inherit] before:pointer-events-none" <>
-      " before:bg-linear-to-b before:from-white/20 before:opacity-50 before:transition-opacity" <>
-      " before:duration-300 before:ease-mui-out hover:before:opacity-100" <>
-      " after:absolute after:inset-0 after:-z-10 after:rounded-[inherit] after:pointer-events-none" <>
-      " after:bg-linear-to-b after:from-white/10 after:from-46% after:to-54% after:mix-blend-overlay"
   end
 end

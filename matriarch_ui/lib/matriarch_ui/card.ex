@@ -16,7 +16,7 @@ defmodule MatriarchUI.Card do
       data-mui
       class={
         CN.cn([
-          "rounded-mui-lg border border-mui-border bg-mui-surface text-mui-foreground shadow-mui-sm",
+          "rounded-mui-xl bg-mui-surface text-mui-foreground shadow-mui-lg",
           @class
         ])
       }

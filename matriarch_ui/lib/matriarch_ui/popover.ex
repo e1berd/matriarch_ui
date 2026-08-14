@@ -30,7 +30,7 @@ defmodule MatriarchUI.Popover do
       class={
         CN.cn([
           Floating.panel_class(),
-          "min-w-56 rounded-mui-lg border border-mui-border bg-mui-surface p-4 text-sm text-mui-foreground shadow-mui-lg",
+          "min-w-56 rounded-mui-lg bg-mui-surface p-4 text-sm text-mui-foreground shadow-mui-lg",
           @class
         ])
       }

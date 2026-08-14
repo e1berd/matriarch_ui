@@ -29,9 +29,9 @@ defmodule MatriarchUI.Avatar do
     """
   end
 
-  defp size_classes("xs"), do: "size-6 text-xs"
-  defp size_classes("sm"), do: "size-8 text-xs"
-  defp size_classes("md"), do: "size-10 text-sm"
+  defp size_classes("xs"), do: "size-5 text-[8px]"
+  defp size_classes("sm"), do: "size-7 text-[11px]"
+  defp size_classes("md"), do: "size-9 text-sm"
   defp size_classes("lg"), do: "size-12 text-base"
   defp size_classes("xl"), do: "size-16 text-lg"
 end

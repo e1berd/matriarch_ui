@@ -31,7 +31,7 @@ defmodule MatriarchUI.Modal do
       class={
         CN.cn([
           "m-auto hidden max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-mui-xl",
-          "border border-mui-border bg-mui-surface p-0 text-mui-foreground shadow-mui-xl",
+          "bg-mui-surface p-0 text-mui-foreground shadow-mui-lg",
           "open:flex",
           "scale-95 opacity-0 transition duration-150 ease-mui-out",
           "data-[mui-state=open]:scale-100 data-[mui-state=open]:opacity-100",

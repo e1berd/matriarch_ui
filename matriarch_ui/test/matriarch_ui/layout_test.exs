@@ -7,9 +7,14 @@ defmodule MatriarchUI.LayoutTest do
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
 
   test "card is a bare surface that any card_* sub-component can render into" do
-    html = render_component(&card/1, %{inner_block: [%{inner_block: fn _, _ -> "Body" end}]})
+    html =
+      render_component(&card/1, %{
+        id: "profile-card",
+        inner_block: [%{inner_block: fn _, _ -> "Body" end}]
+      })
+
     assert html =~ "Body"
-    assert query(html, "div.rounded-mui-lg") == 1
+    assert query(html, "div#profile-card[data-mui]") == 1
   end
 
   test "card_header, card_title, card_description, card_content and card_footer each render their slot" do
@@ -49,16 +54,38 @@ defmodule MatriarchUI.LayoutTest do
     assert query(html, ~s(img[src="/a.png"][alt="Ada"])) == 1
   end
 
-  test "alert exposes an alert role and the chosen title" do
+  test "alert exposes an alert role and shows a variant-appropriate icon" do
     html =
       render_component(&alert/1, %{
         variant: "danger",
-        title: "Something broke",
         inner_block: [%{inner_block: fn _, _ -> "Try again" end}]
       })
 
     assert query(html, ~s(div[role="alert"])) == 1
-    assert html =~ "Something broke"
+    assert query(html, "svg") == 1
+    assert html =~ "Try again"
+  end
+
+  test "alert_title and alert_description render their slot" do
+    assert render_component(&alert_title/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Something broke" end}]
+           }) =~ "Something broke"
+
+    assert render_component(&alert_description/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Try again" end}]
+           }) =~ "Try again"
+  end
+
+  test "a custom :icon slot overrides the variant default" do
+    html =
+      render_component(&alert/1, %{
+        icon: [
+          %{inner_block: fn _, _ -> Phoenix.HTML.raw(~s(<svg class="custom-icon"></svg>)) end}
+        ],
+        inner_block: [%{inner_block: fn _, _ -> "Body" end}]
+      })
+
+    assert query(html, "svg.custom-icon") == 1
   end
 
   test "separator exposes aria-orientation" do

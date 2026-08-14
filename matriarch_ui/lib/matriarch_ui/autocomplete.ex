@@ -52,8 +52,8 @@ defmodule MatriarchUI.Autocomplete do
         data-mui-role="listbox"
         class={
           CN.cn([
-            "h-9 w-full rounded-mui-sm border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
-            "placeholder:text-mui-subtle-foreground focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
+            "h-8 w-full rounded-mui-md border border-mui-border bg-mui-surface px-3 text-sm text-mui-foreground",
+            "placeholder:text-mui-input-placeholder focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
             @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
             @class
           ])
@@ -67,7 +67,7 @@ defmodule MatriarchUI.Autocomplete do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 min-w-48 overflow-auto rounded-mui-lg border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg"
+            "max-h-64 min-w-48 overflow-auto rounded-mui-lg bg-mui-surface p-0.5 text-sm shadow-mui-lg"
           ])
         }
       >
@@ -77,7 +77,7 @@ defmodule MatriarchUI.Autocomplete do
           tabindex="-1"
           data-mui-value={option.value}
           data-mui-label={option[:label] || option.value}
-          class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2.5 py-1.5 hover:bg-mui-surface-hover"
+          class="flex cursor-pointer items-center justify-between rounded-mui-md px-2 py-1 hover:bg-mui-surface-hover"
         >
           {render_slot(option)}
         </div>

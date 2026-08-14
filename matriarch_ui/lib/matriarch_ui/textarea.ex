@@ -29,8 +29,8 @@ defmodule MatriarchUI.Textarea do
       aria-invalid={to_string(@invalid)}
       class={
         CN.cn([
-          "min-h-24 w-full rounded-mui-sm border border-mui-border-strong bg-mui-surface px-3 py-2 text-sm text-mui-foreground",
-          "placeholder:text-mui-subtle-foreground focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/30",
+          "min-h-24 w-full rounded-mui-md border border-mui-border bg-mui-surface px-3 py-2 text-sm text-mui-foreground",
+          "placeholder:text-mui-input-placeholder focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/30",
           "disabled:cursor-not-allowed disabled:opacity-50",
           @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
           @class

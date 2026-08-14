@@ -20,11 +20,17 @@ defmodule MatriarchUI do
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
       import MatriarchUI.Input
+      import MatriarchUI.Listbox
       import MatriarchUI.Modal
+      import MatriarchUI.Pagination
       import MatriarchUI.Popover
       import MatriarchUI.RadioGroup
+      import MatriarchUI.ScrollArea
       import MatriarchUI.Select
       import MatriarchUI.Separator
+      import MatriarchUI.Sidebar
+      import MatriarchUI.Slider
+      import MatriarchUI.Splitter
       import MatriarchUI.Switch
       import MatriarchUI.Tabs
       import MatriarchUI.Textarea

@@ -17,7 +17,7 @@ defmodule MatriarchUI.Badge do
       data-mui
       class={
         CN.cn([
-          "inline-flex items-center gap-1 rounded-mui-full px-2.5 py-0.5 text-xs font-medium",
+          "inline-flex h-5 items-center gap-1 rounded-mui-full px-2 text-xs font-medium",
           variant_classes(@variant),
           @class
         ])
@@ -30,7 +30,7 @@ defmodule MatriarchUI.Badge do
   end
 
   defp variant_classes("neutral"), do: "bg-mui-surface-hover text-mui-muted-foreground"
-  defp variant_classes("primary"), do: "bg-mui-primary-subtle text-mui-primary-subtle-foreground"
+  defp variant_classes("primary"), do: "bg-mui-primary text-mui-primary-foreground"
 
   defp variant_classes("success") do
     "bg-mui-success-subtle text-mui-success border border-mui-success-border"

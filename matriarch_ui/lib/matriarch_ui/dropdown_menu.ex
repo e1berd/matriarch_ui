@@ -37,7 +37,7 @@ defmodule MatriarchUI.DropdownMenu do
       class={
         CN.cn([
           Floating.panel_class(),
-          "min-w-48 rounded-mui-lg border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg",
+          "min-w-48 rounded-mui-lg bg-mui-surface p-0.5 text-sm shadow-mui-lg",
           @class
         ])
       }
@@ -51,7 +51,7 @@ defmodule MatriarchUI.DropdownMenu do
         tabindex="-1"
         data-mui-close
         class={[
-          "flex w-full items-center gap-2 rounded-mui-sm px-2.5 py-1.5 text-left outline-none",
+          "flex w-full items-center gap-1 rounded-mui-md px-2 py-1 text-left outline-none",
           "hover:bg-mui-surface-hover focus:bg-mui-surface-hover",
           item[:variant] == "danger" && "text-mui-danger"
         ]}

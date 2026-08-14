@@ -14,97 +14,99 @@
 @theme {
   --font-mui-sans: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Inter", sans-serif;
 
-  --color-mui-background: #f8f9fb;
-  --color-mui-surface: #ffffff;
-  --color-mui-surface-hover: #f3f4f6;
-  --color-mui-foreground: #0f172a;
-  --color-mui-muted-foreground: #4b5563;
-  --color-mui-subtle-foreground: #9ca3af;
-  --color-mui-border: #e4e7ec;
-  --color-mui-border-strong: #d1d5db;
-  --color-mui-overlay: rgb(15 23 42 / 55%);
+  --color-mui-background: oklch(0.985 0 0);
+  --color-mui-surface: oklch(1 0 0);
+  --color-mui-surface-hover: oklch(0.97 0 0);
+  --color-mui-foreground: oklch(0.145 0 0);
+  --color-mui-muted-foreground: oklch(0.556 0 0);
+  --color-mui-subtle-foreground: oklch(0.5697 0.0246 279.94);
+  --color-mui-input-placeholder: #a3a3a3;
+  --color-mui-border: oklch(0.9219 0 0);
+  --color-mui-border-strong: oklch(0.9219 0 0);
+  --color-mui-overlay: rgb(47 48 55 / 45%);
 
-  --color-mui-primary: #7c3aed;
-  --color-mui-primary-hover: #6d28d9;
-  --color-mui-primary-foreground: #ffffff;
-  --color-mui-primary-subtle: #f5f3ff;
-  --color-mui-primary-subtle-foreground: #6d28d9;
+  --color-mui-primary: oklch(0.205 0 0);
+  --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
+  --color-mui-primary-foreground: oklch(0.985 0 0);
+  --color-mui-primary-subtle: oklch(0.9583 0.0214 291.74);
+  --color-mui-primary-subtle-foreground: oklch(0.205 0 0);
 
-  --color-mui-accent: #d97706;
-  --color-mui-accent-hover: #b45309;
+  --color-mui-accent: #6c47ff;
+  --color-mui-accent-hover: #5f3ee8;
   --color-mui-accent-foreground: #ffffff;
-  --color-mui-accent-subtle: #fef3c7;
-  --color-mui-accent-subtle-foreground: #92400e;
+  --color-mui-accent-subtle: oklch(0.9583 0.0214 291.74);
+  --color-mui-accent-subtle-foreground: #5f3ee8;
 
-  --color-mui-success: #16a34a;
-  --color-mui-success-subtle: #f0fdf4;
-  --color-mui-success-border: #bbf7d0;
+  --color-mui-success: oklch(0.548 0.153 152.535);
+  --color-mui-success-subtle: oklch(0.9859 0.0164 156.92);
+  --color-mui-success-border: color-mix(in oklab, var(--color-mui-success), transparent 82%);
 
-  --color-mui-warning: #d97706;
-  --color-mui-warning-subtle: #fffbeb;
-  --color-mui-warning-border: #fde68a;
+  --color-mui-warning: oklch(0.646 0.222 41.116);
+  --color-mui-warning-subtle: oklch(0.9799 0.0147 70.89);
+  --color-mui-warning-border: color-mix(in oklab, var(--color-mui-warning), transparent 82%);
 
-  --color-mui-danger: #dc2626;
-  --color-mui-danger-hover: #b91c1c;
-  --color-mui-danger-foreground: #ffffff;
-  --color-mui-danger-subtle: #fef2f2;
-  --color-mui-danger-border: #fecaca;
+  --color-mui-danger: oklch(0.577 0.245 27.325);
+  --color-mui-danger-hover: color-mix(in oklab, var(--color-mui-danger), var(--color-mui-danger-foreground) 12%);
+  --color-mui-danger-foreground: oklch(0.985 0 0);
+  --color-mui-danger-subtle: oklch(0.9757 0.0118 17.36);
+  --color-mui-danger-border: color-mix(in oklab, var(--color-mui-danger), transparent 82%);
 
   --color-mui-ring: var(--color-mui-primary);
 
-  --radius-mui-xs: 4px;
-  --radius-mui-sm: 6px;
-  --radius-mui-md: 8px;
-  --radius-mui-lg: 12px;
-  --radius-mui-xl: 16px;
+  --radius-mui-xs: 2px;
+  --radius-mui-sm: 4px;
+  --radius-mui-md: 6px;
+  --radius-mui-lg: 8px;
+  --radius-mui-xl: 12px;
   --radius-mui-full: 9999px;
 
-  --shadow-mui-xs: 0 1px 1px rgb(15 23 42 / 5%);
-  --shadow-mui-sm: 0 1px 2px rgb(15 23 42 / 8%), 0 0 0 1px rgb(15 23 42 / 4%);
-  --shadow-mui-md: 0 2px 8px rgb(15 23 42 / 8%), 0 0 0 1px rgb(15 23 42 / 4%);
-  --shadow-mui-lg: 0 8px 24px rgb(15 23 42 / 12%), 0 0 0 1px rgb(15 23 42 / 4%);
-  --shadow-mui-xl: 0 16px 48px rgb(15 23 42 / 18%), 0 0 0 1px rgb(15 23 42 / 4%);
-  --shadow-mui-button: inset 0 1px 0 rgb(255 255 255 / 7%), 0 1px 3px rgb(15 23 42 / 20%);
+  --shadow-mui-xs: 0 1px 1px oklch(0.2046 0 0 / 5%);
+  --shadow-mui-sm: 0 1px 2px oklch(0.2046 0 0 / 8%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
+  --shadow-mui-md: 0 4px 8px -4px oklch(0.2046 0 0 / 10%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
+  --shadow-mui-lg: 0 12px 12px -7px oklch(0.2046 0 0 / 12%), 0 24px 24px -10px oklch(0.2046 0 0 / 4%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
+  --shadow-mui-xl: 0 16px 48px oklch(0.2046 0 0 / 18%), 0 0 0 1px oklch(0.2046 0 0 / 4%);
+  --shadow-mui-button: none;
 
   --ease-mui-out: cubic-bezier(0.4, 0.36, 0, 1);
 }
 
 :root[data-theme="dark"] {
-  --color-mui-background: #0b1220;
-  --color-mui-surface: #111827;
-  --color-mui-surface-hover: #1f2937;
-  --color-mui-foreground: #f1f5f9;
-  --color-mui-muted-foreground: #94a3b8;
-  --color-mui-subtle-foreground: #64748b;
-  --color-mui-border: #1f2937;
-  --color-mui-border-strong: #334155;
+  --color-mui-background: oklch(0.205 0 0);
+  --color-mui-surface: oklch(0.205 0 0);
+  --color-mui-surface-hover: oklch(0.269 0 0);
+  --color-mui-foreground: oklch(0.985 0 0);
+  --color-mui-muted-foreground: oklch(0.708 0 0);
+  --color-mui-subtle-foreground: oklch(0.6953 0.0261 285.7);
+  --color-mui-input-placeholder: #a3a3a3;
+  --color-mui-border: oklch(0.3715 0 0);
+  --color-mui-border-strong: oklch(0.3715 0 0);
   --color-mui-overlay: rgb(0 0 0 / 65%);
 
-  --color-mui-primary: #a78bfa;
-  --color-mui-primary-hover: #c4b5fd;
-  --color-mui-primary-foreground: #1e1033;
-  --color-mui-primary-subtle: #241246;
-  --color-mui-primary-subtle-foreground: #c4b5fd;
+  --color-mui-primary: oklch(0.922 0 0);
+  --color-mui-primary-hover: color-mix(in oklab, var(--color-mui-primary), var(--color-mui-primary-foreground) 12%);
+  --color-mui-primary-foreground: oklch(0.205 0 0);
+  --color-mui-primary-subtle: oklch(0.3097 0.1008 285.05);
+  --color-mui-primary-subtle-foreground: oklch(0.96 0 0);
 
-  --color-mui-accent: #f59e0b;
-  --color-mui-accent-hover: #fbbf24;
-  --color-mui-accent-foreground: #0b1220;
-  --color-mui-accent-subtle: #451a03;
-  --color-mui-accent-subtle-foreground: #fcd34d;
+  --color-mui-accent: #a78bfa;
+  --color-mui-accent-hover: #c4b5fd;
+  --color-mui-accent-foreground: oklch(0.205 0 0);
+  --color-mui-accent-subtle: oklch(0.3097 0.1008 285.05);
+  --color-mui-accent-subtle-foreground: #c4b5fd;
 
-  --color-mui-success: #4ade80;
-  --color-mui-success-subtle: #052e16;
-  --color-mui-success-border: #166534;
+  --color-mui-success: oklch(0.696 0.17 162.48);
+  --color-mui-success-subtle: oklch(0.3297 0.052 152.31);
+  --color-mui-success-border: color-mix(in oklab, var(--color-mui-success), transparent 72%);
 
-  --color-mui-warning: #fbbf24;
-  --color-mui-warning-subtle: #451a03;
-  --color-mui-warning-border: #92400e;
+  --color-mui-warning: oklch(0.75 0.183 55.934);
+  --color-mui-warning-subtle: oklch(0.2725 0.0547 55.7);
+  --color-mui-warning-border: color-mix(in oklab, var(--color-mui-warning), transparent 72%);
 
-  --color-mui-danger: #f87171;
-  --color-mui-danger-hover: #fca5a5;
-  --color-mui-danger-foreground: #450a0a;
-  --color-mui-danger-subtle: #450a0a;
-  --color-mui-danger-border: #991b1b;
+  --color-mui-danger: oklch(0.637 0.237 25.331);
+  --color-mui-danger-hover: color-mix(in oklab, var(--color-mui-danger), var(--color-mui-danger-foreground) 12%);
+  --color-mui-danger-foreground: oklch(0.985 0 0);
+  --color-mui-danger-subtle: oklch(0.255 0.0604 22.31);
+  --color-mui-danger-border: color-mix(in oklab, var(--color-mui-danger), transparent 72%);
 
   --shadow-mui-xs: 0 1px 1px rgb(0 0 0 / 20%);
   --shadow-mui-sm: 0 1px 2px rgb(0 0 0 / 30%), 0 0 0 1px rgb(255 255 255 / 6%);
@@ -122,5 +124,64 @@
   [data-mui]:focus-visible {
     outline: 2px solid var(--color-mui-ring);
     outline-offset: 2px;
+  }
+
+  /* ::-webkit-slider-thumb/::-moz-range-* aren't reachable via Tailwind utilities; used by MatriarchUI.Slider. */
+  input.mui-slider {
+    appearance: none;
+    width: 100%;
+    height: 1.25rem;
+    background: transparent;
+    --mui-slider-fill: 0%;
+  }
+
+  input.mui-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: var(--radius-mui-full);
+    background: linear-gradient(
+      to right,
+      var(--color-mui-primary) var(--mui-slider-fill),
+      var(--color-mui-border-strong) var(--mui-slider-fill)
+    );
+  }
+
+  input.mui-slider::-moz-range-track {
+    height: 6px;
+    border-radius: var(--radius-mui-full);
+    background: var(--color-mui-border-strong);
+  }
+
+  input.mui-slider::-moz-range-progress {
+    height: 6px;
+    border-radius: var(--radius-mui-full);
+    background: var(--color-mui-primary);
+  }
+
+  input.mui-slider::-webkit-slider-thumb {
+    appearance: none;
+    margin-top: -6px;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-mui-full);
+    background: var(--color-mui-surface);
+    border: 2px solid var(--color-mui-primary);
+    box-shadow: var(--shadow-mui-sm);
+    cursor: pointer;
+  }
+
+  input.mui-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-mui-full);
+    background: var(--color-mui-surface);
+    border: 2px solid var(--color-mui-primary);
+    box-shadow: var(--shadow-mui-sm);
+    cursor: pointer;
+    box-sizing: border-box;
+  }
+
+  input.mui-slider:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }

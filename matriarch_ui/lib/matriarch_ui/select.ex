@@ -50,7 +50,7 @@ defmodule MatriarchUI.Select do
         data-mui-value-target={"#{@id}-value"}
         class={
           CN.cn([
-            "flex h-9 w-full items-center justify-between gap-2 rounded-mui-sm border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
+            "flex h-8 w-full items-center justify-between gap-2 rounded-mui-md border border-mui-border bg-mui-surface px-3 text-sm text-mui-foreground",
             "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
             @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
             @class
@@ -70,7 +70,7 @@ defmodule MatriarchUI.Select do
         class={
           CN.cn([
             Floating.panel_class(),
-            "max-h-64 min-w-48 overflow-auto rounded-mui-lg border border-mui-border bg-mui-surface p-1 text-sm shadow-mui-lg"
+            "max-h-64 min-w-48 overflow-auto rounded-mui-lg bg-mui-surface p-0.5 text-sm shadow-mui-lg"
           ])
         }
       >
@@ -81,7 +81,7 @@ defmodule MatriarchUI.Select do
           data-mui-value={option.value}
           data-mui-label={option[:label] || option.value}
           aria-selected={to_string(to_string(@value) == to_string(option.value))}
-          class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2.5 py-1.5 hover:bg-mui-surface-hover aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
+          class="flex cursor-pointer items-center justify-between rounded-mui-md px-2 py-1 hover:bg-mui-surface-hover aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
         >
           {render_slot(option)}
         </div>
