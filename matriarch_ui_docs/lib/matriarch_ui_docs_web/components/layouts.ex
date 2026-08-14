@@ -40,7 +40,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         href="/"
         class="flex items-center gap-2 text-[13px] font-semibold tracking-tight text-mui-foreground"
       >
-        <span class="flex size-6 items-center justify-center rounded-mui-sm bg-mui-primary text-xs text-white shadow-mui-button [background-image:linear-gradient(180deg,var(--color-mui-primary),var(--color-mui-primary-hover))]">
+        <span class="flex size-6 items-center justify-center rounded-mui-md bg-mui-accent text-xs text-mui-accent-foreground">
           M
         </span>
         matriarchUI

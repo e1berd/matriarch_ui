@@ -21,7 +21,7 @@ defmodule MatriarchUIDocsWeb.DocsSidebar do
       <.link
         navigate={~p"/docs"}
         class={[
-          "block rounded-mui-sm px-2 py-1",
+          "block rounded-mui-md px-2 py-1",
           is_nil(@active) && "bg-mui-primary-subtle text-mui-primary-subtle-foreground",
           !is_nil(@active) &&
             "text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground"
@@ -37,7 +37,7 @@ defmodule MatriarchUIDocsWeb.DocsSidebar do
         :for={component <- @components}
         navigate={~p"/docs/components/#{component.slug}"}
         class={[
-          "block rounded-mui-sm px-2 py-1",
+          "block rounded-mui-md px-2 py-1",
           @active == component.slug && "bg-mui-primary-subtle text-mui-primary-subtle-foreground",
           @active != component.slug &&
             "text-mui-muted-foreground hover:bg-mui-surface-hover hover:text-mui-foreground"

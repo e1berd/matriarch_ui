@@ -1,0 +1,40 @@
+defmodule MatriarchUIDocsWeb.Examples.Splitter do
+  use Phoenix.Component
+  use MatriarchUI
+  import MatriarchUIDocsWeb.Showcase
+
+  def examples(assigns) do
+    ~H"""
+    <.example
+      title="Basic"
+      code={
+        ~S'''
+        <.splitter id="layout" class="h-48 rounded-mui-lg border border-mui-border">
+          <:panel default_size={30}>
+            <div class="h-full p-3 text-sm text-mui-foreground">Sidebar</div>
+          </:panel>
+          <:panel>
+            <div class="h-full p-3 text-sm text-mui-foreground">Content</div>
+          </:panel>
+        </.splitter>
+        '''
+      }
+    >
+      <.splitter id="layout" class="h-48 rounded-mui-lg border border-mui-border">
+        <:panel default_size={30}>
+          <div class="h-full p-3 text-sm text-mui-foreground">Sidebar</div>
+        </:panel>
+        <:panel>
+          <div class="h-full p-3 text-sm text-mui-foreground">Content</div>
+        </:panel>
+      </.splitter>
+    </.example>
+
+    <.props_table rows={[
+      {"orientation", "horizontal | vertical", "resize axis, defaults to horizontal"},
+      {"panel", "slot, required",
+       "one per pane; takes default_size and min_size (percent, defaults to an even split / 10)"}
+    ]} />
+    """
+  end
+end

@@ -10,22 +10,54 @@ defmodule MatriarchUIDocsWeb.Examples.Alert do
       class="flex-col items-stretch"
       code={
         ~S'''
-        <.alert>Heads up — this is an informational message.</.alert>
-        <.alert variant="success" title="Saved">Your changes were saved.</.alert>
-        <.alert variant="warning" title="Careful">This action can't be undone.</.alert>
-        <.alert variant="danger" title="Error">Something went wrong.</.alert>
+        <.alert>
+          <.alert_title>Heads up</.alert_title>
+          <.alert_description>This is an informational message.</.alert_description>
+        </.alert>
+        <.alert variant="info">
+          <.alert_title>Note</.alert_title>
+          <.alert_description>New features are available in settings.</.alert_description>
+        </.alert>
+        <.alert variant="success">
+          <.alert_title>Saved</.alert_title>
+          <.alert_description>Your changes were saved.</.alert_description>
+        </.alert>
+        <.alert variant="warning">
+          <.alert_title>Careful</.alert_title>
+          <.alert_description>This action can't be undone.</.alert_description>
+        </.alert>
+        <.alert variant="danger">
+          <.alert_title>Error</.alert_title>
+          <.alert_description>Something went wrong.</.alert_description>
+        </.alert>
         '''
       }
     >
-      <.alert>Heads up — this is an informational message.</.alert>
-      <.alert variant="success" title="Saved">Your changes were saved.</.alert>
-      <.alert variant="warning" title="Careful">This action can't be undone.</.alert>
-      <.alert variant="danger" title="Error">Something went wrong.</.alert>
+      <.alert>
+        <.alert_title>Heads up</.alert_title>
+        <.alert_description>This is an informational message.</.alert_description>
+      </.alert>
+      <.alert variant="info">
+        <.alert_title>Note</.alert_title>
+        <.alert_description>New features are available in settings.</.alert_description>
+      </.alert>
+      <.alert variant="success">
+        <.alert_title>Saved</.alert_title>
+        <.alert_description>Your changes were saved.</.alert_description>
+      </.alert>
+      <.alert variant="warning">
+        <.alert_title>Careful</.alert_title>
+        <.alert_description>This action can't be undone.</.alert_description>
+      </.alert>
+      <.alert variant="danger">
+        <.alert_title>Error</.alert_title>
+        <.alert_description>Something went wrong.</.alert_description>
+      </.alert>
     </.example>
 
     <.props_table rows={[
-      {"variant", "info | success | warning | danger", "visual style"},
-      {"title", "string", "optional bold heading above the message"},
+      {"variant", "default | info | success | warning | danger", "visual style and default icon"},
+      {"icon", "slot", "overrides the variant's default icon"},
       {"class", "string", "merged with the default classes via CN.cn/1"}
     ]} />
     """

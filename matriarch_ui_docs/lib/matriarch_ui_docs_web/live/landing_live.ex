@@ -9,14 +9,14 @@ defmodule MatriarchUIDocsWeb.LandingLive do
     ~H"""
     <Layouts.app flash={@flash}>
       <section class="relative overflow-hidden px-6 pb-16 pt-16 sm:pt-20">
-        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-primary-subtle to-transparent">
+        <div class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[420px] bg-gradient-to-b from-mui-accent-subtle to-transparent">
         </div>
         <div class="mx-auto max-w-2xl text-center">
           <span class="inline-flex items-center rounded-mui-full border border-mui-border bg-mui-surface px-2.5 py-0.5 text-xs font-medium text-mui-muted-foreground shadow-mui-xs">
             Built for Phoenix LiveView
           </span>
           <h1 class="mt-5 text-4xl font-bold tracking-tight text-mui-foreground sm:text-5xl">
-            Interfaces that feel <span class="text-mui-primary">inevitable</span>.
+            Interfaces that feel <span class="text-mui-accent">inevitable</span>.
           </h1>
           <p class="mx-auto mt-4 max-w-lg text-base text-mui-muted-foreground">
             A Clerk/Mosaic-inspired component kit for Phoenix LiveView. No daisyUI,
