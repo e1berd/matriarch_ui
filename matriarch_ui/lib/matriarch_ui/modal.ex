@@ -25,7 +25,12 @@ defmodule MatriarchUI.Modal do
         CN.cn([
           "m-auto hidden max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-mui-xl",
           "border border-mui-border bg-mui-surface p-0 text-mui-foreground shadow-mui-xl",
-          "backdrop:bg-mui-overlay open:flex",
+          "open:flex",
+          "scale-95 opacity-0 open:scale-100 open:opacity-100",
+          "open:starting:scale-95 open:starting:opacity-0",
+          "transition duration-150 ease-mui-out transition-discrete",
+          "backdrop:bg-mui-overlay backdrop:opacity-0 open:backdrop:opacity-100 open:backdrop:starting:opacity-0",
+          "backdrop:transition-opacity backdrop:duration-150 backdrop:ease-mui-out backdrop:transition-discrete",
           @class
         ])
       }

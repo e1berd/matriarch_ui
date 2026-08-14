@@ -46,6 +46,7 @@
 
   --color-mui-danger: #dc2626;
   --color-mui-danger-hover: #b91c1c;
+  --color-mui-danger-foreground: #ffffff;
   --color-mui-danger-subtle: #fef2f2;
   --color-mui-danger-border: #fecaca;
 
@@ -63,7 +64,9 @@
   --shadow-mui-md: 0 2px 8px rgb(15 23 42 / 8%), 0 0 0 1px rgb(15 23 42 / 4%);
   --shadow-mui-lg: 0 8px 24px rgb(15 23 42 / 12%), 0 0 0 1px rgb(15 23 42 / 4%);
   --shadow-mui-xl: 0 16px 48px rgb(15 23 42 / 18%), 0 0 0 1px rgb(15 23 42 / 4%);
-  --shadow-mui-button: 0 1px 2px rgb(15 23 42 / 16%), inset 0 1px 0 rgb(255 255 255 / 16%);
+  --shadow-mui-button: inset 0 1px 0 rgb(255 255 255 / 7%), 0 1px 3px rgb(15 23 42 / 20%);
+
+  --ease-mui-out: cubic-bezier(0.4, 0.36, 0, 1);
 }
 
 :root[data-theme="dark"] {
@@ -99,6 +102,7 @@
 
   --color-mui-danger: #f87171;
   --color-mui-danger-hover: #fca5a5;
+  --color-mui-danger-foreground: #450a0a;
   --color-mui-danger-subtle: #450a0a;
   --color-mui-danger-border: #991b1b;
 
@@ -107,7 +111,7 @@
   --shadow-mui-md: 0 2px 8px rgb(0 0 0 / 35%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-lg: 0 8px 24px rgb(0 0 0 / 45%), 0 0 0 1px rgb(255 255 255 / 6%);
   --shadow-mui-xl: 0 16px 48px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
-  --shadow-mui-button: 0 1px 2px rgb(0 0 0 / 35%), inset 0 1px 0 rgb(255 255 255 / 10%);
+  --shadow-mui-button: inset 0 1px 0 rgb(255 255 255 / 10%), 0 1px 3px rgb(0 0 0 / 35%);
 }
 
 @layer base {

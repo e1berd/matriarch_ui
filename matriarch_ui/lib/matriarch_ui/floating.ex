@@ -23,10 +23,14 @@ defmodule MatriarchUI.Floating do
   """
   use Phoenix.Component
 
-  @doc "Shared positioning/animation classes for a floating panel; add surface chrome on top."
+  @doc """
+  Shared positioning/animation classes for a floating panel; add surface chrome
+  on top. Uses the same `duration-150 ease-mui-out` scale+fade recipe as
+  `MatriarchUI.Modal`, so every overlay in the app opens with an identical feel.
+  """
   def panel_class do
     [
-      "fixed z-50 invisible scale-95 opacity-0 pointer-events-none transition duration-100 ease-out",
+      "fixed z-50 invisible scale-95 opacity-0 pointer-events-none transition duration-150 ease-mui-out",
       "data-[mui-state=open]:visible data-[mui-state=open]:scale-100 data-[mui-state=open]:opacity-100",
       "data-[mui-state=open]:pointer-events-auto"
     ]

@@ -9,8 +9,12 @@ defmodule MatriarchUI.Select do
   attr :value, :any, default: nil
   attr :label, :string, default: nil
   attr :placeholder, :string, default: "Select…"
-  attr :options, :list, required: true, doc: "list of `{label, value}` tuples"
   attr :class, :string, default: nil
+
+  slot :option, required: true do
+    attr :value, :string, required: true
+    attr :label, :string, doc: "plain-text mirror shown in the trigger after a client-side pick"
+  end
 
   def select(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
@@ -24,8 +28,8 @@ defmodule MatriarchUI.Select do
     assigns =
       assign(
         assigns,
-        :current_label,
-        current_label(assigns.options, assigns.value, assigns.placeholder)
+        :selected,
+        Enum.find(assigns.option, &(to_string(&1.value) == to_string(assigns.value)))
       )
 
     ~H"""
@@ -53,7 +57,8 @@ defmodule MatriarchUI.Select do
           ])
         }
       >
-        <span data-mui-select-label>{@current_label}</span>
+        <span :if={@selected} data-mui-select-label>{render_slot(@selected)}</span>
+        <span :if={!@selected} data-mui-select-label>{@placeholder}</span>
         <svg class="size-4 text-mui-subtle-foreground" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
           <path d="M5.5 7.5L10 12l4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -70,24 +75,18 @@ defmodule MatriarchUI.Select do
         }
       >
         <div
-          :for={{option_label, option_value} <- @options}
+          :for={option <- @option}
           role="option"
           tabindex="-1"
-          data-mui-value={option_value}
-          data-mui-label={option_label}
-          aria-selected={to_string(to_string(@value) == to_string(option_value))}
+          data-mui-value={option.value}
+          data-mui-label={option[:label] || option.value}
+          aria-selected={to_string(to_string(@value) == to_string(option.value))}
           class="flex cursor-pointer items-center justify-between rounded-mui-sm px-2.5 py-1.5 hover:bg-mui-surface-hover aria-selected:bg-mui-primary-subtle aria-selected:text-mui-primary-subtle-foreground"
         >
-          {option_label}
+          {render_slot(option)}
         </div>
       </div>
     </div>
     """
-  end
-
-  defp current_label(options, value, placeholder) do
-    Enum.find_value(options, placeholder, fn {label, option_value} ->
-      to_string(option_value) == to_string(value) && label
-    end)
   end
 end

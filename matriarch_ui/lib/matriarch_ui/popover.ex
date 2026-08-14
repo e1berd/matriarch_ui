@@ -11,8 +11,7 @@ defmodule MatriarchUI.Popover do
 
   def popover(assigns) do
     ~H"""
-    <button
-      type="button"
+    <div
       id={"#{@id}-trigger"}
       phx-hook="MatriarchUI.Floating.MUIFloating"
       aria-controls={"#{@id}-panel"}
@@ -23,7 +22,7 @@ defmodule MatriarchUI.Popover do
       class="inline-flex"
     >
       {render_slot(@trigger)}
-    </button>
+    </div>
     <div
       id={"#{@id}-panel"}
       role="dialog"

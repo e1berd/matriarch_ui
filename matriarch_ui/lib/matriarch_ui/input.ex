@@ -48,7 +48,7 @@ defmodule MatriarchUI.Input do
           value={Phoenix.HTML.Form.normalize_value(@type, @value)}
           class={
             CN.cn([
-              "h-9 w-full rounded-mui-md border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
+              "h-9 w-full rounded-mui-sm border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
               "placeholder:text-mui-subtle-foreground focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
               "disabled:cursor-not-allowed disabled:opacity-50",
               @leading != [] && "pl-9",

@@ -39,4 +39,25 @@ defmodule MatriarchUI.CNTest do
     assert CN.cn(["rounded-t-lg", "rounded-b-none"]) == "rounded-t-lg rounded-b-none"
     assert CN.cn(["rounded-lg", "rounded-full"]) == "rounded-full"
   end
+
+  test "an arbitrary font-size value is not mistaken for a text color" do
+    assert CN.cn(["text-[13px]", "text-mui-primary-foreground"]) ==
+             "text-[13px] text-mui-primary-foreground"
+  end
+
+  test "size-* is its own group, distinct from width and height" do
+    assert CN.cn(["size-4", "w-6"]) == "size-4 w-6"
+    assert CN.cn(["size-4", "size-6"]) == "size-6"
+  end
+
+  test "ring width and ring color are different groups and both survive" do
+    assert CN.cn(["focus-visible:ring-2 focus-visible:ring-mui-ring/30"]) ==
+             "focus-visible:ring-2 focus-visible:ring-mui-ring/30"
+
+    assert CN.cn(["ring-[0.5px]", "ring-mui-primary-hover"]) ==
+             "ring-[0.5px] ring-mui-primary-hover"
+
+    assert CN.cn(["ring-2", "ring-4"]) == "ring-4"
+    assert CN.cn(["ring-mui-primary", "ring-mui-danger"]) == "ring-mui-danger"
+  end
 end

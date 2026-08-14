@@ -23,8 +23,8 @@ defmodule MatriarchUIDocsWeb.LandingLive do
             no npm, no build step — just Elixir, Tailwind and a few colocated hooks.
           </p>
           <div class="mt-6 flex flex-wrap items-center justify-center gap-2.5">
-            <.button size="lg" navigate={~p"/docs"}>Browse the docs</.button>
-            <.button size="lg" variant="outline" href="https://github.com/e1berd/matriarch_ui">
+            <.button navigate={~p"/docs"}>Browse the docs</.button>
+            <.button variant="outline" href="https://github.com/e1berd/matriarch_ui">
               View on GitHub
             </.button>
           </div>

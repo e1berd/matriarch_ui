@@ -57,17 +57,21 @@ defmodule MatriarchUI.FormsTest do
     assert count(html, ~s(input[type="radio"][value="pro"][checked])) == 1
   end
 
-  test "select renders the trigger, hidden value input and one option per entry" do
+  test "select renders the trigger, hidden value input and one option per slot entry" do
     html =
       render_component(&select/1, %{
         id: "role",
         name: "role",
         value: "admin",
-        options: [{"Admin", "admin"}, {"Viewer", "viewer"}]
+        option: [
+          %{value: "admin", inner_block: fn _, _ -> "Admin" end},
+          %{value: "viewer", inner_block: fn _, _ -> "Viewer" end}
+        ]
       })
 
     assert count(html, ~s(input[type="hidden"][name="role"][value="admin"])) == 1
     assert count(html, ~s([role="option"])) == 2
+    assert count(html, ~s([role="option"][data-mui-value="admin"][aria-selected="true"])) == 1
     assert html =~ "Admin"
   end
 end
