@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Modal do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -40,11 +41,14 @@ defmodule MatriarchUIDocsWeb.Examples.Modal do
       </.modal>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "id passed to show_modal/1 and hide_modal/1"},
-      {"title", "string", "optional header text"},
-      {"footer", "slot", "optional footer, usually action buttons"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "id passed to show_modal/1 and hide_modal/1"},
+        {"title", "string", "optional header text"},
+        {"footer", "slot", "optional footer, usually action buttons"}
+      ]}
+    />
     """
   end
 end

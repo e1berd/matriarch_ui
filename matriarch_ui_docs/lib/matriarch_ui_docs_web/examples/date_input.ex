@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.DateInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Per-input date format"
       class="flex-col items-stretch"
       code={
@@ -40,6 +41,7 @@ defmodule MatriarchUIDocsWeb.Examples.DateInput do
     </.example>
 
     <.example
+      locale={@locale}
       title="Global default"
       description="Set the default once in the consuming application's config. An input-level format always takes precedence."
       code={
@@ -53,13 +55,16 @@ defmodule MatriarchUIDocsWeb.Examples.DateInput do
       </code>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
-      {"format", "string", "visual token order and separator, such as DD.MM.YYYY"},
-      {"min / max", "Date | ISO string", "inclusive date constraints"},
-      {"rest", "global attrs", "supports disabled, readonly, and required"},
-      {"class", "string", "merged with the default input classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
+        {"format", "string", "visual token order and separator, such as DD.MM.YYYY"},
+        {"min / max", "Date | ISO string", "inclusive date constraints"},
+        {"rest", "global attrs", "supports disabled, readonly, and required"},
+        {"class", "string", "merged with the default input classes"}
+      ]}
+    />
     """
   end
 end

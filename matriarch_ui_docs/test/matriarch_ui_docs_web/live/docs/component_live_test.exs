@@ -23,6 +23,31 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLiveTest do
     assert_patch(view, ~p"/docs/components/pagination?#{[page: 5, locale: "ru"]}")
   end
 
+  test "Russian locale translates component documentation", %{conn: conn} do
+    {:ok, _view, html} = live(conn, ~p"/docs/components/autocomplete?locale=ru")
+
+    assert html =~ "Автодополнение"
+    assert html =~ "Основной пример"
+    assert html =~ "Список открывается при фокусе"
+    assert html =~ "Описание"
+    assert html =~ "связывает name/value/invalid с формой"
+  end
+
+  test "every component has an English and Russian title", %{conn: conn} do
+    english = MatriarchUIDocsWeb.Registry.components("en")
+    russian = MatriarchUIDocsWeb.Registry.components("ru")
+
+    assert Enum.map(english, & &1.slug) == Enum.map(russian, & &1.slug)
+    assert Enum.all?(english, &(&1.title != ""))
+    assert Enum.all?(russian, &(&1.title != ""))
+    assert Enum.zip_with(english, russian, fn en, ru -> en.title != ru.title end) |> Enum.all?()
+
+    Enum.each(russian, fn component ->
+      assert {:ok, _view, html} = live(conn, "/docs/components/#{component.slug}?locale=ru")
+      assert html =~ component.title
+    end)
+  end
+
   test "pagination writes the selected page to the query string", %{conn: conn} do
     {:ok, view, _html} = live(conn, ~p"/docs/components/pagination")
 

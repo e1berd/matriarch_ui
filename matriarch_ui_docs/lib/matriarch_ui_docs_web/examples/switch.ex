@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Switch do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -30,11 +31,14 @@ defmodule MatriarchUIDocsWeb.Examples.Switch do
       </.field>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/checked from a form"},
-      {"checked", "boolean", "initial checked state"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/checked from a form"},
+        {"checked", "boolean", "initial checked state"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Avatar do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Sizes"
       code={
         ~S'''
@@ -24,12 +25,15 @@ defmodule MatriarchUIDocsWeb.Examples.Avatar do
       <.avatar size="xl" initials="AB" />
     </.example>
 
-    <.props_table rows={[
-      {"src", "string", "image URL; falls back to initials when omitted"},
-      {"initials", "string", "shown when no src is given"},
-      {"size", "xs | sm | md | lg | xl", "diameter"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"src", "string", "image URL; falls back to initials when omitted"},
+        {"initials", "string", "shown when no src is given"},
+        {"size", "xs | sm | md | lg | xl", "diameter"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

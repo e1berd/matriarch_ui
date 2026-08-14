@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.ScrollArea do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -28,13 +29,16 @@ defmodule MatriarchUIDocsWeb.Examples.ScrollArea do
       </.scroll_area>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique DOM id for the scroll behavior hook"},
-      {"orientation", "vertical | horizontal | both", "which axis scrolls, defaults to vertical"},
-      {"class", "string", "classes for the outer root — set height and width here"},
-      {"viewport_class", "string", "classes merged into the scrollable viewport"},
-      {"content_class", "string", "classes merged into the content container"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique DOM id for the scroll behavior hook"},
+        {"orientation", "vertical | horizontal | both", "which axis scrolls, defaults to vertical"},
+        {"class", "string", "classes for the outer root — set height and width here"},
+        {"viewport_class", "string", "classes merged into the scrollable viewport"},
+        {"content_class", "string", "classes merged into the content container"}
+      ]}
+    />
     """
   end
 end

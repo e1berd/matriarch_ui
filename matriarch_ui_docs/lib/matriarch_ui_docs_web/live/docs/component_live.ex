@@ -1,23 +1,30 @@
 defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
   use MatriarchUIDocsWeb, :live_view
   alias MatriarchUI.I18n
-  alias MatriarchUIDocsWeb.{DocsSidebar, Registry}
+  alias MatriarchUIDocsWeb.{DocsSidebar, ReaderPresence, Registry}
+  import MatriarchUIDocsWeb.ReaderCount
 
   def mount(%{"slug" => slug} = params, _session, socket) do
-    case Registry.fetch(slug) do
+    locale = I18n.normalize_locale(params["locale"])
+
+    case Registry.fetch(slug, locale) do
       nil ->
         {:ok, push_navigate(socket, to: ~p"/docs")}
 
       entry ->
+        {reader_topic, reader_count} = ReaderPresence.track(socket, "component:#{slug}")
+
         {:ok,
          assign(socket,
            page_title: entry.title,
            entry: entry,
-           locale: I18n.normalize_locale(params["locale"]),
+           locale: locale,
            language_paths: language_paths(slug, params),
            pagination_page: 4,
            table_page: 1,
-           table_filters: %{"query" => "", "status" => ""}
+           table_filters: %{"query" => "", "status" => ""},
+           reader_topic: reader_topic,
+           reader_count: reader_count
          )}
     end
   end
@@ -29,6 +36,7 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
         <DocsSidebar.sidebar active={@entry.slug} locale={@locale} />
         <div class="min-w-0 flex-1 border-l border-mui-border py-8 pl-7">
           <h1 class="text-2xl font-semibold tracking-tight text-mui-foreground">{@entry.title}</h1>
+          <.reader_count count={@reader_count} locale={@locale} class="mt-1.5" />
           <div class="mt-6 flex flex-col gap-8">
             {apply(@entry.module, :examples, [
               %{
@@ -77,11 +85,22 @@ defmodule MatriarchUIDocsWeb.Docs.ComponentLive do
     {:noreply, push_patch(socket, to: ~p"/docs/components/table?#{params}")}
   end
 
+  def handle_info(message, socket) do
+    if ReaderPresence.diff?(socket.assigns.reader_topic, message) do
+      {:noreply, assign(socket, reader_count: ReaderPresence.count(socket.assigns.reader_topic))}
+    else
+      {:noreply, socket}
+    end
+  end
+
   def handle_params(params, _uri, socket) do
     locale = I18n.normalize_locale(params["locale"])
+    entry = Registry.fetch(socket.assigns.entry.slug, locale)
 
     socket =
       assign(socket,
+        page_title: entry.title,
+        entry: entry,
         locale: locale,
         language_paths: language_paths(socket.assigns.entry.slug, params)
       )

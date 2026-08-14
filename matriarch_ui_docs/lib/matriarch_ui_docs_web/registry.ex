@@ -1,6 +1,7 @@
 defmodule MatriarchUIDocsWeb.Registry do
   @moduledoc "Single source of truth for the components sidebar and `/docs/components/:slug`."
   alias MatriarchUIDocsWeb.Examples
+  alias MatriarchUIDocsWeb.DocsI18n
 
   @components [
     %{slug: "accordion", title: "Accordion", module: Examples.Accordion},
@@ -50,5 +51,13 @@ defmodule MatriarchUIDocsWeb.Registry do
 
   def components, do: @components
 
+  def components(locale) do
+    Enum.map(@components, fn component ->
+      Map.put(component, :title, DocsI18n.component_title(locale, component))
+    end)
+  end
+
   def fetch(slug), do: Enum.find(@components, &(&1.slug == slug))
+
+  def fetch(slug, locale), do: Enum.find(components(locale), &(&1.slug == slug))
 end

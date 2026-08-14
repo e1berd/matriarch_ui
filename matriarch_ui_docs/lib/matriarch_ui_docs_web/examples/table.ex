@@ -73,6 +73,7 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
 
     ~H"""
     <.example
+      locale={@locale}
       title="Users"
       description="Filters submit through phx-change and are restored from query parameters by the parent LiveView."
       class="items-stretch"
@@ -174,14 +175,17 @@ defmodule MatriarchUIDocsWeb.Examples.Table do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"table", "id required", "scroll container and semantic table root"},
-      {"table_header / table_body / table_footer", "components", "semantic table sections"},
-      {"table_row / table_head / table_cell", "components",
-       "rows and cells with overrideable classes"},
-      {"table_empty", "colspan", "centered empty state row"},
-      {"table_filters", "for, id, event, target", "Phoenix form emitting phx-change and phx-submit"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"table", "id required", "scroll container and semantic table root"},
+        {"table_header / table_body / table_footer", "components", "semantic table sections"},
+        {"table_row / table_head / table_cell", "components",
+         "rows and cells with overrideable classes"},
+        {"table_empty", "colspan", "centered empty state row"},
+        {"table_filters", "for, id, event, target", "Phoenix form emitting phx-change and phx-submit"}
+      ]}
+    />
     """
   end
 

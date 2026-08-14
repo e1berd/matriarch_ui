@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.PasswordInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Visibility toggle"
       class="flex-col items-stretch"
       code={
@@ -25,12 +26,15 @@ defmodule MatriarchUIDocsWeb.Examples.PasswordInput do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
-      {"show_label / hide_label", "string", "accessible labels for the visibility button"},
-      {"rest", "global attrs", "supports autocomplete, minlength, maxlength, and required"},
-      {"class", "string", "merged with the default input classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
+        {"show_label / hide_label", "string", "accessible labels for the visibility button"},
+        {"rest", "global attrs", "supports autocomplete, minlength, maxlength, and required"},
+        {"class", "string", "merged with the default input classes"}
+      ]}
+    />
     """
   end
 end

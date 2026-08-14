@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Fieldset do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Related controls"
       description="Fieldset gives a group of related fields native semantics. Its legend names the group, while every field retains its own label."
       class="flex-col items-stretch"
@@ -40,11 +41,14 @@ defmodule MatriarchUIDocsWeb.Examples.Fieldset do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"legend", "slot", "optional native legend that names the control group"},
-      {"class", "string", "merged with the vertical group layout via CN.cn/1"},
-      {"rest", "global attrs", "supports native fieldset attributes such as disabled"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"legend", "slot", "optional native legend that names the control group"},
+        {"class", "string", "merged with the vertical group layout via CN.cn/1"},
+        {"rest", "global attrs", "supports native fieldset attributes such as disabled"}
+      ]}
+    />
     """
   end
 end

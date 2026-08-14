@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Popover do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -24,11 +25,14 @@ defmodule MatriarchUIDocsWeb.Examples.Popover do
       </.popover>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique id for the trigger/panel pair"},
-      {"placement", "string", "any .MUIFloating placement, defaults to \"bottom-start\""},
-      {"trigger", "slot, required", "the clickable trigger content"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique id for the trigger/panel pair"},
+        {"placement", "string", "any .MUIFloating placement, defaults to \"bottom-start\""},
+        {"trigger", "slot, required", "the clickable trigger content"}
+      ]}
+    />
     """
   end
 end

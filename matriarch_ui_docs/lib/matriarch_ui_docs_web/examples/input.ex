@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Input do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       class="flex-col items-stretch"
       code={
@@ -26,6 +27,7 @@ defmodule MatriarchUIDocsWeb.Examples.Input do
     </.example>
 
     <.example
+      locale={@locale}
       title="With error"
       class="flex-col items-stretch"
       code={
@@ -45,16 +47,24 @@ defmodule MatriarchUIDocsWeb.Examples.Input do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value/invalid from a form"},
-      {"type", "string", "any input type, defaults to \"text\""},
-      {"invalid", "boolean", "shows the danger border and aria-invalid"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value/invalid from a form"},
+        {"type", "string", "any input type, defaults to \"text\""},
+        {"invalid", "boolean", "shows the danger border and aria-invalid"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
 
     <p class="text-sm text-mui-muted-foreground">
-      Pair with <code>&lt;.field&gt;</code>
-      for a label and validation errors — see the Field docs page.
+      <%= if @locale == "ru" do %>
+        Используйте вместе с <code>&lt;.field&gt;</code>, чтобы добавить подпись и ошибки валидации.
+        Подробнее на странице компонента Field.
+      <% else %>
+        Pair with <code>&lt;.field&gt;</code>
+        for a label and validation errors — see the Field docs page.
+      <% end %>
     </p>
     """
   end

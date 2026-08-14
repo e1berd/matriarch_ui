@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Sidebar do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       description="On desktop the trigger collapses it to icon-only width; below the md breakpoint it becomes an off-canvas drawer."
       class="items-stretch"
@@ -82,14 +83,17 @@ defmodule MatriarchUIDocsWeb.Examples.Sidebar do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"sidebar", "id required",
-       "root; group/sidebar carries data-mui-state for descendants to key off"},
-      {"sidebar_trigger", "for required",
-       "dispatches mui:toggle-sidebar to the sidebar with that id"},
-      {"sidebar_group", "label", "optional heading, hidden while collapsed on desktop"},
-      {"sidebar_menu_item", "navigate/patch/href, active, icon slot", "a nav link row"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"sidebar", "id required",
+         "root; group/sidebar carries data-mui-state for descendants to key off"},
+        {"sidebar_trigger", "for required",
+         "dispatches mui:toggle-sidebar to the sidebar with that id"},
+        {"sidebar_group", "label", "optional heading, hidden while collapsed on desktop"},
+        {"sidebar_menu_item", "navigate/patch/href, active, icon slot", "a nav link row"}
+      ]}
+    />
     """
   end
 end

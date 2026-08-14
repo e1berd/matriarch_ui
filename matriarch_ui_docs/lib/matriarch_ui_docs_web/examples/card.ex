@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Card do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Deployment"
       description="The Vuzeno Card example reproduced with matriarchUI primitives."
       code={
@@ -87,6 +88,7 @@ defmodule MatriarchUIDocsWeb.Examples.Card do
     </.example>
 
     <.example
+      locale={@locale}
       title="Sign in"
       description="A polished authentication layout composed from Card, Button, Field and Input primitives."
       code={sign_in_code()}
@@ -145,14 +147,17 @@ defmodule MatriarchUIDocsWeb.Examples.Card do
       </.card>
     </.example>
 
-    <.props_table rows={[
-      {"card", "component", "Vuzeno-style outer surface with border, p-1 and rounded-xl"},
-      {"card_header", "component", "flex column with gap-1 and p-3"},
-      {"card_title", "component", "text-xl font-semibold"},
-      {"card_description", "component", "text-sm text-mui-muted-foreground"},
-      {"card_content", "component", "inset bordered surface with p-3 and rounded-lg"},
-      {"card_footer", "component", "flex row with px-3, pt-1.5 and pb-0.5"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"card", "component", "Vuzeno-style outer surface with border, p-1 and rounded-xl"},
+        {"card_header", "component", "flex column with gap-1 and p-3"},
+        {"card_title", "component", "text-xl font-semibold"},
+        {"card_description", "component", "text-sm text-mui-muted-foreground"},
+        {"card_content", "component", "inset bordered surface with p-3 and rounded-lg"},
+        {"card_footer", "component", "flex row with px-3, pt-1.5 and pb-0.5"}
+      ]}
+    />
     """
   end
 

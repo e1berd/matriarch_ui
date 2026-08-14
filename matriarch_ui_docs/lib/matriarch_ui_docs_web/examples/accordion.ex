@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Accordion do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Single (default)"
       description="Opening one item closes the others."
       code={
@@ -39,12 +40,15 @@ defmodule MatriarchUIDocsWeb.Examples.Accordion do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique id, prefixes every trigger/panel id"},
-      {"type", "single | multiple", "single (default) closes siblings when one opens"},
-      {"default", "list of strings", "item values open on first render"},
-      {"item", "slot, required", "one per row; takes value and title, content is the panel body"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique id, prefixes every trigger/panel id"},
+        {"type", "single | multiple", "single (default) closes siblings when one opens"},
+        {"default", "list of strings", "item values open on first render"},
+        {"item", "slot, required", "one per row; takes value and title, content is the panel body"}
+      ]}
+    />
     """
   end
 end

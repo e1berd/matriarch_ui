@@ -8,6 +8,7 @@ defmodule MatriarchUIDocsWeb.Examples.DatePicker do
 
     ~H"""
     <.example
+      locale={@locale}
       title="Calendar popover"
       class="flex-col items-stretch"
       code={
@@ -53,13 +54,16 @@ defmodule MatriarchUIDocsWeb.Examples.DatePicker do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"for", "string", "id of the separate date_input updated by the calendar"},
-      {"min / max", "Date | ISO string", "disables dates outside the inclusive range"},
-      {"locale", "string", "locale for the visible value, month, weekdays, and day labels"},
-      {"week_start", "0..6", "first weekday where 0 is Sunday; defaults to Monday"},
-      {"class", "string", "merged with the root control classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"for", "string", "id of the separate date_input updated by the calendar"},
+        {"min / max", "Date | ISO string", "disables dates outside the inclusive range"},
+        {"locale", "string", "locale for the visible value, month, weekdays, and day labels"},
+        {"week_start", "0..6", "first weekday where 0 is Sunday; defaults to Monday"},
+        {"class", "string", "merged with the root control classes"}
+      ]}
+    />
     """
   end
 end

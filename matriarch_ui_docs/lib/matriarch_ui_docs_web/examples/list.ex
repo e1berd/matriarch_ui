@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.List do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Custom items"
       class="flex-col items-stretch"
       code={
@@ -65,12 +66,15 @@ defmodule MatriarchUIDocsWeb.Examples.List do
       </.list>
     </.example>
 
-    <.props_table rows={[
-      {"list.as", "ul | ol", "semantic list element, defaults to ul"},
-      {"list_item.title / subtitle", "string", "optional primary and secondary text"},
-      {"list_item.media", "slot", "optional image, avatar, icon, or custom leading content"},
-      {"list_item.trailing", "slot", "any trailing content, including one or several buttons"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"list.as", "ul | ol", "semantic list element, defaults to ul"},
+        {"list_item.title / subtitle", "string", "optional primary and secondary text"},
+        {"list_item.media", "slot", "optional image, avatar, icon, or custom leading content"},
+        {"list_item.trailing", "slot", "any trailing content, including one or several buttons"}
+      ]}
+    />
     """
   end
 end

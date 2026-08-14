@@ -9,6 +9,7 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
 
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       description="Use the arrows or enter a page directly. The input is clamped between 1 and total_pages."
       code={
@@ -50,15 +51,18 @@ defmodule MatriarchUIDocsWeb.Examples.Pagination do
       </.pagination>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique DOM id used by the navigation controls"},
-      {"page", "integer, required", "current page, 1-indexed"},
-      {"total_pages", "integer, required", "total number of pages"},
-      {"event", "string", "phx-click event name, default \"paginate\""},
-      {"target", "any", "phx-target, e.g. @myself in a LiveComponent"},
-      {"locale", "en | ru", "translation locale loaded from the package YAML files"},
-      {"page_size", "slot", "optional page-size control shown with a translated label"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique DOM id used by the navigation controls"},
+        {"page", "integer, required", "current page, 1-indexed"},
+        {"total_pages", "integer, required", "total number of pages"},
+        {"event", "string", "phx-click event name, default \"paginate\""},
+        {"target", "any", "phx-target, e.g. @myself in a LiveComponent"},
+        {"locale", "en | ru", "translation locale loaded from the package YAML files"},
+        {"page_size", "slot", "optional page-size control shown with a translated label"}
+      ]}
+    />
     """
   end
 end

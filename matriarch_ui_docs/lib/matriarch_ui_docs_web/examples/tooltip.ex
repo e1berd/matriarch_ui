@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Tooltip do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Placements"
       code={
         ~S'''
@@ -38,12 +39,15 @@ defmodule MatriarchUIDocsWeb.Examples.Tooltip do
       </.tooltip>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique id for the trigger/panel pair"},
-      {"text", "string, required", "tooltip content"},
-      {"placement", "string",
-       "any .MUIFloating placement, or \"auto\" to pick top/bottom based on room, defaults to \"top\". Falls back to any side that fits if the requested one doesn't."}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique id for the trigger/panel pair"},
+        {"text", "string, required", "tooltip content"},
+        {"placement", "string",
+         "any .MUIFloating placement, or \"auto\" to pick top/bottom based on room, defaults to \"top\". Falls back to any side that fits if the requested one doesn't."}
+      ]}
+    />
     """
   end
 end

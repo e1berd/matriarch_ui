@@ -44,7 +44,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
       class="sticky top-0 z-40 flex h-13 items-center gap-5 border-b border-mui-border bg-mui-surface/80 px-4 backdrop-blur sm:px-6"
     >
       <a
-        href="/"
+        href={~p"/?#{locale_params(@locale)}"}
         class="flex items-center gap-2 text-[13px] font-semibold tracking-tight text-mui-foreground"
       >
         <span class="flex size-6 items-center justify-center rounded-mui-md bg-mui-accent text-xs text-mui-accent-foreground">
@@ -64,6 +64,11 @@ defmodule MatriarchUIDocsWeb.Layouts do
         </.link>
       </nav>
       <div class="ml-auto flex items-center gap-2.5">
+        <.live_component
+          module={MatriarchUIDocsWeb.SearchPalette}
+          id="docs-search"
+          locale={@locale}
+        />
         <.dropdown_menu id="docs-language" placement="bottom-end" class="min-w-32">
           <:trigger>
             <.button
@@ -87,13 +92,13 @@ defmodule MatriarchUIDocsWeb.Layouts do
         >
           GitHub
         </a>
-        <.theme_toggle />
+        <.theme_toggle locale={@locale} />
       </div>
     </header>
 
     <main>{render_slot(@inner_block)}</main>
 
-    <.flash_group flash={@flash} />
+    <.flash_group flash={@flash} locale={@locale} />
     """
   end
 
@@ -106,6 +111,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
   attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+  attr :locale, :string, default: "en"
 
   def flash_group(assigns) do
     ~H"""
@@ -116,7 +122,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
       <.flash
         id="client-error"
         kind={:error}
-        title={gettext("We can't find the internet")}
+        title={MatriarchUIDocsWeb.DocsI18n.t(@locale, "We can't find the internet")}
         phx-disconnected={
           show(".phx-client-error #client-error")
           |> JS.remove_attribute("hidden", to: ".phx-client-error #client-error")
@@ -124,14 +130,14 @@ defmodule MatriarchUIDocsWeb.Layouts do
         phx-connected={hide("#client-error") |> JS.set_attribute({"hidden", ""})}
         hidden
       >
-        {gettext("Attempting to reconnect")}
+        {MatriarchUIDocsWeb.DocsI18n.t(@locale, "Attempting to reconnect")}
         <.icon name="arrows-clockwise" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={gettext("Something went wrong!")}
+        title={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Something went wrong!")}
         phx-disconnected={
           show(".phx-server-error #server-error")
           |> JS.remove_attribute("hidden", to: ".phx-server-error #server-error")
@@ -139,7 +145,7 @@ defmodule MatriarchUIDocsWeb.Layouts do
         phx-connected={hide("#server-error") |> JS.set_attribute({"hidden", ""})}
         hidden
       >
-        {gettext("Attempting to reconnect")}
+        {MatriarchUIDocsWeb.DocsI18n.t(@locale, "Attempting to reconnect")}
         <.icon name="arrows-clockwise" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
     </div>
@@ -151,6 +157,8 @@ defmodule MatriarchUIDocsWeb.Layouts do
 
   See <head> in root.html.heex which applies the theme before page load.
   """
+  attr :locale, :string, default: "en"
+
   def theme_toggle(assigns) do
     ~H"""
     <div class="relative flex items-center rounded-mui-full border border-mui-border bg-mui-surface-hover">
@@ -158,7 +166,9 @@ defmodule MatriarchUIDocsWeb.Layouts do
       </div>
 
       <button
+        id="theme-system"
         class="z-10 flex w-1/3 cursor-pointer p-1.5"
+        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "System theme")}
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="system"
       >
@@ -166,7 +176,9 @@ defmodule MatriarchUIDocsWeb.Layouts do
       </button>
 
       <button
+        id="theme-light"
         class="z-10 flex w-1/3 cursor-pointer p-1.5"
+        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Light theme")}
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="light"
       >
@@ -174,7 +186,9 @@ defmodule MatriarchUIDocsWeb.Layouts do
       </button>
 
       <button
+        id="theme-dark"
         class="z-10 flex w-1/3 cursor-pointer p-1.5"
+        aria-label={MatriarchUIDocsWeb.DocsI18n.t(@locale, "Dark theme")}
         phx-click={JS.dispatch("phx:set-theme")}
         data-phx-theme="dark"
       >
@@ -186,6 +200,12 @@ defmodule MatriarchUIDocsWeb.Layouts do
 
   defp locale_params("ru"), do: [locale: "ru"]
   defp locale_params(_locale), do: []
+
+  defp root_locale(%{conn: conn}) do
+    MatriarchUI.I18n.normalize_locale(Map.get(conn.query_params, "locale"))
+  end
+
+  defp root_locale(_assigns), do: "en"
 
   attr :rest, :global
 

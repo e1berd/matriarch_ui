@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Choose or drop a file"
       class="flex-col items-stretch"
       code={
@@ -26,6 +27,7 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
     </.example>
 
     <.example
+      locale={@locale}
       title="Multiple files"
       class="flex-col items-stretch"
       code={
@@ -51,13 +53,16 @@ defmodule MatriarchUIDocsWeb.Examples.FileUpload do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id and validation state from a form"},
-      {"multiple", "boolean", "accepts one file by default or several files when enabled"},
-      {"event", "string", "optional LiveView event receiving selected file metadata"},
-      {"prompt / description", "string", "static drop-zone copy; selected files are not rendered"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id and validation state from a form"},
+        {"multiple", "boolean", "accepts one file by default or several files when enabled"},
+        {"event", "string", "optional LiveView event receiving selected file metadata"},
+        {"prompt / description", "string", "static drop-zone copy; selected files are not rendered"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

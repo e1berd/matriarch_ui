@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Autocomplete do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       description="The list opens on focus and filters locally as you type. Add phx-change/phx-debounce when suggestions come from the server."
       code={
@@ -33,14 +34,17 @@ defmodule MatriarchUIDocsWeb.Examples.Autocomplete do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/value/invalid from a form"},
-      {"option", "slot", "one per suggestion; takes value and an optional label"},
-      {"placeholder", "string", "shown when the input is empty"},
-      {"invalid", "boolean", "shows the danger border and aria-invalid"},
-      {"rest", "phx-change, phx-keyup, phx-debounce, phx-target, disabled",
-       "optional server filtering — local filtering works without LiveView events"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/value/invalid from a form"},
+        {"option", "slot", "one per suggestion; takes value and an optional label"},
+        {"placeholder", "string", "shown when the input is empty"},
+        {"invalid", "boolean", "shows the danger border and aria-invalid"},
+        {"rest", "phx-change, phx-keyup, phx-debounce, phx-target, disabled",
+         "optional server filtering — local filtering works without LiveView events"}
+      ]}
+    />
     """
   end
 end

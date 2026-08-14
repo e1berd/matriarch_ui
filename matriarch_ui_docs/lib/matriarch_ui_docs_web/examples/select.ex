@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Select do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -33,6 +34,7 @@ defmodule MatriarchUIDocsWeb.Examples.Select do
     </.example>
 
     <.example
+      locale={@locale}
       title="Multiple"
       description="Selected values stay open for further choices and are submitted as a list. Click outside or press Escape to close."
       code={
@@ -60,15 +62,18 @@ defmodule MatriarchUIDocsWeb.Examples.Select do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/value/invalid from a form"},
-      {"option", "slot, required",
-       "one per choice; takes value (required) and label (optional plain-text mirror)"},
-      {"placeholder", "string", "shown when no option is selected"},
-      {"multiple", "boolean",
-       "submits a list, keeps the panel open and separates labels with commas"},
-      {"invalid", "boolean", "shows the danger border and aria-invalid"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/value/invalid from a form"},
+        {"option", "slot, required",
+         "one per choice; takes value (required) and label (optional plain-text mirror)"},
+        {"placeholder", "string", "shown when no option is selected"},
+        {"multiple", "boolean",
+         "submits a list, keeps the panel open and separates labels with commas"},
+        {"invalid", "boolean", "shows the danger border and aria-invalid"}
+      ]}
+    />
     """
   end
 end

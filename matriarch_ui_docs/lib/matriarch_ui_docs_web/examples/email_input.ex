@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.EmailInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Email field"
       class="flex-col items-stretch"
       code={
@@ -26,6 +27,7 @@ defmodule MatriarchUIDocsWeb.Examples.EmailInput do
     </.example>
 
     <.example
+      locale={@locale}
       title="Inside a group"
       code={
         ~S'''
@@ -42,11 +44,14 @@ defmodule MatriarchUIDocsWeb.Examples.EmailInput do
       </.group>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
-      {"rest", "global attrs", "supports autocomplete, required, multiple, and placeholder"},
-      {"class", "string", "merged with the default input classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
+        {"rest", "global attrs", "supports autocomplete, required, multiple, and placeholder"},
+        {"class", "string", "merged with the default input classes"}
+      ]}
+    />
     """
   end
 end

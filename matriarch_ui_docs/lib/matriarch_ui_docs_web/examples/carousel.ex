@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Carousel do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -50,11 +51,14 @@ defmodule MatriarchUIDocsWeb.Examples.Carousel do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique id for the track/hook"},
-      {"label", "string", "aria-label for the region, defaults to \"Carousel\""},
-      {"slide", "slot, required", "one per slide, each takes the track's full width"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique id for the track/hook"},
+        {"label", "string", "aria-label for the region, defaults to \"Carousel\""},
+        {"slide", "slot, required", "one per slide, each takes the track's full width"}
+      ]}
+    />
     """
   end
 end

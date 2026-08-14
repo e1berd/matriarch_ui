@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.ColorInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Color field"
       class="flex-col items-stretch"
       code={
@@ -26,6 +27,7 @@ defmodule MatriarchUIDocsWeb.Examples.ColorInput do
     </.example>
 
     <.example
+      locale={@locale}
       title="Inside a group"
       code={
         ~S'''
@@ -42,12 +44,15 @@ defmodule MatriarchUIDocsWeb.Examples.ColorInput do
       </.group>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
-      {"value", "hex string", "six-digit CSS hex value shared by the text and native picker"},
-      {"rest", "global attrs", "supports disabled, readonly, required, and placeholder"},
-      {"class", "string", "merged with the root control classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value and validation state"},
+        {"value", "hex string", "six-digit CSS hex value shared by the text and native picker"},
+        {"rest", "global attrs", "supports disabled, readonly, required, and placeholder"},
+        {"class", "string", "merged with the root control classes"}
+      ]}
+    />
     """
   end
 end

@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.RadioGroup do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Radio group"
       code={
         ~S'''
@@ -28,12 +29,15 @@ defmodule MatriarchUIDocsWeb.Examples.RadioGroup do
       />
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value from a form"},
-      {"options", "list of {label, value}", "the radio choices"},
-      {"orientation", "vertical | horizontal", "layout of the options"},
-      {"label", "string", "optional legend above the group"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value from a form"},
+        {"options", "list of {label, value}", "the radio choices"},
+        {"orientation", "vertical | horizontal", "layout of the options"},
+        {"label", "string", "optional legend above the group"}
+      ]}
+    />
     """
   end
 end

@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.NumberInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Bounded and scrubbable"
       description="Hold either step button, use ArrowUp/ArrowDown, or drag horizontally over the input. Every interaction respects min, max, and step."
       class="flex-col items-stretch"
@@ -27,6 +28,7 @@ defmodule MatriarchUIDocsWeb.Examples.NumberInput do
     </.example>
 
     <.example
+      locale={@locale}
       title="Formatted raw value"
       description="The visible value uses the mask and currency suffix, while the submitted value remains 100000."
       class="flex-col items-stretch"
@@ -57,14 +59,17 @@ defmodule MatriarchUIDocsWeb.Examples.NumberInput do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds the raw numeric value and validation state"},
-      {"min / max / step", "number", "bounds and increment used by every interaction"},
-      {"mask", "string", "visual digit mask where # is a digit, for example ### ###"},
-      {"decimal_separator", "string", "visible decimal separator, default ."},
-      {"prefix / suffix", "string", "visual units that are excluded from the submitted value"},
-      {"class", "string", "merged with the control classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds the raw numeric value and validation state"},
+        {"min / max / step", "number", "bounds and increment used by every interaction"},
+        {"mask", "string", "visual digit mask where # is a digit, for example ### ###"},
+        {"decimal_separator", "string", "visible decimal separator, default ."},
+        {"prefix / suffix", "string", "visual units that are excluded from the submitted value"},
+        {"class", "string", "merged with the control classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

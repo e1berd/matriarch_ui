@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Group do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Split button"
       description="Adjacent controls share their outer radius and collapse overlapping borders."
       code={
@@ -28,6 +29,7 @@ defmodule MatriarchUIDocsWeb.Examples.Group do
     </.example>
 
     <.example
+      locale={@locale}
       title="Input action"
       code={
         ~S'''
@@ -44,11 +46,14 @@ defmodule MatriarchUIDocsWeb.Examples.Group do
       </.group>
     </.example>
 
-    <.props_table rows={[
-      {"orientation", "horizontal | vertical", "join direction, defaults to horizontal"},
-      {"label", "string", "accessible name for role=group"},
-      {"class", "string", "merged with the default group classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"orientation", "horizontal | vertical", "join direction, defaults to horizontal"},
+        {"label", "string", "accessible name for role=group"},
+        {"class", "string", "merged with the default group classes"}
+      ]}
+    />
     """
   end
 end

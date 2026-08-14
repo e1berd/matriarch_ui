@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Alert do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Variants"
       class="flex-col items-stretch"
       code={
@@ -55,11 +56,14 @@ defmodule MatriarchUIDocsWeb.Examples.Alert do
       </.alert>
     </.example>
 
-    <.props_table rows={[
-      {"variant", "default | info | success | warning | danger", "visual style and default icon"},
-      {"icon", "slot", "overrides the variant's default icon"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"variant", "default | info | success | warning | danger", "visual style and default icon"},
+        {"icon", "slot", "overrides the variant's default icon"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

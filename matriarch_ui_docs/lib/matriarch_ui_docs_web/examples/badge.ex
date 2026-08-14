@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Badge do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Variants"
       code={
         ~S'''
@@ -26,10 +27,13 @@ defmodule MatriarchUIDocsWeb.Examples.Badge do
       <.badge variant="outline">Outline</.badge>
     </.example>
 
-    <.props_table rows={[
-      {"variant", "neutral | primary | success | warning | danger | outline", "visual style"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"variant", "neutral | primary | success | warning | danger | outline", "visual style"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

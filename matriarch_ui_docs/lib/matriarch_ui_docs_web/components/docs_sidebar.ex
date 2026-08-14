@@ -12,7 +12,7 @@ defmodule MatriarchUIDocsWeb.DocsSidebar do
   attr :locale, :string, default: "en"
 
   def sidebar(assigns) do
-    assigns = assign(assigns, :components, Registry.components())
+    assigns = assign(assigns, :components, Registry.components(assigns.locale))
 
     ~H"""
     <nav class="w-52 shrink-0 py-8 pr-5 text-[13px]">

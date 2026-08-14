@@ -11,6 +11,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Variants"
       code={
         ~S'''
@@ -34,6 +35,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
     </.example>
 
     <.example
+      locale={@locale}
       title="Sizes"
       code={
         ~S'''
@@ -49,6 +51,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
     </.example>
 
     <.example
+      locale={@locale}
       title="Loading"
       code={
         ~S'''
@@ -60,6 +63,7 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
     </.example>
 
     <.example
+      locale={@locale}
       title="As a link"
       code={
         ~S'''
@@ -70,14 +74,17 @@ defmodule MatriarchUIDocsWeb.Examples.Button do
       <.button navigate={~p"/docs"}>Browse the docs</.button>
     </.example>
 
-    <.props_table rows={[
-      {"variant", "solid | brand | outline | ghost | soft | destructive | link", "visual style"},
-      {"size", "sm | md | lg | icon", "height and padding"},
-      {"loading", "boolean", "shows a spinner and disables the button"},
-      {"disabled", "boolean", "disables the button"},
-      {"navigate / patch / href", "string", "renders as <.link> instead of <button>"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"variant", "solid | brand | outline | ghost | soft | destructive | link", "visual style"},
+        {"size", "sm | md | lg | icon", "height and padding"},
+        {"loading", "boolean", "shows a spinner and disables the button"},
+        {"disabled", "boolean", "disables the button"},
+        {"navigate / patch / href", "string", "renders as <.link> instead of <button>"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Compact region and protected prefix"
       class="flex-col items-stretch"
       code={
@@ -35,13 +36,17 @@ defmodule MatriarchUIDocsWeb.Examples.PhoneInput do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds the telephone value and validation state"},
-      {"region / region_name", "string", "selected ISO region and the separate submitted field name"},
-      {"regions", "list", "ISO regions shown in the selector; defaults to the complete list"},
-      {"calling_codes", "map", "region to international-prefix overrides"},
-      {"class", "string", "merged with the joined control classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds the telephone value and validation state"},
+        {"region / region_name", "string",
+         "selected ISO region and the separate submitted field name"},
+        {"regions", "list", "ISO regions shown in the selector; defaults to the complete list"},
+        {"calling_codes", "map", "region to international-prefix overrides"},
+        {"class", "string", "merged with the joined control classes"}
+      ]}
+    />
     """
   end
 end

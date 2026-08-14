@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Listbox do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Single select"
       code={
         ~S'''
@@ -27,6 +28,7 @@ defmodule MatriarchUIDocsWeb.Examples.Listbox do
     </.example>
 
     <.example
+      locale={@locale}
       title="Multiple select"
       code={
         ~S'''
@@ -47,12 +49,15 @@ defmodule MatriarchUIDocsWeb.Examples.Listbox do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/value from a form"},
-      {"multiple", "boolean", "checkboxes instead of radios; value is a list"},
-      {"option", "slot, required",
-       "one per row; each is a native radio/checkbox wrapped in its own label"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/value from a form"},
+        {"multiple", "boolean", "checkboxes instead of radios; value is a list"},
+        {"option", "slot, required",
+         "one per row; each is a native radio/checkbox wrapped in its own label"}
+      ]}
+    />
     """
   end
 end

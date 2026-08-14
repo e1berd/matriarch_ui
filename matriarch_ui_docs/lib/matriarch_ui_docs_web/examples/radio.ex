@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Radio do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Field usage"
       code={
         ~S'''
@@ -22,13 +23,16 @@ defmodule MatriarchUIDocsWeb.Examples.Radio do
       </.field>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id and the selected form value"},
-      {"checked", "boolean", "explicit checked state"},
-      {"value", "any", "submitted option value"},
-      {"invalid", "boolean", "danger state and aria-invalid"},
-      {"class", "string", "merged with the default control classes"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id and the selected form value"},
+        {"checked", "boolean", "explicit checked state"},
+        {"value", "any", "submitted option value"},
+        {"invalid", "boolean", "danger state and aria-invalid"},
+        {"class", "string", "merged with the default control classes"}
+      ]}
+    />
     """
   end
 end

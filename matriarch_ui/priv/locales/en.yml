@@ -17,3 +17,8 @@ docs.docs: Docs
 docs.components: Components
 docs.getting_started: Getting started
 docs.installation: Installation
+docs.search: Search
+docs.search_placeholder: Search components and documentation…
+docs.search_empty: Nothing found
+docs.reading_now.one: %{count} person reading this page
+docs.reading_now.other: %{count} people reading this page

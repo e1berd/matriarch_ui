@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.DropdownMenu do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -26,11 +27,14 @@ defmodule MatriarchUIDocsWeb.Examples.DropdownMenu do
       </.dropdown_menu>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "unique id for the trigger/panel pair"},
-      {"trigger", "slot, required", "the clickable trigger content"},
-      {"item", "slot, required", "one per menu row; accepts navigate/patch/href/variant"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "unique id for the trigger/panel pair"},
+        {"trigger", "slot, required", "the clickable trigger content"},
+        {"item", "slot, required", "one per menu row; accepts navigate/patch/href/variant"}
+      ]}
+    />
     """
   end
 end

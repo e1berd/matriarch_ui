@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Slider do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -28,11 +29,14 @@ defmodule MatriarchUIDocsWeb.Examples.Slider do
       </div>
     </.example>
 
-    <.props_table rows={[
-      {"field", "Phoenix.HTML.FormField", "binds name/id/value from a form"},
-      {"min / max / step", "number", "defaults 0 / 100 / 1"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"field", "Phoenix.HTML.FormField", "binds name/id/value from a form"},
+        {"min / max / step", "number", "defaults 0 / 100 / 1"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

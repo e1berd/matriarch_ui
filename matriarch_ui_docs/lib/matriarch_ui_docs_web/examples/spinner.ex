@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Spinner do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Sizes"
       code={
         ~S'''
@@ -21,6 +22,7 @@ defmodule MatriarchUIDocsWeb.Examples.Spinner do
     </.example>
 
     <.example
+      locale={@locale}
       title="In a button"
       code={
         ~S'''
@@ -36,11 +38,14 @@ defmodule MatriarchUIDocsWeb.Examples.Spinner do
       </.button>
     </.example>
 
-    <.props_table rows={[
-      {"size", "sm | md | lg", "indicator size, defaults to md"},
-      {"label", "string", "accessible status label"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"size", "sm | md | lg", "indicator size, defaults to md"},
+        {"label", "string", "accessible status label"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

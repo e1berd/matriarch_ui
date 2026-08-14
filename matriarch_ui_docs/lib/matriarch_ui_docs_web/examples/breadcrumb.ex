@@ -11,6 +11,7 @@ defmodule MatriarchUIDocsWeb.Examples.Breadcrumb do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -29,11 +30,14 @@ defmodule MatriarchUIDocsWeb.Examples.Breadcrumb do
       </.breadcrumb>
     </.example>
 
-    <.props_table rows={[
-      {"item", "slot, required",
-       "one per crumb; accepts navigate/patch/href. The last item is always rendered as the current page (no link)."},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"item", "slot, required",
+         "one per crumb; accepts navigate/patch/href. The last item is always rendered as the current page (no link)."},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end

@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Tabs do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       class="flex-col items-stretch"
       code={
@@ -27,12 +28,15 @@ defmodule MatriarchUIDocsWeb.Examples.Tabs do
       </.tabs>
     </.example>
 
-    <.props_table rows={[
-      {"id", "string, required", "root id"},
-      {"default", "string, required", "value of the initially active tab"},
-      {"tab", "slot, required", "one per tab trigger; needs a value attr"},
-      {"panel", "slot, required", "one per panel; needs a matching value attr"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"id", "string, required", "root id"},
+        {"default", "string, required", "value of the initially active tab"},
+        {"tab", "slot, required", "one per tab trigger; needs a value attr"},
+        {"panel", "slot, required", "one per panel; needs a matching value attr"}
+      ]}
+    />
     """
   end
 end

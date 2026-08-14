@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Splitter do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Basic"
       code={
         ~S'''
@@ -30,11 +31,14 @@ defmodule MatriarchUIDocsWeb.Examples.Splitter do
       </.splitter>
     </.example>
 
-    <.props_table rows={[
-      {"orientation", "horizontal | vertical", "resize axis, defaults to horizontal"},
-      {"panel", "slot, required",
-       "one per pane; takes default_size and min_size (percent, defaults to an even split / 10)"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"orientation", "horizontal | vertical", "resize axis, defaults to horizontal"},
+        {"panel", "slot, required",
+         "one per pane; takes default_size and min_size (percent, defaults to an even split / 10)"}
+      ]}
+    />
     """
   end
 end

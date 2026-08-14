@@ -6,6 +6,7 @@ defmodule MatriarchUIDocsWeb.Examples.Separator do
   def examples(assigns) do
     ~H"""
     <.example
+      locale={@locale}
       title="Horizontal"
       class="flex-col"
       code={
@@ -22,6 +23,7 @@ defmodule MatriarchUIDocsWeb.Examples.Separator do
     </.example>
 
     <.example
+      locale={@locale}
       title="Vertical"
       code={
         ~S'''
@@ -36,10 +38,13 @@ defmodule MatriarchUIDocsWeb.Examples.Separator do
       <span class="text-mui-foreground">Right</span>
     </.example>
 
-    <.props_table rows={[
-      {"orientation", "horizontal | vertical", "axis of the line"},
-      {"class", "string", "merged with the default classes via CN.cn/1"}
-    ]} />
+    <.props_table
+      locale={@locale}
+      rows={[
+        {"orientation", "horizontal | vertical", "axis of the line"},
+        {"class", "string", "merged with the default classes via CN.cn/1"}
+      ]}
+    />
     """
   end
 end
