@@ -5,6 +5,12 @@ defmodule MatriarchUI.Modal do
 
       phx-click={MatriarchUI.Modal.show_modal("my-modal")}
       phx-click={MatriarchUI.Modal.hide_modal("my-modal")}
+
+  Opens/closes with the same `duration-150 ease-mui-out` scale+fade recipe as
+  `MatriarchUI.Floating.panel_class/0`. The real `dialog.close()` (and the ESC
+  key's native `cancel`) is deferred until the fade-out `transitionend` fires,
+  so the exit animation is reliable across browsers instead of depending on
+  `<dialog>`'s Chromium-only `overlay`/`@starting-style` auto-defer behavior.
   """
   use Phoenix.Component
   alias MatriarchUI.CN
@@ -21,16 +27,16 @@ defmodule MatriarchUI.Modal do
     <dialog
       id={@id}
       phx-hook=".MUIDialog"
+      data-mui-state="closed"
       class={
         CN.cn([
           "m-auto hidden max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-mui-xl",
           "border border-mui-border bg-mui-surface p-0 text-mui-foreground shadow-mui-xl",
           "open:flex",
-          "scale-95 opacity-0 open:scale-100 open:opacity-100",
-          "open:starting:scale-95 open:starting:opacity-0",
-          "transition duration-150 ease-mui-out transition-discrete",
-          "backdrop:bg-mui-overlay backdrop:opacity-0 open:backdrop:opacity-100 open:backdrop:starting:opacity-0",
-          "backdrop:transition-opacity backdrop:duration-150 backdrop:ease-mui-out backdrop:transition-discrete",
+          "scale-95 opacity-0 transition duration-150 ease-mui-out",
+          "data-[mui-state=open]:scale-100 data-[mui-state=open]:opacity-100",
+          "backdrop:bg-mui-overlay backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-150 backdrop:ease-mui-out",
+          "data-[mui-state=open]:backdrop:opacity-100",
           @class
         ])
       }
@@ -76,13 +82,29 @@ defmodule MatriarchUI.Modal do
           const open = () => {
             dialog.showModal()
             document.body.style.overflow = "hidden"
+            requestAnimationFrame(() => (dialog.dataset.muiState = "open"))
+          }
+
+          const close = () => {
+            if (dialog.dataset.muiState === "closed") return
+            dialog.dataset.muiState = "closed"
+            const onEnd = (event) => {
+              if (event.target !== dialog || event.propertyName !== "opacity") return
+              dialog.removeEventListener("transitionend", onEnd)
+              dialog.close()
+            }
+            dialog.addEventListener("transitionend", onEnd)
           }
 
           dialog.addEventListener("mui:open", open)
-          dialog.addEventListener("mui:close", () => dialog.close())
+          dialog.addEventListener("mui:close", close)
+          dialog.addEventListener("cancel", (event) => {
+            event.preventDefault()
+            close()
+          })
           dialog.addEventListener("close", () => document.body.style.removeProperty("overflow"))
           dialog.addEventListener("click", (event) => {
-            if (event.target === dialog) dialog.close()
+            if (event.target === dialog) close()
           })
         }
       }

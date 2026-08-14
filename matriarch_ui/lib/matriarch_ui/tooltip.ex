@@ -5,7 +5,12 @@ defmodule MatriarchUI.Tooltip do
 
   attr :id, :string, required: true
   attr :text, :string, required: true
-  attr :placement, :string, default: "top"
+
+  attr :placement, :string,
+    default: "top",
+    doc:
+      ~s(a side like "top"/"bottom-start", or "auto" to pick top/bottom based on available room)
+
   attr :class, :string, default: nil
   slot :inner_block, required: true
 

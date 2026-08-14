@@ -6,13 +6,19 @@ defmodule MatriarchUI do
 
   defmacro __using__(_opts) do
     quote do
+      import MatriarchUI.Accordion
       import MatriarchUI.Alert
+      import MatriarchUI.Autocomplete
       import MatriarchUI.Avatar
       import MatriarchUI.Badge
+      import MatriarchUI.Breadcrumb
       import MatriarchUI.Button
       import MatriarchUI.Card
+      import MatriarchUI.Carousel
       import MatriarchUI.Checkbox
       import MatriarchUI.DropdownMenu
+      import MatriarchUI.Field
+      import MatriarchUI.Fieldset
       import MatriarchUI.Input
       import MatriarchUI.Modal
       import MatriarchUI.Popover

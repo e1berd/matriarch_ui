@@ -1,5 +1,5 @@
 defmodule MatriarchUI.Select do
-  @moduledoc "Listbox-style select, usable standalone or bound to a `Phoenix.HTML.FormField`."
+  @moduledoc "Bare listbox-style select — pair with `MatriarchUI.Field` for a label and validation errors."
   use Phoenix.Component
   alias MatriarchUI.{CN, Floating}
 
@@ -7,8 +7,8 @@ defmodule MatriarchUI.Select do
   attr :field, Phoenix.HTML.FormField
   attr :name, :any, default: nil
   attr :value, :any, default: nil
-  attr :label, :string, default: nil
   attr :placeholder, :string, default: "Select…"
+  attr :invalid, :boolean, default: false
   attr :class, :string, default: nil
 
   slot :option, required: true do
@@ -18,7 +18,7 @@ defmodule MatriarchUI.Select do
 
   def select(%{field: %Phoenix.HTML.FormField{} = field} = assigns) do
     assigns
-    |> assign(field: nil)
+    |> assign(field: nil, invalid: used_input?(field) && field.errors != [])
     |> assign_new(:name, fn -> field.name end)
     |> assign_new(:value, fn -> field.value end)
     |> select()
@@ -33,26 +33,26 @@ defmodule MatriarchUI.Select do
       )
 
     ~H"""
-    <div data-mui class="flex flex-col gap-1.5">
-      <label :if={@label} for={"#{@id}-trigger"} class="text-sm font-medium text-mui-foreground">
-        {@label}
-      </label>
+    <div data-mui>
       <input type="hidden" id={"#{@id}-value"} name={@name} value={@value} />
       <button
         type="button"
-        id={"#{@id}-trigger"}
+        id={@id}
         phx-hook="MatriarchUI.Floating.MUIFloating"
         aria-controls={"#{@id}-panel"}
         aria-haspopup="listbox"
         aria-expanded="false"
+        aria-invalid={to_string(@invalid)}
         data-mui-trigger="click"
         data-mui-placement="bottom-start"
+        data-mui-axis="vertical"
         data-mui-role="listbox"
         data-mui-value-target={"#{@id}-value"}
         class={
           CN.cn([
-            "flex h-9 w-full items-center justify-between gap-2 rounded-mui-md border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
+            "flex h-9 w-full items-center justify-between gap-2 rounded-mui-sm border border-mui-border-strong bg-mui-surface px-3 text-sm text-mui-foreground shadow-mui-xs",
             "focus-visible:border-mui-primary focus-visible:ring-2 focus-visible:ring-mui-ring/20",
+            @invalid && "border-mui-danger focus-visible:ring-mui-danger/30",
             @class
           ])
         }

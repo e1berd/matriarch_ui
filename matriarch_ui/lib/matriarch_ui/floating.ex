@@ -1,25 +1,44 @@
 defmodule MatriarchUI.Floating do
   @moduledoc """
   Ships the `MatriarchUI.Floating.MUIFloating` colocated hook used by every
-  anchored component (Tooltip, Popover, DropdownMenu, Select, Combobox). A
+  anchored component (Tooltip, Popover, DropdownMenu, Select, Autocomplete). A
   colocated hook name is always prefixed with its *declaring* module, so
   components that reference this hook from another module must use the fully
   qualified name rather than the `.MUIFloating` shorthand. A trigger element sets:
 
     * `phx-hook="MatriarchUI.Floating.MUIFloating"` and `aria-controls` pointing at the panel id
-    * `data-mui-placement` — e.g. `"bottom-start"`, `"top"`, `"right-end"` (default `"bottom-start"`)
+    * `data-mui-placement` — e.g. `"bottom-start"`, `"top"`, `"right-end"`, or
+      `"auto"` (default `"bottom-start"`). `"auto"` opens toward the viewport
+      center — bottom if the trigger sits in the upper half of the screen,
+      top if it sits in the lower half — then lets the fallback below take over.
     * `data-mui-trigger` — `"click"` (default), `"hover"`, or `"focus"`
     * `data-mui-offset` — gap in px between trigger and panel (default `8`)
+    * `data-mui-axis` — `"both"` (default) lets the panel fall back to any of
+      the 4 sides when the requested one has no room; `"vertical"` (Select)
+      restricts fallback to top/bottom only, never left/right
     * `data-mui-role` — `"menu"` or `"listbox"` enables arrow-key roving focus
     * `data-mui-value-target` — id of the hidden input a `"listbox"` writes its
       selected value into (Select only)
 
+  Whatever side is requested, if it doesn't fit in the viewport the panel
+  falls back to the opposite side, then (unless `data-mui-axis="vertical"`)
+  to whichever perpendicular side has the most room — it always ends up
+  somewhere on-screen.
+
   The panel needs `data-mui-state="closed"` initially and CSS driven off that
   attribute (`visibility`/`opacity`, never `display:none`, so it stays
-  measurable). Items inside a menu/listbox panel get closed on click via a
-  `data-mui-close` attribute. A `"listbox"` option additionally reads
-  `data-mui-value`/`data-mui-label` and writes them into the value target plus
-  any `[data-mui-select-label]` element inside the trigger.
+  measurable). Clicking a `"listbox"` option closes the panel and writes the
+  option's `data-mui-value`/`data-mui-label` into the `data-mui-value-target`
+  hidden input (Select) or, when the trigger itself is an `<input>`
+  (Autocomplete), directly into the trigger's own value. Items inside a
+  menu/listbox panel also get closed on click via a `data-mui-close` attribute.
+
+  A `MutationObserver` on the panel re-asserts `data-mui-state="open"` and
+  repositions whenever its content changes while open — this keeps a listbox
+  open across a LiveView-driven re-render of its options (e.g. Autocomplete
+  filtering server-side on `phx-change`), since that re-render would otherwise
+  overwrite the JS-set `data-mui-state` back to the template's static
+  `"closed"`.
   """
   use Phoenix.Component
 
@@ -30,7 +49,8 @@ defmodule MatriarchUI.Floating do
   """
   def panel_class do
     [
-      "fixed z-50 invisible scale-95 opacity-0 pointer-events-none transition duration-150 ease-mui-out",
+      "fixed z-50 invisible scale-95 opacity-0 pointer-events-none",
+      "transition duration-150 ease-mui-out transition-discrete",
       "data-[mui-state=open]:visible data-[mui-state=open]:scale-100 data-[mui-state=open]:opacity-100",
       "data-[mui-state=open]:pointer-events-auto"
     ]
@@ -43,6 +63,31 @@ defmodule MatriarchUI.Floating do
     <script :type={Phoenix.LiveView.ColocatedHook} name=".MUIFloating">
       const SIDES = ["top", "right", "bottom", "left"]
       const OPPOSITE = { top: "bottom", bottom: "top", left: "right", right: "left" }
+
+      function spaceFor(side, triggerRect, offset, viewport) {
+        if (side === "top") return triggerRect.top - offset
+        if (side === "bottom") return viewport.height - triggerRect.bottom - offset
+        if (side === "left") return triggerRect.left - offset
+        return viewport.width - triggerRect.right - offset
+      }
+
+      function sideFits(side, triggerRect, panelRect, offset, viewport) {
+        const size = side === "top" || side === "bottom" ? panelRect.height : panelRect.width
+        return spaceFor(side, triggerRect, offset, viewport) >= size
+      }
+
+      function autoSide(triggerRect, viewport) {
+        return triggerRect.top + triggerRect.height / 2 > viewport.height / 2 ? "top" : "bottom"
+      }
+
+      function candidateSides(preferredSide, axis, triggerRect, offset, viewport) {
+        if (axis === "vertical") return [preferredSide, OPPOSITE[preferredSide]]
+        const perpendiculars = SIDES.filter((side) => side !== preferredSide && side !== OPPOSITE[preferredSide])
+        perpendiculars.sort(
+          (a, b) => spaceFor(b, triggerRect, offset, viewport) - spaceFor(a, triggerRect, offset, viewport)
+        )
+        return [preferredSide, OPPOSITE[preferredSide], ...perpendiculars]
+      }
 
       function coordsFor(placement, triggerRect, panelRect, offset) {
         const [side, align = "center"] = placement.split("-")
@@ -66,20 +111,22 @@ defmodule MatriarchUI.Floating do
         return { x, y }
       }
 
-      function fits(side, triggerRect, panelRect, offset, viewport) {
-        if (side === "top") return triggerRect.top - panelRect.height - offset >= 0
-        if (side === "bottom") return triggerRect.bottom + panelRect.height + offset <= viewport.height
-        if (side === "left") return triggerRect.left - panelRect.width - offset >= 0
-        return triggerRect.right + panelRect.width + offset <= viewport.width
-      }
+      function resolvePlacement(placement, triggerRect, panelRect, offset, viewport, axis) {
+        const isAuto = placement === "auto"
+        const preferredSide = isAuto ? autoSide(triggerRect, viewport) : placement.split("-")[0]
+        if (!SIDES.includes(preferredSide)) return placement
+        const align = isAuto ? "center" : placement.split("-")[1] || "center"
 
-      function resolvePlacement(placement, triggerRect, panelRect, offset, viewport) {
-        const [side] = placement.split("-")
-        if (!SIDES.includes(side)) return placement
-        if (fits(side, triggerRect, panelRect, offset, viewport)) return placement
-        const altSide = OPPOSITE[side]
-        if (fits(altSide, triggerRect, panelRect, offset, viewport)) return placement.replace(side, altSide)
-        return placement
+        const candidates = candidateSides(preferredSide, axis, triggerRect, offset, viewport)
+        const bestSide =
+          candidates.find((side) => sideFits(side, triggerRect, panelRect, offset, viewport)) ||
+          candidates.reduce((best, side) =>
+            spaceFor(side, triggerRect, offset, viewport) > spaceFor(best, triggerRect, offset, viewport)
+              ? side
+              : best
+          )
+
+        return align === "center" ? bestSide : `${bestSide}-${align}`
       }
 
       function shift(coords, panelRect, viewport, padding = 8) {
@@ -103,11 +150,11 @@ defmodule MatriarchUI.Floating do
         }
       }
 
-      function computeAndApply(trigger, panel, placement, offset) {
+      function computeAndApply(trigger, panel, placement, offset, axis) {
         const viewport = { width: window.innerWidth, height: window.innerHeight }
         const triggerRect = trigger.getBoundingClientRect()
         const panelRect = panel.getBoundingClientRect()
-        const resolved = resolvePlacement(placement, triggerRect, panelRect, offset, viewport)
+        const resolved = resolvePlacement(placement, triggerRect, panelRect, offset, viewport, axis)
         const coords = shift(coordsFor(resolved, triggerRect, panelRect, offset), panelRect, viewport)
 
         panel.style.left = `${coords.x}px`
@@ -140,14 +187,24 @@ defmodule MatriarchUI.Floating do
       }
 
       function selectOption(trigger, panel, option) {
+        const label = option.dataset.muiLabel || option.textContent.trim()
+
+        if (trigger.tagName === "INPUT") {
+          trigger.value = label
+          trigger.dispatchEvent(new Event("input", { bubbles: true }))
+          trigger.dispatchEvent(new Event("change", { bubbles: true }))
+        }
+
         const target = document.getElementById(trigger.dataset.muiValueTarget)
         if (target) {
           target.value = option.dataset.muiValue
           target.dispatchEvent(new Event("input", { bubbles: true }))
           target.dispatchEvent(new Event("change", { bubbles: true }))
         }
-        const label = trigger.querySelector("[data-mui-select-label]")
-        if (label) label.textContent = option.dataset.muiLabel || option.textContent
+
+        const labelEl = trigger.querySelector("[data-mui-select-label]")
+        if (labelEl) labelEl.textContent = label
+
         panel.querySelectorAll('[role="option"]').forEach((el) => {
           el.setAttribute("aria-selected", el === option ? "true" : "false")
         })
@@ -161,12 +218,13 @@ defmodule MatriarchUI.Floating do
 
           const placement = trigger.dataset.muiPlacement || "bottom-start"
           const offset = parseInt(trigger.dataset.muiOffset || "8", 10)
+          const axis = trigger.dataset.muiAxis || "both"
           const triggerMode = trigger.dataset.muiTrigger || "click"
           const role = trigger.dataset.muiRole
           let open = false
           let stopAutoUpdate = null
 
-          const position = () => computeAndApply(trigger, panel, placement, offset)
+          const position = () => computeAndApply(trigger, panel, placement, offset, axis)
 
           const onPointerDown = (event) => {
             if (panel.contains(event.target) || trigger.contains(event.target)) return
@@ -195,7 +253,9 @@ defmodule MatriarchUI.Floating do
             stopAutoUpdate = autoUpdate(trigger, panel, position)
             document.addEventListener("pointerdown", onPointerDown, true)
             document.addEventListener("keydown", onKeydown, true)
-            if (role === "menu" || role === "listbox") requestAnimationFrame(() => focusItem(panel, 0))
+            if ((role === "menu" || role === "listbox") && trigger.tagName !== "INPUT") {
+              requestAnimationFrame(() => focusItem(panel, 0))
+            }
           }
 
           const hide = () => {
@@ -223,14 +283,31 @@ defmodule MatriarchUI.Floating do
 
           panel.addEventListener("click", (event) => {
             const option = event.target.closest("[data-mui-value]")
-            if (option && role === "listbox") selectOption(trigger, panel, option)
+            if (option && role === "listbox") {
+              selectOption(trigger, panel, option)
+              hide()
+            }
             if (event.target.closest("[data-mui-close]")) hide()
           })
 
+          const panelObserver = new MutationObserver(() => {
+            if (!open) return
+            if (panel.dataset.muiState !== "open") panel.dataset.muiState = "open"
+            position()
+          })
+          panelObserver.observe(panel, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ["data-mui-state"]
+          })
+
           this.muiHide = hide
+          this.muiPanelObserver = panelObserver
         },
         destroyed() {
           if (this.muiHide) this.muiHide()
+          if (this.muiPanelObserver) this.muiPanelObserver.disconnect()
         }
       }
     </script>

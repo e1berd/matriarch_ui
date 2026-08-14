@@ -1,28 +1,22 @@
 defmodule MatriarchUI.FormsTest do
   use ExUnit.Case, async: true
   import Phoenix.LiveViewTest
-  import MatriarchUI.{Input, Textarea, Checkbox, Switch, RadioGroup, Select}
+  import MatriarchUI.{Input, Textarea, Checkbox, Switch, RadioGroup, Select, Autocomplete}
 
   defp count(html, selector),
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
 
-  test "input renders label, name and value from plain assigns" do
+  test "input renders name and value from plain assigns" do
     html =
-      render_component(&input/1, %{
-        name: "user_email",
-        id: "email",
-        value: "a@b.com",
-        label: "Email"
-      })
+      render_component(&input/1, %{name: "user_email", id: "email", value: "a@b.com"})
 
     assert count(html, ~s(input[name="user_email"][value="a@b.com"])) == 1
-    assert html =~ "Email"
   end
 
-  test "input surfaces errors and applies the danger border" do
-    html = render_component(&input/1, %{name: "email", id: "email", errors: ["is invalid"]})
-    assert html =~ "is invalid"
+  test "input applies the danger border and aria-invalid when invalid" do
+    html = render_component(&input/1, %{name: "email", id: "email", invalid: true})
     assert count(html, "input.border-mui-danger") == 1
+    assert count(html, ~s(input[aria-invalid="true"])) == 1
   end
 
   test "textarea renders the given value as its content" do
@@ -32,11 +26,10 @@ defmodule MatriarchUI.FormsTest do
   end
 
   test "checkbox marks the input checked and keeps a hidden fallback field" do
-    html =
-      render_component(&checkbox/1, %{name: "tos", id: "tos", checked: true, label: "Accept"})
+    html = render_component(&checkbox/1, %{name: "tos", id: "tos", checked: true})
 
     assert count(html, ~s(input[type="hidden"][name="tos"][value="false"])) == 1
-    assert count(html, ~s(input[type="checkbox"][checked])) == 1
+    assert count(html, ~s(input[type="checkbox"]#tos[checked])) == 1
   end
 
   test "switch renders a checkbox input styled as a track/thumb" do
@@ -73,5 +66,28 @@ defmodule MatriarchUI.FormsTest do
     assert count(html, ~s([role="option"])) == 2
     assert count(html, ~s([role="option"][data-mui-value="admin"][aria-selected="true"])) == 1
     assert html =~ "Admin"
+  end
+
+  test "autocomplete renders a text input trigger and one option per slot entry" do
+    html =
+      render_component(&autocomplete/1, %{
+        id: "city",
+        name: "city",
+        value: "Ber",
+        option: [
+          %{value: "Berlin", inner_block: fn _, _ -> "Berlin" end},
+          %{value: "Bern", inner_block: fn _, _ -> "Bern" end}
+        ]
+      })
+
+    assert count(html, ~s(input[type="text"][name="city"][value="Ber"])) == 1
+    assert count(html, ~s(input[data-mui-trigger="focus"][data-mui-axis="vertical"])) == 1
+    assert count(html, ~s([role="option"])) == 2
+    assert html =~ "Berlin"
+  end
+
+  test "autocomplete shows a no-results message when :option is empty" do
+    html = render_component(&autocomplete/1, %{id: "city", name: "city", option: []})
+    assert html =~ "No results"
   end
 end

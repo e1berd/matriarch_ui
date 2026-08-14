@@ -1,24 +1,41 @@
 defmodule MatriarchUI.LayoutTest do
   use ExUnit.Case, async: true
   import Phoenix.LiveViewTest
-  import MatriarchUI.{Card, Avatar, Alert, Separator, Tabs, Modal}
+  import MatriarchUI.{Card, Avatar, Alert, Separator, Tabs, Modal, Breadcrumb}
 
   defp query(html, selector),
     do: html |> LazyHTML.from_fragment() |> LazyHTML.query(selector) |> Enum.count()
 
-  test "card renders header and footer slots only when given" do
-    with_both =
-      render_component(&card/1, %{
-        header: [%{inner_block: fn _, _ -> "Title" end}],
-        footer: [%{inner_block: fn _, _ -> "Footer" end}],
-        inner_block: [%{inner_block: fn _, _ -> "Body" end}]
-      })
+  test "card is a bare surface that any card_* sub-component can render into" do
+    html = render_component(&card/1, %{inner_block: [%{inner_block: fn _, _ -> "Body" end}]})
+    assert html =~ "Body"
+    assert query(html, "div.rounded-mui-lg") == 1
+  end
 
-    without_either =
-      render_component(&card/1, %{inner_block: [%{inner_block: fn _, _ -> "Body" end}]})
+  test "card_header, card_title, card_description, card_content and card_footer each render their slot" do
+    assert render_component(&card_header/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Header" end}]
+           }) =~
+             "Header"
 
-    assert with_both =~ "Title" and with_both =~ "Footer"
-    refute without_either =~ "border-b"
+    assert render_component(&card_title/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Title" end}]
+           }) =~
+             "Title"
+
+    assert render_component(&card_description/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Description" end}]
+           }) =~ "Description"
+
+    assert render_component(&card_content/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Body" end}]
+           }) =~
+             "Body"
+
+    assert render_component(&card_footer/1, %{
+             inner_block: [%{inner_block: fn _, _ -> "Footer" end}]
+           }) =~
+             "Footer"
   end
 
   test "avatar falls back to initials when no image src is given" do
@@ -81,5 +98,22 @@ defmodule MatriarchUI.LayoutTest do
     assert query(html, "dialog#confirm") == 1
     assert html =~ "Delete item?"
     assert html =~ "This cannot be undone."
+  end
+
+  test "breadcrumb renders every earlier item as a link and the last as the current page" do
+    html =
+      render_component(&breadcrumb/1, %{
+        item: [
+          %{inner_block: fn _, _ -> "Home" end, navigate: "/"},
+          %{inner_block: fn _, _ -> "Docs" end, navigate: "/docs"},
+          %{inner_block: fn _, _ -> "Breadcrumb" end}
+        ]
+      })
+
+    assert query(html, "a") == 2
+    assert query(html, ~s(a[href="/"])) == 1
+    assert query(html, ~s([aria-current="page"])) == 1
+    assert html =~ "Breadcrumb"
+    refute query(html, ~s(a[aria-current="page"])) > 0
   end
 end
