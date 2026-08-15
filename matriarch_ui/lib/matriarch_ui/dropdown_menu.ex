@@ -12,6 +12,7 @@ defmodule MatriarchUI.DropdownMenu do
     attr :navigate, :string
     attr :patch, :string
     attr :href, :string
+    attr :method, :string
     attr :variant, :string
   end
 
