@@ -31,8 +31,16 @@ Visit `localhost:4000`.
 
 ```css
 /* assets/css/app.css */
-@import "../../deps/matriarch_ui/assets/matriarch_ui.css";
+@import "../../deps/matriarch_ui/matriarch_ui/assets/matriarch_ui.css";
+@source "../../deps/matriarch_ui/matriarch_ui/lib";
 ```
+
+The `@source` line is required, not optional: Tailwind v4 only generates CSS for
+classes it finds in scanned files. Without it, `matriarch_ui`'s own component
+markup (`w-64`, `-translate-x-full`, `bg-mui-card-muted`, `data-[mui-state=open]:...`,
+...) is invisible to the build — components render with no styling and no error
+in the console or server log, since nothing actually fails; the classes are just
+never emitted.
 
 ```elixir
 # lib/my_app_web.ex, inside the html_helpers block
@@ -132,6 +140,16 @@ Realtime draggable order uses the same `EditorSocket` with
 and the bounded in-memory
 [`DraggableStore`](./matriarch_ui_docs/lib/matriarch_ui_docs/draggable_store.ex).
 Consumers can copy that pair or implement the same `join`/`reorder` protocol.
+
+`Toast` is a client-only primitive with no built-in link to `Phoenix.Flash` —
+`MatriarchUI.FlashToast` bridges the two, for apps that want `put_flash/3` to
+show up as a toast instead of a banner:
+
+```heex
+<.toaster id="toaster" />
+<.flash_toast flash={@flash} kind={:info} />
+<.flash_toast flash={@flash} kind={:error} />
+```
 
 See the docs site for the full component reference.
 

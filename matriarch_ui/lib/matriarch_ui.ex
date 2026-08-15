@@ -28,6 +28,7 @@ defmodule MatriarchUI do
       import MatriarchUI.Field
       import MatriarchUI.Fieldset
       import MatriarchUI.FileUpload
+      import MatriarchUI.FlashToast
       import MatriarchUI.Group
       import MatriarchUI.Input
       import MatriarchUI.Icon

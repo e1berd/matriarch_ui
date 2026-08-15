@@ -10,8 +10,16 @@ end
 
 ```css
 /* assets/css/app.css */
-@import "../../deps/matriarch_ui/assets/matriarch_ui.css";
+@import "../../deps/matriarch_ui/matriarch_ui/assets/matriarch_ui.css";
+@source "../../deps/matriarch_ui/matriarch_ui/lib";
 ```
+
+The `@source` line is required, not optional: Tailwind v4 only generates CSS for
+classes it finds in scanned files. Without it, `matriarch_ui`'s own component
+markup (`w-64`, `-translate-x-full`, `bg-mui-card-muted`, `data-[mui-state=open]:...`,
+...) is invisible to the build — components render with no styling and no error
+in the console or server log, since nothing actually fails; the classes are just
+never emitted.
 
 ```elixir
 # lib/my_app_web.ex, html_helpers block
@@ -57,5 +65,15 @@ submits its order as JSON, and synchronizes order through a Phoenix Channel when
 `document` is set. The docs application includes the bounded channel store.
 The RichEditor docs show how to compose an outliner from grouped bubble controls
 and the shared draggable handle without introducing another component.
+
+`Toast` is a client-only primitive with no built-in link to `Phoenix.Flash` —
+`MatriarchUI.FlashToast` bridges the two, for apps that want `put_flash/3` to
+show up as a toast instead of a banner:
+
+```heex
+<.toaster id="toaster" />
+<.flash_toast flash={@flash} kind={:info} />
+<.flash_toast flash={@flash} kind={:error} />
+```
 
 Full reference: the [docs site](https://github.com/e1berd/matriarch_ui/tree/main/matriarch_ui_docs).
